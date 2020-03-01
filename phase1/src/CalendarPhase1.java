@@ -1,6 +1,8 @@
+import java.io.IOException;
+
 public class CalendarPhase1 {
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException, ClassNotFoundException{
 
         /*
         Prompt user to log in or create new account
@@ -13,6 +15,11 @@ public class CalendarPhase1 {
          */
 
         /*
+        Constructing the Calendar from the User's .ser file
+         */
+        Calendar c = constructCalendar("user");
+
+        /*
         Prompt user to create new account
         Writes out to external User.csv file
          */
@@ -21,13 +28,32 @@ public class CalendarPhase1 {
         Event displaying (interaction with class Calendar)
          */
 
+        /*
+        Save the calendar to the user's .ser file before exiting
+         */
+        saveCalendar("user");
+    }
 
+    public static Calendar constructCalendar(String username) throws IOException, ClassNotFoundException {
 
+        String serializedCalendarManagerInfo = "src/" + username + ".ser";
+        CalendarManager sm = new CalendarManager(serializedCalendarManagerInfo);
 
+//      System.out.println("Initial state:\n" + cm);
+        // Loads data from a CSV for first launch of the program
+//        sm.readFromCSVFile(studentCSVFile);
+//        System.out.println("Students from CSV:\n" + sm.toString());
 
+//    // Deserializes contents of the SER file
+        sm.readFromFile(serializedCalendarManagerInfo);
+        System.out.println("Students from ser:\n" + sm.toString());
 
+        return sm.getCalendar();
+    }
 
-
-
+    public static void saveCalendar(String username) throws IOException, ClassNotFoundException {
+        String serializedCalendarManagerInfo = "src/" + username + ".ser";
+        CalendarManager sm = new CalendarManager(serializedCalendarManagerInfo);
+        sm.saveToFile(serializedCalendarManagerInfo);
     }
 }
