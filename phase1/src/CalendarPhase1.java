@@ -1,4 +1,5 @@
 import java.io.IOException;
+import javax.swing.JOptionPane;
 
 public class CalendarPhase1 {
 
@@ -9,10 +10,29 @@ public class CalendarPhase1 {
          */
 
         /*
+        boolean accountExist;
+        accountExist = JOptionPane.showInputDialog("Do you have an account?");
+        */
+
+
+
+
+        /*
         Prompt user to log in
         User input username and password
         Read external User.csv file to compare credentials, loop if credentials do not match
+
+        String userName;
+        String password;
+        do{
+            userName = JOptionPane.showInputDialog("Please enter your user user name to log in");
+            password = JOptionPane.showInputDialog("Please enter your password to log in");
+        }while ();
+
+
          */
+
+
 
         /*
         Constructing the Calendar from the User's .ser file
