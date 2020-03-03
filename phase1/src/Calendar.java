@@ -1,4 +1,6 @@
-public class Calendar {
+import java.io.Serializable;
+
+public class Calendar implements Serializable {
 
     /*
     Class Calendar is user-specific

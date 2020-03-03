@@ -1,23 +1,45 @@
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLOutput;
+import java.util.HashMap;
+import java.util.Scanner;
 
 public class CalendarPhase1 {
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException{
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
 
         /*
         Prompt user to log in or create new account
          */
 
         /*
+        Creating a map of all users in the csv file
+         */
+        HashMap<String, String> users = getUsers();
+
+        /*
         Prompt user to log in
         User input username and password
         Read external User.csv file to compare credentials, loop if credentials do not match
          */
-
+        String enteredUsername;
+        String enteredPswd;
+        do{
+            Scanner s = new Scanner(System.in);
+            System.out.print("Enter usename: ");
+            enteredUsername = s.nextLine();
+            System.out.print("Enter password: ");
+            enteredPswd = s.nextLine();
+        }while (!login(enteredUsername, enteredPswd, users));
+        System.out.println("Successfully logged in as " + enteredUsername);
         /*
         Constructing the Calendar from the User's .ser file
          */
-        Calendar c = constructCalendar("user");
+        String serializedCalendarManagerInfo = "./phase1/src/" + enteredUsername + ".ser";
+        CalendarManager sm = new CalendarManager(serializedCalendarManagerInfo);
+        sm.readFromFile(serializedCalendarManagerInfo);
+        Calendar myCalendar = sm.getCalendar();
 
         /*
         Prompt user to create new account
@@ -31,29 +53,27 @@ public class CalendarPhase1 {
         /*
         Save the calendar to the user's .ser file before exiting
          */
-        saveCalendar("user");
-    }
-
-    public static Calendar constructCalendar(String username) throws IOException, ClassNotFoundException {
-
-        String serializedCalendarManagerInfo = "src/" + username + ".ser";
-        CalendarManager sm = new CalendarManager(serializedCalendarManagerInfo);
-
-//      System.out.println("Initial state:\n" + cm);
-        // Loads data from a CSV for first launch of the program
-//        sm.readFromCSVFile(studentCSVFile);
-//        System.out.println("Students from CSV:\n" + sm.toString());
-
-//    // Deserializes contents of the SER file
-        sm.readFromFile(serializedCalendarManagerInfo);
-        System.out.println("Students from ser:\n" + sm.toString());
-
-        return sm.getCalendar();
-    }
-
-    public static void saveCalendar(String username) throws IOException, ClassNotFoundException {
-        String serializedCalendarManagerInfo = "src/" + username + ".ser";
-        CalendarManager sm = new CalendarManager(serializedCalendarManagerInfo);
         sm.saveToFile(serializedCalendarManagerInfo);
+    }
+
+    /**
+     * Checks if the entered username and password are valid
+     */
+    public static boolean login(String user, String pswd, HashMap<String, String> users){
+        if(!users.containsKey(user)){
+            return false;
+        }
+        return users.get(user).equals(pswd);
+    }
+
+    public static HashMap<String, String> getUsers() throws FileNotFoundException {
+        Scanner scanner = new Scanner(new FileInputStream("./phase1/src/users.csv"));
+        String[] login;
+        HashMap<String, String> users = new HashMap<>();
+        while (scanner.hasNextLine()) {
+            login = scanner.nextLine().split(",");
+            users.put(login[0], login[1]);
+        }
+        return users;
     }
 }
