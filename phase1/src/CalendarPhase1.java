@@ -31,30 +31,23 @@ public class CalendarPhase1 {
         Prompt user to log in
         User input username and password
         Read external User.csv file to compare credentials, loop if credentials do not match
-
+         */
         String userName;
         String password;
         do{
-            userName = JOptionPane.showInputDialog("Please enter your user user name to log in");
-            password = JOptionPane.showInputDialog("Please enter your password to log in");
-        }while ();
-
-
-         */
-        String enteredUsername;
-        String enteredPswd;
-        do{
             Scanner s = new Scanner(System.in);
             System.out.print("Enter usename: ");
-            enteredUsername = s.nextLine();
+            userName = s.nextLine();
+//            userName = JOptionPane.showInputDialog("Please enter your user user name to log in");
             System.out.print("Enter password: ");
-            enteredPswd = s.nextLine();
-        }while (!login(enteredUsername, enteredPswd, users));
-        System.out.println("Successfully logged in as " + enteredUsername);
+            password = s.nextLine();
+//            password = JOptionPane.showInputDialog("Please enter your password to log in");
+        }while (!login(userName, password, users));
+        System.out.println("Successfully logged in as " + userName);
         /*
         Constructing the Calendar from the User's .ser file
          */
-        String serializedCalendarManagerInfo = "./phase1/src/" + enteredUsername + ".ser";
+        String serializedCalendarManagerInfo = "./phase1/src/" + userName + ".ser";
         CalendarManager sm = new CalendarManager(serializedCalendarManagerInfo);
         sm.readFromFile(serializedCalendarManagerInfo);
         Calendar myCalendar = sm.getCalendar();
