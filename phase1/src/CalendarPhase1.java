@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLOutput;
 import java.util.HashMap;
 import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 public class CalendarPhase1 {
 
@@ -19,9 +20,26 @@ public class CalendarPhase1 {
         HashMap<String, String> users = getUsers();
 
         /*
+        boolean accountExist;
+        accountExist = JOptionPane.showInputDialog("Do you have an account?");
+        */
+
+
+
+
+        /*
         Prompt user to log in
         User input username and password
         Read external User.csv file to compare credentials, loop if credentials do not match
+
+        String userName;
+        String password;
+        do{
+            userName = JOptionPane.showInputDialog("Please enter your user user name to log in");
+            password = JOptionPane.showInputDialog("Please enter your password to log in");
+        }while ();
+
+
          */
         String enteredUsername;
         String enteredPswd;
