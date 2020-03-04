@@ -8,4 +8,7 @@ public class Calendar implements Serializable {
      */
 
 
+    /*
+    creates event, alerts,
+     */
 }

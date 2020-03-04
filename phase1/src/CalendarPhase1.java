@@ -2,6 +2,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLOutput;
+import java.time.Clock;
 import java.util.HashMap;
 import java.util.Scanner;
 import javax.swing.*;
@@ -14,6 +15,9 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 public class CalendarPhase1 {
+
+    // clock giving the current time
+    public static Clock clock;
 
     public static class accountButton{
 
@@ -58,6 +62,9 @@ public class CalendarPhase1 {
 
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
+
+        clock = Clock.systemDefaultZone();
+        System.out.println(clock.instant().atZone(clock.getZone()));
 
         /*
         Prompt user to log in or create new account
