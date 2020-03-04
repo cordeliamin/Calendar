@@ -2,69 +2,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLOutput;
-import java.time.Clock;
 import java.util.HashMap;
 import java.util.Scanner;
-import javax.swing.*;
-import javax.swing.JOptionPane;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
+
 
 public class CalendarPhase1 {
 
-    // clock giving the current time
-    public static Clock clock;
-
-    public static class accountButton{
-
-        accountButton(){
-            JFrame f = new JFrame("Account");
-            JButton b1 = new JButton("Yes");
-            JButton b2 = new JButton("No");
-
-            b1.setBounds(70,100,90, 30);
-            b2.setBounds(170, 100, 90, 30);
-
-            JLabel label = new JLabel();
-            label.setText("Do you have an existing account?");
-            label.setBounds(10, 10, 300, 100);
-
-            f.add(label);
-            f.add(b1);
-            f.add(b2);
-            f.setSize(300,300);
-            f.setLayout(null);
-            f.setVisible(true);
-            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-            //action listener
-            b1.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                    System.out.println("yes!");
-                    System.exit(0);
-                }
-            });
-            b2.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    System.out.println(("No!"));
-                    System.exit(0);
-                }
-            });
-        }
-    }
-
-
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-
-        clock = Clock.systemDefaultZone();
-        System.out.println(clock.instant().atZone(clock.getZone()));
 
         /*
         Prompt user to log in or create new account
@@ -73,7 +17,7 @@ public class CalendarPhase1 {
         /*
         Creating a map of all users in the csv file
          */
-        new accountButton();
+        new Menus("a");
 
         HashMap<String, String> users = getUsers();
 
@@ -92,7 +36,7 @@ public class CalendarPhase1 {
         String password;
         do{
             Scanner s = new Scanner(System.in);
-            System.out.print("Enter usename: ");
+            System.out.print("Enter username: ");
             userName = s.nextLine();
 //            userName = JOptionPane.showInputDialog("Please enter your user user name to log in");
             System.out.print("Enter password: ");
