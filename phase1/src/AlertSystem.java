@@ -79,4 +79,17 @@ public class AlertSystem implements Serializable{
     public List<Alert> getAlerts(Event e) {
         return eventAlertsMap.get(e);
     }
+
+    /**
+     * get all alerts in the system, past, current or future
+     * @return all alerts
+     */
+    public Set<Alert> getAllAlerts(){
+        Set<Alert> result = new HashSet<>();
+        Set<Event> events = eventAlertsMap.keySet();
+        for (Event e: events){
+            result.addAll(eventAlertsMap.get(e));
+        }
+        return result;
+    }
 }
