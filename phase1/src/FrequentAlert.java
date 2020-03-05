@@ -1,24 +1,30 @@
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FrequentAlert extends Alert{
-    private Date frequency;
+    private Duration frequency;
 
-    public FrequentAlert(Date et, Date t){
-        frequency = t;
-        eventTime = et;
+    public FrequentAlert(LocalDateTime evT, String name, Duration d){
+        super(evT, name);
+        frequency = d;
+        setTimesHelper();
     }
 
-    @Override
-    public List<Date> appearAt(){
-        List<Date> l = new ArrayList<>();
-        // for every date that the alert should appear
-        /*
-        for (long i = eventDate.getTime(); i > Calendar.getCurrTime(); i = i + frequency.getTime()){
-            l.add(new Date(i));
+    private void setTimesHelper(){
+        LocalDateTime t = getEventTime();
+        do{
+            t = t.minus(this.frequency);
         }
-        */
-        return l;
+        while (t.isBefore(CalendarPhase1.time));
+
+        //then t is the first alarm time
+        while(t.isBefore(this.getEventTime())){
+            addtoTimes(t);
+            t = t.plus(this.frequency);
+        }
     }
 }

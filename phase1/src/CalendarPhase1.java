@@ -20,7 +20,7 @@ import javax.swing.JTextField;
 public class CalendarPhase1 {
 
     // clock giving the current time
-    public static Clock clock;
+    public static LocalDateTime time;
 
     public static class accountButton{
 
@@ -67,8 +67,8 @@ public class CalendarPhase1 {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
         // display time when program runs
-        clock = Clock.systemDefaultZone();
-        System.out.println(clock.instant().atZone(clock.getZone()));
+        time = LocalDateTime.now();
+        System.out.println(time);
 
 
         /*
