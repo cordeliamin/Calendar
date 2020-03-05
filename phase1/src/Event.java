@@ -1,33 +1,33 @@
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class Event {
+public class Event implements Serializable {
 
-    public String eventName;
-    public String startTime;
-    public String endTime;
-    public String startDay;
-    public String endDay;
+    private String eventName;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
     /** A list of memos associated with this Event */
-    public ArrayList<Memo> memos;
+    private ArrayList<Memo> memos;
 
 
-    public Event(String name, String st, String et, String sd, String ed){
+    public Event(String name, LocalDateTime start, LocalDateTime end){
         eventName = name;
-        startTime = st;
-        endTime = et;
-        startDay = sd;
-        endDay = ed;
+        startTime = start;
+        endTime = end;
         memos = new ArrayList<>();
     }
 
+    public String getEventName() {
+        return eventName;
+    }
 
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
 
-
-
-
-
-
-
-
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
 }

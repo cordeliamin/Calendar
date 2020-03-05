@@ -1,8 +1,8 @@
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Scanner;
 import javax.swing.*;
@@ -75,7 +75,7 @@ public class CalendarPhase1 {
         /*
         Creating a map of all users in the csv file
          */
-        new accountButton();
+//        new accountButton();
 
         HashMap<String, String> users = getUsers();
 
@@ -84,6 +84,7 @@ public class CalendarPhase1 {
         boolean accountExist;
         accountExist = JOptionPane.showInputDialog("Do you have an account?");
         */
+
 
         /*
         Prompt user to log in
@@ -102,6 +103,7 @@ public class CalendarPhase1 {
 //            password = JOptionPane.showInputDialog("Please enter your password to log in");
         }while (!login(userName, password, users));
         System.out.println("Successfully logged in as " + userName);
+
         /*
         Constructing the Calendar from the User's .ser file
          */
@@ -111,13 +113,9 @@ public class CalendarPhase1 {
         Calendar myCalendar = sm.getCalendar();
 
         /*
-        Prompt user to create new account
-        Writes out to external User.csv file
-         */
-
-        /*
         Event displaying (interaction with class Calendar)
          */
+        System.out.println(myCalendar);
 
         /*
         Save the calendar to the user's .ser file before exiting
