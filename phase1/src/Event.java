@@ -9,7 +9,7 @@ public class Event implements Serializable {
     private LocalDateTime endTime;
     private String tag;
 
-    /**
+    /** whether this Event is "past", "ongoing" or "future" */
     private String status;
 
     /** A list of memos associated with this Event */
@@ -21,6 +21,7 @@ public class Event implements Serializable {
         startTime = start;
         endTime = end;
         tag = null;
+        status = "future";
         memos = new ArrayList<>();
     }
 
@@ -37,6 +38,16 @@ public class Event implements Serializable {
     }
 
     public ArrayList<Memo> getMemos() { return memos; }
+
+    public String getTag() { return this.tag; }
+
+    /**
+     * change the status of this Event to "past", "ongoing" or "future"
+     * @param newStatus: "past", "ongoing" or "future"
+     */
+    public void changeStatus(String newStatus) {
+        this.status = newStatus;
+    }
 
     public void setTag(String tag) { this.tag = tag; }
 
