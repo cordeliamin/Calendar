@@ -114,10 +114,11 @@ public class CalendarPhase1 {
         CalendarManager sm = new CalendarManager(serializedCalendarManagerInfo);
         sm.readFromFile(serializedCalendarManagerInfo);
         Calendar myCalendar = sm.getCalendar();
-
+        myCalendar.update();
+        System.out.println(myCalendar.getTime());
         //Testing series creation
-//        myCalendar.createSeries("series 1", Duration.ofHours(1), Period.ofDays(1), 3, LocalDateTime.now());
-        myCalendar.reset();
+//        myCalendar.addSeries("series 1", Duration.ofHours(1), Period.ofDays(1), 3, LocalDateTime.now());
+//        myCalendar.reset();
 //        ArrayList<Event> seriesEvents = new ArrayList<>();
 //        seriesEvents.add(new Event("series event 1", LocalDateTime.now(), LocalDateTime.now().plus(Duration.ofHours(1))));
 //        seriesEvents.add(new Event("series event 2", LocalDateTime.now(), LocalDateTime.now().plus(Duration.ofHours(1))));
@@ -125,7 +126,7 @@ public class CalendarPhase1 {
 //        for(Event e : seriesEvents){
 //            myCalendar.addEvent(e);
 //        }
-//        myCalendar.createSeries("series", seriesEvents);
+//        myCalendar.addSeries("series", seriesEvents);
 //        System.out.println(myCalendar.findEventsBySeries("series"));
 
 
