@@ -42,7 +42,7 @@ public class AlertSystem implements Serializable{
     /**
      * display alerts that should appear now
      */
-    public Set<Alert> alert(){
+    public Set<Alert> getCurrAlerts(){
         Set<Alert> CurrAlerts = new HashSet<>(); //the set of Alerts to Show
 
         // subset of valid times, reverse order
