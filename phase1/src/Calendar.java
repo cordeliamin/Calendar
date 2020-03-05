@@ -10,7 +10,17 @@ public class Calendar implements Serializable {
     Class Calendar is user-specific
      */
     private ArrayList<Event> myEvents = new ArrayList<>();
-    private ArrayList<Series> mySeries = new ArrayList<>();
+    private SeriesSystem mySeries  = new SeriesSystem();
+    public LocalDateTime time = LocalDateTime.now();
+
+    public void update(){
+        time = time.plus(Period.ofDays(1));
+    }
+
+    public String getTime(){
+        return time.toString();
+    }
+
     /*
     creates event, alerts,
      */
@@ -18,36 +28,26 @@ public class Calendar implements Serializable {
         myEvents.add(e);
     }
 
-    //Create a series from a selection of events
-    public void createSeries(String name, Collection<Event> ls){
-         Series s = new Series(name, ls);
-         mySeries.add(s);
+    public void reset(){
+        myEvents = new ArrayList<>();
+        time = LocalDateTime.now();
     }
 
     //Create a series from parameters
-    public void createSeries(String name, Duration d, Period freq, int num, LocalDateTime first){
-        Series s = new Series(name);
-        this.myEvents.addAll(s.constructSeries(d, freq, num, first));
-        this.mySeries.add(s);
+    public void addSeries(String name, Duration d, Period freq, int num, LocalDateTime first){
+        Collection<Event> newEvents = mySeries.buildSeries(name, d, freq, num, first);
+        this.myEvents.addAll(newEvents);
     }
 
     /**
-     *
-     * @param seriesName The name of the series to search for
-     * @return Returns the events in the series if it exists, null otherwise
+     * Create series from existing events
      */
-    public Collection<Event> findEventsBySeries(String seriesName){
-        for(Series s : this.mySeries){
-            if(s.getName().equals(seriesName)){
-                return s.getEvents();
-            }
-        }
-        return null;
+    public void addSeries(String name, Collection<Event> ls){
+        mySeries.createSeries(name, ls);
     }
 
-    public void reset(){
-        myEvents = new ArrayList<>();
-        mySeries = new ArrayList<>();
+    public Collection<Event> findEventsBySeries(String name){
+        return mySeries.findEventsBySeries(name);
     }
 
 
