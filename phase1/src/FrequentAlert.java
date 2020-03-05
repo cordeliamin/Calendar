@@ -1,15 +1,11 @@
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FrequentAlert extends Alert{
     private Duration frequency;
 
-    public FrequentAlert(LocalDateTime evT, String name, Duration d){
-        super(evT, name);
+    public FrequentAlert(LocalDateTime evT, String name, String message, Duration d){
+        super(evT, message, name);
         frequency = d;
         setTimesHelper();
     }

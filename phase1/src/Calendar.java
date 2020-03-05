@@ -13,6 +13,7 @@ public class Calendar implements Serializable {
     private ArrayList<Event> myEvents = new ArrayList<>();
     private MemoSystem myMemos = new MemoSystem();
     private SeriesSystem mySeries  = new SeriesSystem();
+    private AlertSystem myAlerts = new AlertSystem();
     public LocalDateTime time = LocalDateTime.now();
 
     public void update(){
@@ -103,6 +104,49 @@ public class Calendar implements Serializable {
         } else {
             return events;
         }
+    }
+
+    /**
+     * return list of events occurred in the past by time of calendar
+     * @return list of past events
+     */
+    public ArrayList<Event> getPastEvents(){
+        ArrayList<Event> events = new ArrayList<>();
+        for (Event event: myEvents) {
+            if (event.getEndTime().isBefore(time)){
+                events.add(event);
+            }
+        }
+        return events;
+    }
+
+    /**
+     * return list of events currently occurring by time of calendar
+     * @return list of current events
+     */
+    public ArrayList<Event> getCurrentEvents(){
+        ArrayList<Event> eventsDay = findEvent(time.toLocalDate());
+        ArrayList<Event> events = new ArrayList<>();
+        for (Event event: eventsDay) {
+            if (event.getEndTime().isAfter(time) && event.getStartTime().isBefore(time)) {
+                events.add(event);
+            }
+        }
+        return events;
+    }
+
+    /**
+     * return list of events occurring in the future by time of calendar
+     * @return list of future events
+     */
+    public ArrayList<Event> getFutureEvents(){
+        ArrayList<Event> events = new ArrayList<>();
+        for (Event event: myEvents) {
+            if (event.getEndTime().isAfter(time)){
+                events.add(event);
+            }
+        }
+        return events;
     }
 
     public void reset(){

@@ -9,16 +9,18 @@ public abstract class Alert implements Serializable {
     private String name;
     private LocalDateTime eventTime;
     private ArrayList<LocalDateTime> times;
+    private String message;
 
-    public Alert(LocalDateTime date, String name){
+    public Alert(LocalDateTime date, String name, String message){
         this.name = name;
         this.eventTime = date;
+        this.message = message;
         this.times = new ArrayList<LocalDateTime>();
     }
 
     @Override
     public String toString() {
-        return "Alert for Event" + name + "occurring at" + eventTime.toString();
+        return "Alert for Event" + name + "occurring at" + eventTime.toString() + ": " + message;
     }
 
     public ArrayList<LocalDateTime> getTimes(){

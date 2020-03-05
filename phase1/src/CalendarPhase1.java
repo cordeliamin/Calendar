@@ -129,7 +129,6 @@ public class CalendarPhase1 {
 //        myCalendar.addSeries("series", seriesEvents);
 //        System.out.println(myCalendar.findEventsBySeries("series"));
 
-
         /*
         Event displaying (interaction with class Calendar)
          */

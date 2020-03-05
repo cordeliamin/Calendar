@@ -14,9 +14,10 @@ public class AlertSystem implements Serializable{
      * adds the new Individual alert to the system
      * @param event: event of the alert
      * @param time: time of the alert
+     * @param message: message content of the alert
      */
-    public void addIndividualAlert(Event event, LocalDateTime time){
-        Alert newAlert = new IndividualAlert(event.getStartTime(), event.getEventName(), time);
+    public void addIndividualAlert(Event event, String message, LocalDateTime time){
+        Alert newAlert = new IndividualAlert(event.getStartTime(), event.getEventName(), message, time);
         eventAlertsMap.putIfAbsent(event, new ArrayList<>());
         eventAlertsMap.get(event).add(newAlert);
         addtoTimesSet(newAlert);
@@ -26,9 +27,10 @@ public class AlertSystem implements Serializable{
      * adds the new Frequent alert to the system
      * @param event: event of the alert
      * @param duration: the frequency of the event
+     * @param message: message content of the alert
      */
-    public void addFrequentAlert(Event event, Duration duration) {
-        Alert newAlert = new FrequentAlert(event.getStartTime(), event.getEventName(), duration);
+    public void addFrequentAlert(Event event, Duration duration, String message) {
+        Alert newAlert = new FrequentAlert(event.getStartTime(), event.getEventName(), message, duration);
         eventAlertsMap.putIfAbsent(event, new ArrayList<>());
         eventAlertsMap.get(event).add(newAlert);
         addtoTimesSet(newAlert);
