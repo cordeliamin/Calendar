@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ public class Calendar implements Serializable {
      */
     private ArrayList<Event> myEvents = new ArrayList<>();
     private ArrayList<Series> mySeries = new ArrayList<>();
+    private MemoSystem memoSystem;
     /*
     creates event, alerts,
      */
@@ -22,6 +24,43 @@ public class Calendar implements Serializable {
     public void createSeries(String name, Collection<Event> ls){
          Series s = new Series(name, ls);
          mySeries.add(s);
+    }
+
+    /**
+     * find events by their tag
+     * @param tag: the tag associated with an Event or multiple Events
+     * @return A list of events with the input tag
+     */
+    public ArrayList<Event> findEvent(String tag) {
+        ArrayList<Event> events = new ArrayList<>();
+        for (Event event: myEvents) {
+            if (event.getTag().equals(tag)) {
+                events.add(event);
+            }
+        }
+        if (events.isEmpty()) {
+            System.out.println("No events found.");
+            return null;
+        } else {
+            return events;
+        }
+    }
+
+    /**
+     * find events by date
+     * @param date
+     * @return A list of events
+     */
+    public ArrayList<Event> findEvent(LocalDate date) {
+        ArrayList<Event> events = new ArrayList<>();
+        for (Event event: myEvents) {
+            LocalDate start = event.getStartTime().toLocalDate();
+            LocalDate end = event.getEndTime().toLocalDate();
+            if (date.compareTo(start) >=0 && date.compareTo(end) <= 0) {
+                events.add(event);
+            }
+        }
+        return events;
     }
 
     //Create a series from parameters
