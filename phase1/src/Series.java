@@ -28,11 +28,19 @@ public class Series implements Serializable {
      * @param first The dateTime of the first event in the series
      */
     public Collection<Event> constructSeries(Duration d, Period freq, int num, LocalDateTime first){
-        myEvents.add(new Event(this.name + " 1", first, first.plus(d)));
+        myEvents.add(new Event(this.name + ": Event 1", first, first.plus(d)));
         for(int i = 2; i <= num; i++){
             first = first.plus(freq);
-            myEvents.add(new Event(this.name + " 1", first, first.plus(d)));
+            myEvents.add(new Event(this.name + ": Event " + i , first, first.plus(d)));
         }
+        return this.myEvents;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Collection<Event> getEvents(){
         return this.myEvents;
     }
 }

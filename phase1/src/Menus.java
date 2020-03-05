@@ -14,7 +14,6 @@ public class Menus {
         if(type == "a"){
             accountButton();
         }
-
     }
 
     public void accountButton(){

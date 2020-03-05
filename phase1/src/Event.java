@@ -30,4 +30,8 @@ public class Event implements Serializable {
     public LocalDateTime getEndTime() {
         return endTime;
     }
+
+    public String toString(){
+        return this.eventName + "\t" + this.startTime.toString() + " to " + this.endTime.toString();
+    }
 }
