@@ -17,6 +17,8 @@ public class Menus extends JFrame{
     private static JFrame f = new JFrame("Account");
     private static JFrame f2 = new JFrame("Log In");
     private static JFrame f3 = new JFrame("New Feature is coming!");
+    private static JFrame f4 = new JFrame("Incorrect Credentials!");
+
 
     JButton yes = new JButton("Yes");
     JButton no = new JButton("No");
@@ -26,6 +28,7 @@ public class Menus extends JFrame{
     JLabel userLabel = new JLabel("Username:");
     JLabel pswdLabel = new JLabel("Password:");
     JLabel newFeature = new JLabel("You can create a new account in phase 2!");
+    JLabel incorrectCre = new JLabel("Please try again!");
 
     public Menus(String type) throws IOException {
         HashMap<String, String> users = getUsers(); //Creating a map of all users in the csv file
@@ -80,8 +83,6 @@ public class Menus extends JFrame{
 
     public void accountLogIn(HashMap<String, String> users, JFrame f){
 
-
-        JFrame f4 = new JFrame("Incorrect Credentials!");
         JTextField userText = new JTextField();
         JTextField pswdText = new JTextField();
 
@@ -103,18 +104,32 @@ public class Menus extends JFrame{
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         submit.addActionListener(ae -> {
-
             String user = userText.getText();
             String pswd = pswdText.getText();
 
-            if(!login(user, pswd, users)){
+            if(login(user, pswd, users)){
+                f.setVisible(false);
                 f.dispose();
-                System.out.println("FALSE INFORMATION");
-                accountLogIn(users, f4);
+                f4.setVisible(false);
+                f4.dispose();
+                System.out.println("Correct info!");
             }
             else{
-                f.dispose();
-                System.out.println("Credentials are correct!");
+                userText.setText("");
+                pswdText.setText("");
+                incorrectCre.setBounds(200, 70, 200, 30);
+                f.setVisible(false);
+                f4.setSize(500,300);
+                f4.add(userLabel);
+                f4.add(pswdLabel);
+                f4.add(incorrectCre);
+                f4.add(userText);
+                f4.add(pswdText);
+                f4.add(submit);
+                f4.setLocationRelativeTo(null);
+                f4.setLayout(null);
+                f4.setVisible(true);
+                f4.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             }
         });
     }
