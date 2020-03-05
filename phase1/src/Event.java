@@ -39,11 +39,19 @@ public class Event implements Serializable {
 
     public ArrayList<Memo> getMemos() { return memos; }
 
+    public void viewMemos() {
+        for (Memo memo:memos) {
+            System.out.println(memo);
+        }
+    }
+
     public String getTag() { return this.tag; }
+
+    public String getStatus() { return this.status; }
 
     /**
      * change the status of this Event to "past", "ongoing" or "future"
-     * @param newStatus: "past", "ongoing" or "future"
+     * @param newStatus: "past" || "ongoing" || "future"
      */
     public void changeStatus(String newStatus) {
         this.status = newStatus;
