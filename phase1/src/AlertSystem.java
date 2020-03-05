@@ -10,8 +10,9 @@ public class AlertSystem implements Serializable{
     private Map<LocalDateTime, List<Alert>> dateAlertsMap = new HashMap<>();
     private Map<Event, List<Alert>> eventAlertsMap = new HashMap<>();
 
+    //Add alerts to the system
     /**
-     * adds the new Individual alert to the system
+     * adds the new Individual alert to the system:
      * @param event: event of the alert
      * @param time: time of the alert
      * @param message: message content of the alert
@@ -29,29 +30,19 @@ public class AlertSystem implements Serializable{
      * @param duration: the frequency of the event
      * @param message: message content of the alert
      */
-    public void addFrequentAlert(Event event, Duration duration, String message) {
+    public void addFrequentAlert(Event event, String message, Duration duration) {
         Alert newAlert = new FrequentAlert(event.getStartTime(), event.getEventName(), message, duration);
         eventAlertsMap.putIfAbsent(event, new ArrayList<>());
         eventAlertsMap.get(event).add(newAlert);
         addtoTimesSet(newAlert);
     }
 
-    /**
-     * adds the times of the alert to dateAlertsMap and allAlertTimes,
-     * @param alert: the alert to add
-     */
-    public void addtoTimesSet(Alert alert) {
-        for (LocalDateTime alertTime: alert.getTimes()) {
-            dateAlertsMap.putIfAbsent(alertTime, new ArrayList<>());
-            dateAlertsMap.get(alertTime).add(alert);
-            allAlertTimes.add(alertTime);
-        }
-    }
 
+    //return sets of alerts -> that should appear currently, all alerts, or according to event
     /**
      * display alerts that should appear now
      */
-    public void alert(){
+    public Set<Alert> alert(){
         Set<Alert> CurrAlerts = new HashSet<>(); //the set of Alerts to Show
 
         // subset of valid times, reverse order
@@ -66,18 +57,16 @@ public class AlertSystem implements Serializable{
             }
         }
 
-        //display alerts in set CurrAlerts
-        for (Alert alert: CurrAlerts){
-            System.out.println(alert.toString());
-        }
+        return CurrAlerts;
     }
 
     /**
      * get all alerts associated with the event
      * @param e: events
      */
-    public List<Alert> getAlerts(Event e) {
-        return eventAlertsMap.get(e);
+    public Set<Alert> getAlerts(Event e) {
+        Set<Alert> alerts = new HashSet<>(eventAlertsMap.get(e));
+        return alerts;
     }
 
     /**
@@ -91,5 +80,19 @@ public class AlertSystem implements Serializable{
             result.addAll(eventAlertsMap.get(e));
         }
         return result;
+    }
+
+
+    // helper methods
+    /**
+     * helper method for adding the times of the alert to dateAlertsMap and allAlertTimes,
+     * @param alert: the alert to add
+     */
+    public void addtoTimesSet(Alert alert) {
+        for (LocalDateTime alertTime: alert.getTimes()) {
+            dateAlertsMap.putIfAbsent(alertTime, new ArrayList<>());
+            dateAlertsMap.get(alertTime).add(alert);
+            allAlertTimes.add(alertTime);
+        }
     }
 }
