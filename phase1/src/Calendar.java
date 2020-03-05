@@ -11,13 +11,24 @@ public class Calendar implements Serializable {
     Class Calendar is user-specific
      */
     private ArrayList<Event> myEvents = new ArrayList<>();
-    private ArrayList<Series> mySeries = new ArrayList<>();
-    private MemoSystem memoSystem;
+    private MemoSystem myMemos = new MemoSystem();
     private SeriesSystem mySeries  = new SeriesSystem();
     public LocalDateTime time = LocalDateTime.now();
 
     public void update(){
         time = time.plus(Period.ofDays(1));
+        LocalDate date = time.toLocalDate();
+
+        // update the status of events
+        for (Event event: myEvents) {
+            LocalDate start = event.getStartTime().toLocalDate();
+            LocalDate end = event.getEndTime().toLocalDate();
+            if (date.compareTo(start) >=0 && date.compareTo(end) <= 0 && !event.getStatus().equals("ongoing")) {
+                    event.changeStatus("ongoing");
+            } else if (date.compareTo(end) > 0 && !event.getStatus().equals("past")) {
+                event.changeStatus("past");
+            }
+        }
     }
 
     public String getTime(){
@@ -29,12 +40,6 @@ public class Calendar implements Serializable {
      */
     public void addEvent(Event e){
         myEvents.add(e);
-    }
-
-    //Create a series from a selection of events
-    public void createSeries(String name, Collection<Event> ls){
-         Series s = new Series(name, ls);
-         mySeries.add(s);
     }
 
     /**
@@ -59,8 +64,7 @@ public class Calendar implements Serializable {
 
     /**
      * find events by date
-     * @param date
-     * @return A list of events
+     * @return A list of events that are happening during the input date
      */
     public ArrayList<Event> findEvent(LocalDate date) {
         ArrayList<Event> events = new ArrayList<>();
@@ -71,28 +75,34 @@ public class Calendar implements Serializable {
                 events.add(event);
             }
         }
-        return events;
-    }
-
-    //Create a series from parameters
-    public void createSeries(String name, Duration d, Period freq, int num, LocalDateTime first){
-        Series s = new Series(name);
-        this.myEvents.addAll(s.constructSeries(d, freq, num, first));
-        this.mySeries.add(s);
+        if (events.isEmpty()) {
+            System.out.println("No events found.");
+            return null;
+        } else {
+            return events;
+        }
     }
 
     /**
-     *
-     * @param seriesName The name of the series to search for
-     * @return Returns the events in the series if it exists, null otherwise
+     * find events by their memo
+     * @param memo: a memo associated with an event or multiple events
+     * @return A list of events which have the input memo
      */
-    public Collection<Event> findEventsBySeries(String seriesName){
-        for(Series s : this.mySeries){
-            if(s.getName().equals(seriesName)){
-                return s.getEvents();
+    public ArrayList<Event> findEvent(Memo memo) {
+        ArrayList<Event> events = new ArrayList<>();
+        for (Event event: myEvents) {
+            for (Memo memo1:event.getMemos()) {
+                if (memo1 == memo) {
+                    events.add(event);
+                }
             }
         }
-        return null;
+        if (events.isEmpty()) {
+            System.out.println("No events found.");
+            return null;
+        } else {
+            return events;
+        }
     }
 
     public void reset(){
