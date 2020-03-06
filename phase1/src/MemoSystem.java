@@ -47,7 +47,4 @@ public class MemoSystem implements Serializable {
         System.out.println("This is not a valid id number for a memo.");
         return null;
     }
-
-
-
 }

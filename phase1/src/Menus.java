@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.JOptionPane;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
@@ -20,17 +21,27 @@ public class Menus extends JFrame{
     private static JFrame f3 = new JFrame("New Feature is coming!");
     private static JFrame f4 = new JFrame("Incorrect Credentials!");
     private static JFrame f5 = new JFrame("Main Menu");
+    private static JFrame f6 = new JFrame("View Events");
+    private static JFrame f7 = new JFrame("View Alerts");
+    private static JFrame f8 = new JFrame("View Memos");
+
 
     JButton yes = new JButton("Yes");
     JButton no = new JButton("No");
     JButton submit = new JButton("Submit");
     JButton viewEvents = new JButton("View all events");
-    JButton createEvents = new JButton("Create Events");
+    JButton createEvents = new JButton("Create events");
     JButton viewPastEvents = new JButton("Past events");
     JButton viewCurrentEvents = new JButton("Ongoing events");
     JButton viewFutureEvents = new JButton("Future Events");
+    JButton individualEvent = new JButton("Select");
+    JButton eventSeries = new JButton("Select");
+    JButton individualAlert = new JButton("Individual");
+    JButton frequencyAlert = new JButton("Frequency");
+    JButton viewAlerts = new JButton("View alerts");
+    JButton viewMemos = new JButton("View memos");
 
-    JLabel existingAcc = new JLabel();
+    JLabel existingAcc = new JLabel("Do you have an existing account?");
     JLabel userLabel = new JLabel("Username:");
     JLabel pswdLabel = new JLabel("Password:");
     JLabel newFeature = new JLabel("You can create a new account in phase 2!");
@@ -53,17 +64,13 @@ public class Menus extends JFrame{
         yes.setBounds(70,100,90, 30);
         no.setBounds(170, 100, 90, 30);
 
-        existingAcc.setText("Do you have an existing account?");
         existingAcc.setBounds(10, 10, 300, 100);
 
         f.setSize(300,300);
         f.add(existingAcc);
         f.add(yes);
         f.add(no);
-        f.setLocationRelativeTo(null);
-        f.setLayout(null);
-        f.setVisible(true);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        makeVisible(f);
 
         //action listener
         yes.addActionListener(arg0 -> {
@@ -87,9 +94,7 @@ public class Menus extends JFrame{
         f.setSize(400, 300);
         newFeature.setBounds(50, 100, 300, 30);
         f.add(newFeature);
-        f.setLocationRelativeTo(null);
-        f.setLayout(null);
-        f.setVisible(true);
+        makeVisible(f);
         // prompt create new user
     }
 
@@ -100,7 +105,7 @@ public class Menus extends JFrame{
      */
     public void accountLogIn(HashMap<String, String> users, JFrame f){
         JTextField userText = new JTextField();
-        JTextField pswdText = new JTextField();
+        JPasswordField pswdText = new JPasswordField();
 
         submit.setBounds(200, 150, 90, 30);
         userLabel.setBounds(50, 100, 70, 30);
@@ -114,10 +119,7 @@ public class Menus extends JFrame{
         f.add(userText);
         f.add(pswdText);
         f.add(submit);
-        f.setLocationRelativeTo(null);
-        f.setLayout(null);
-        f.setVisible(true);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        makeVisible(f);
 
         submit.addActionListener(ae -> {
             String user = userText.getText();
@@ -148,10 +150,7 @@ public class Menus extends JFrame{
                 f4.add(userText);
                 f4.add(pswdText);
                 f4.add(submit);
-                f4.setLocationRelativeTo(null);
-                f4.setLayout(null);
-                f4.setVisible(true);
-                f4.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                makeVisible(f4);
             }
         });
     }
@@ -159,9 +158,9 @@ public class Menus extends JFrame{
     /**
      * Prompts user to select different functions
      * @param user: specific user that logged in
-     * @param f5: pre-fixed JFrame
+     * @param f: pre-fixed JFrame
      */
-    public void mainDisplay(String user, JFrame f5) throws IOException, ClassNotFoundException{
+    public void mainDisplay(String user, JFrame f) throws IOException, ClassNotFoundException{
 
         String serializedCalendarManagerInfo = user + ".ser";
         CalendarManager sm = new CalendarManager(serializedCalendarManagerInfo);
@@ -170,30 +169,84 @@ public class Menus extends JFrame{
         myCalendar.update();
         //System.out.println(myCalendar.getTime());
 
+        JPanel gbPanel = new JPanel(new GridBagLayout());
+        JLabel userName = new JLabel();
+        JLabel emptySpace = new JLabel(" ");
+        userName.setBounds(100, 60, 80, 30);
+        userName.setText(user);
+        userLabel.setBounds(30, 60, 70, 30);
 
+        addGB(gbPanel, userLabel, 0, 0);
+        addGB(gbPanel, userName, 0, 1);
+        addGB(gbPanel, emptySpace, 0, 2);
+        addGB(gbPanel, viewEvents, 0, 3);
+        addGB(gbPanel, viewAlerts, 0, 4);
+        addGB(gbPanel, viewMemos, 0, 5);
+        addGB(gbPanel, createEvents, 0, 6);
 
+        f.setSize(800, 800);
+        f.add(gbPanel);
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-
-
-
-
-
-
-
-
-
-
-
+        viewEvents.addActionListener(e -> {
+            f.dispose();
+            viewEventsDisplay(user, f6);
+        });
+        viewAlerts.addActionListener(e -> {
+            f.dispose();
+            viewAlertsDisplay(user, f7);
+        });
+        viewMemos.addActionListener(e -> {
+            f.dispose();
+            viewMemosDisplay(user, f8);
+        });
 
 
 
 
     }
 
+    public void viewEventsDisplay(String user, JFrame f){
+
+    }
+
+    public void viewAlertsDisplay(String user, JFrame f){
+
+    }
+
+    public void viewMemosDisplay(String user, JFrame f){
+
+    }
 
 
+    /**
+     * Makes JFrame centered and visible with default layout and exit on close
+     * @param f: JFrame
+     */
+    public void makeVisible(JFrame f){
+        f.setLocationRelativeTo(null);
+        f.setLayout(null);
+        f.setVisible(true);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
 
-
+    /**
+     * Adds component to the JPanel with proper constraints
+     * @param p: JPanel object
+     * @param comp: component to be added
+     * @param x: constraint's x-axis
+     * @param y: constraint's y-axis
+     */
+    private void addGB(JPanel p, Component comp, int x, int y){
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.insets = new Insets(5, 5, 5, 5);
+        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.gridx = x;
+        constraints.gridy = y;
+        p.add(comp, constraints);
+    }
 
 
 
