@@ -19,9 +19,7 @@ public class CalendarPhase1 {
         time = LocalDateTime.now();
         System.out.println(time);
 
-        new Menus("a");
-
-
+        new Menus();
 
         /*
         Prompt user to log in
@@ -66,7 +64,11 @@ public class CalendarPhase1 {
         /*
         Event displaying (interaction with class Calendar)
          */
-        System.out.println(myCalendar);
+        Event e = new Event("name",LocalDateTime.now(), LocalDateTime.now());
+        System.out.println("Start time is: " + e.getStartTime());
+        //System.out.println(myCalendar);
+        //System.out.println("next line");
+        //System.out.println(e);
 
         /*
         Save the calendar to the user's .ser file before exiting
