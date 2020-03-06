@@ -51,6 +51,7 @@ public class Calendar implements Serializable {
 
     /**
      * find events by date
+     * @param date: date of event
      * @return A list of events that are happening during the input date
      */
     public ArrayList<Event> findEvent(LocalDate date) {
@@ -100,12 +101,17 @@ public class Calendar implements Serializable {
      */
     public ArrayList<Event> getPastEvents(){
         ArrayList<Event> events = new ArrayList<>();
-        for (Event event: myEvents) {
-            if (event.getEndTime().isBefore(time)){
-                events.add(event);
-            }
+        if(myEvents == null){
+            return null;
         }
-        return events;
+        else {
+            for (Event event : myEvents) {
+                if (event.getEndTime().isBefore(time)) {
+                    events.add(event);
+                }
+            }
+            return events;
+        }
     }
 
     /**
@@ -115,12 +121,17 @@ public class Calendar implements Serializable {
     public ArrayList<Event> getCurrentEvents(){
         ArrayList<Event> eventsDay = findEvent(time.toLocalDate());
         ArrayList<Event> events = new ArrayList<>();
-        for (Event event: eventsDay) {
-            if (event.getEndTime().isAfter(time) && event.getStartTime().isBefore(time)) {
-                events.add(event);
-            }
+        if(eventsDay == null){
+            return null;
         }
-        return events;
+        else {
+            for (Event event : eventsDay) {
+                if (event.getEndTime().isAfter(time) && event.getStartTime().isBefore(time)) {
+                    events.add(event);
+                }
+            }
+            return events;
+        }
     }
 
     /**
@@ -129,12 +140,17 @@ public class Calendar implements Serializable {
      */
     public ArrayList<Event> getFutureEvents(){
         ArrayList<Event> events = new ArrayList<>();
-        for (Event event: myEvents) {
-            if (event.getEndTime().isAfter(time)){
-                events.add(event);
-            }
+        if(myEvents == null){
+            return null;
         }
-        return events;
+        else {
+            for (Event event : myEvents) {
+                if (event.getEndTime().isAfter(time)) {
+                    events.add(event);
+                }
+            }
+            return events;
+        }
     }
 
 

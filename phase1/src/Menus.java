@@ -24,6 +24,7 @@ public class Menus extends JFrame{
     private static JFrame f6 = new JFrame("View Events");
     private static JFrame f7 = new JFrame("View Alerts");
     private static JFrame f8 = new JFrame("View Memos");
+    private static JFrame f9 = new JFrame("Create New Events");
 
 
     JButton yes = new JButton("Yes");
@@ -32,14 +33,15 @@ public class Menus extends JFrame{
     JButton viewEvents = new JButton("View all events");
     JButton createEvents = new JButton("Create events");
     JButton viewPastEvents = new JButton("Past events");
-    JButton viewCurrentEvents = new JButton("Ongoing events");
-    JButton viewFutureEvents = new JButton("Future Events");
+    JButton viewCurrentEvents = new JButton("Select");
+    JButton viewFutureEvents = new JButton("Select");
     JButton individualEvent = new JButton("Select");
     JButton eventSeries = new JButton("Select");
     JButton individualAlert = new JButton("Individual");
     JButton frequencyAlert = new JButton("Frequency");
     JButton viewAlerts = new JButton("View alerts");
     JButton viewMemos = new JButton("View memos");
+    JButton goBack = new JButton("Back");
 
     JLabel existingAcc = new JLabel("Do you have an existing account?");
     JLabel userLabel = new JLabel("Username:");
@@ -47,7 +49,10 @@ public class Menus extends JFrame{
     JLabel newFeature = new JLabel("You can create a new account in phase 2!");
     JLabel incorrectCre = new JLabel("Please try again!");
     JLabel alert = new JLabel("Alerts:");
-    JLabel memo = new JLabel("Memo: ");
+    JLabel memo = new JLabel("Memo:");
+    JLabel pastEvents = new JLabel("Past events:");
+    JLabel currentEvents = new JLabel("Current events:");
+    JLabel futureEvents = new JLabel("Future events:");
 
     public Menus() throws IOException {
         HashMap<String, String> users = getUsers(); //Creating a map of all users in the csv file
@@ -166,7 +171,6 @@ public class Menus extends JFrame{
         CalendarManager sm = new CalendarManager(serializedCalendarManagerInfo);
         sm.readFromFile(serializedCalendarManagerInfo);
         Calendar myCalendar = sm.getCalendar();
-        myCalendar.update();
         //System.out.println(myCalendar.getTime());
 
         JPanel gbPanel = new JPanel(new GridBagLayout());
@@ -192,7 +196,7 @@ public class Menus extends JFrame{
 
         viewEvents.addActionListener(e -> {
             f.dispose();
-            viewEventsDisplay(user, f6);
+            viewEventsDisplay(user, myCalendar, f6);
         });
         viewAlerts.addActionListener(e -> {
             f.dispose();
@@ -202,14 +206,81 @@ public class Menus extends JFrame{
             f.dispose();
             viewMemosDisplay(user, f8);
         });
-
-
-
-
+        createEvents.addActionListener(e -> {
+            f.dispose();
+            createEventsDisplay(user, f9);
+        });
     }
 
-    public void viewEventsDisplay(String user, JFrame f){
+    public void viewEventsDisplay(String user, Calendar myCalendar, JFrame f){
 
+        JPanel userPanel = new JPanel();
+        userPanel.setLayout(new BoxLayout(userPanel, BoxLayout.Y_AXIS));
+        JLabel userName = new JLabel();
+        JLabel emptySpace = new JLabel(" ");
+        userName.setText(user);
+        userPanel.add(userLabel);
+        userPanel.add(userName);
+        userPanel.add(emptySpace);
+
+        userPanel.add(currentEvents);
+
+        if(myCalendar.getCurrentEvents() != null){
+            for(Event item : myCalendar.getCurrentEvents()){
+                JLabel label = new JLabel(item.toString());
+                userPanel.add(label);
+            }
+        }
+        else {
+            JLabel label = new JLabel("No current events");
+            userPanel.add(label);
+        }
+
+        userPanel.add(pastEvents);
+
+        if(myCalendar.getPastEvents() != null){
+            for(Event item : myCalendar.getPastEvents()){
+                JLabel label = new JLabel(item.toString());
+                userPanel.add(label);
+            }
+        }
+        else {
+            JLabel label = new JLabel("No past events");
+            userPanel.add(label);
+        }
+
+        userPanel.add(futureEvents);
+
+        if(myCalendar.getFutureEvents() != null){
+            for(Event item : myCalendar.getFutureEvents()){
+                JLabel label = new JLabel(item.toString());
+                userPanel.add(label);
+            }
+        }
+        else {
+            JLabel label = new JLabel("No future events");
+            userPanel.add(label);
+        }
+
+        userPanel.add(goBack);
+
+        f.setSize(800, 800);
+        f.add(userPanel);
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        goBack.addActionListener(e -> {
+            f.dispose();
+            try {
+                f.dispose();
+                mainDisplay(user, f5);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
     public void viewAlertsDisplay(String user, JFrame f){
@@ -217,6 +288,10 @@ public class Menus extends JFrame{
     }
 
     public void viewMemosDisplay(String user, JFrame f){
+
+    }
+
+    public void createEventsDisplay(String user, JFrame f){
 
     }
 
@@ -247,12 +322,6 @@ public class Menus extends JFrame{
         constraints.gridy = y;
         p.add(comp, constraints);
     }
-
-
-
-
-
-
 
 
 
