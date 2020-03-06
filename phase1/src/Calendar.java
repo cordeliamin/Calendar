@@ -190,7 +190,11 @@ public class Calendar implements Serializable {
     /**
      * Create series from existing events
      */
-    public void addSeries(String name, Collection<Event> ls){
+    public void addSeries(String name, ArrayList<Integer> indexes){
+        ArrayList<Event> ls = new ArrayList<>();
+        for(Integer i : indexes){
+            ls.add(this.myEvents.get(i - 1));
+        }
         mySeries.createSeries(name, ls);
     }
 
