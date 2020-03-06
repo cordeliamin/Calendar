@@ -200,7 +200,7 @@ public class Menus extends JFrame{
         });
         viewAlerts.addActionListener(e -> {
             f.dispose();
-            viewAlertsDisplay(user, f7);
+            viewAlertsDisplay(user, myCalendar, f7);
         });
         viewMemos.addActionListener(e -> {
             f.dispose();
@@ -219,8 +219,6 @@ public class Menus extends JFrame{
         JLabel userName = new JLabel();
         JLabel emptySpace = new JLabel(" ");
         userName.setText(user);
-        userPanel.add(userLabel);
-        userPanel.add(userName);
         userPanel.add(emptySpace);
 
         userPanel.add(currentEvents);
@@ -283,7 +281,50 @@ public class Menus extends JFrame{
         });
     }
 
-    public void viewAlertsDisplay(String user, JFrame f){
+    public void viewAlertsDisplay(String user, Calendar calendar, JFrame f){
+
+        JPanel display = new JPanel();
+        display.setLayout(new BoxLayout(display, BoxLayout.Y_AXIS));
+
+        //display title
+        JLabel titleCurrAlert = new JLabel("Current alerts:\n");
+        display.add(titleCurrAlert);
+
+        //display the current alerts
+        for (Alert alert: calendar.getCurrAlerts()){
+            JLabel a = new JLabel(alert.toString());
+            display.add(a);
+        }
+
+        //display all alerts if pressed
+        JButton bAllAlert = new JButton("View all alerts");
+        bAllAlert.addActionListener(e -> {
+            for (Alert alert: calendar.getAllAlerts()){
+                JLabel a = new JLabel(alert.toString());
+                display.add(a);
+            }
+        });
+
+        display.add(goBack);
+        //perform the goback actions here... can we pull it out and make it a helper function?
+        goBack.addActionListener(e -> {
+            f.dispose();
+            try {
+                f.dispose();
+                mainDisplay(user, f5);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        //initialize
+        f.setSize(800, 800);
+        f.add(display);
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     }
 
