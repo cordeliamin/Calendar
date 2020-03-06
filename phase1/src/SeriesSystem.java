@@ -32,7 +32,6 @@ public class SeriesSystem implements Serializable {
         return newEvents;
     }
 
-
     /**
      *
      * @param seriesName The name of the series to search for

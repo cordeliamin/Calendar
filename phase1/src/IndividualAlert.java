@@ -1,18 +1,11 @@
-import java.util.Date;
-import java.util.List;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 public class IndividualAlert extends Alert{
-    private Date appearTime;
+    private LocalDateTime time;
 
-    public IndividualAlert(Date t){
-        appearTime = t;
-    }
-
-    @Override
-    public List<Date> appearAt() {
-        List <Date> l = new ArrayList<>();
-        l.add(appearTime);
-        return l;
+    public IndividualAlert(LocalDateTime evT, String name, String message, LocalDateTime t){
+        super(evT, message, name);
+        time = t;
+        addtoTimes(time);
     }
 }

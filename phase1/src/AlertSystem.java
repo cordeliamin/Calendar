@@ -1,68 +1,98 @@
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.TreeSet;
-import java.util.Set;
 import java.io.Serializable;
+import java.util.NavigableSet;
 
 public class AlertSystem implements Serializable{
-    private Set<Date> allAlertTimes = new TreeSet<>();
-    private Map<Date, List<Alert>> dateAlertsMap = new HashMap<>();
+    private TreeSet<LocalDateTime> allAlertTimes = new TreeSet<>();
+    private Map<LocalDateTime, List<Alert>> dateAlertsMap = new HashMap<>();
     private Map<Event, List<Alert>> eventAlertsMap = new HashMap<>();
 
+    //Add alerts to the system
     /**
-     * adds the event to the alert system
+     * adds the new Individual alert to the system:
      * @param event: event of the alert
-     * @param type: type of alert: f: frequent, i: individual
-     * @param time: time of the alert(date for i, frequency for f)
+     * @param time: time of the alert
+     * @param message: message content of the alert
      */
-    public void addAlert(Event event, char type, Date time){
-        //initialize just for now
-        Alert newAlert = null;
-
-        //initialize in event alert map with event
-        switch (type){
-            case 'i':
-                newAlert = new IndividualAlert(time);
-                eventAlertsMap.putIfAbsent(event, new ArrayList<>());
-                eventAlertsMap.get(event).add(newAlert);
-                break;
-            case 'f':
-                newAlert = new IndividualAlert(time);
-                //     eventAlertsMap.putIfAbsent(event, new ArrayList<Alert>());
-                //     eventAlertsMap.get(event).add(new FrequentAlert(event.getTime(), time));
-                break;
-        }
-
-        // add to
-        if(newAlert != null){
-            for (Date alertTime: newAlert.appearAt()) {
-                dateAlertsMap.putIfAbsent(alertTime, new ArrayList<>());
-                dateAlertsMap.get(alertTime).add(newAlert);
-                allAlertTimes.add(alertTime);
-            }
-        }
-        else
-            System.out.println("Alert type not valid, try again");
+    public void addIndividualAlert(Event event, String message, LocalDateTime time){
+        Alert newAlert = new IndividualAlert(event.getStartTime(), event.getEventName(), message, time);
+        eventAlertsMap.putIfAbsent(event, new ArrayList<>());
+        eventAlertsMap.get(event).add(newAlert);
+        addtoTimesSet(newAlert);
     }
 
     /**
-     * display alerts that should appear now
-     * @param CurrTime: current time of the calendar system
+     * adds the new Frequent alert to the system
+     * @param event: event of the alert
+     * @param duration: the frequency of the event
+     * @param message: message content of the alert
      */
-    public void alert(Date CurrTime){
-        if(allAlertTimes.contains(CurrTime))
-            System.out.println(dateAlertsMap.get(CurrTime));
+    public void addFrequentAlert(Event event, String message, Duration duration) {
+        Alert newAlert = new FrequentAlert(event.getStartTime(), event.getEventName(), message, duration);
+        eventAlertsMap.putIfAbsent(event, new ArrayList<>());
+        eventAlertsMap.get(event).add(newAlert);
+        addtoTimesSet(newAlert);
+    }
+
+
+    //return sets of alerts -> that should appear currently, all alerts, or according to event
+    /**
+     * display alerts that should appear now
+     */
+    public Set<Alert> getCurrAlerts(){
+        Set<Alert> CurrAlerts = new HashSet<>(); //the set of Alerts to Show
+
+        // subset of valid times, reverse order
+        NavigableSet<LocalDateTime> subset = this.allAlertTimes.headSet(CalendarPhase1.time, true);
+        NavigableSet<LocalDateTime> validAlertTimes = subset.descendingSet();
+
+        //check if alert is valid (i.e. event hasn't occurred), then add to set CurrAlerts
+        for (LocalDateTime date: validAlertTimes){
+            for(Alert alert: dateAlertsMap.get(date)){
+                if(alert.getEventTime().isAfter(CalendarPhase1.time))
+                    CurrAlerts.add(alert);
+            }
+        }
+
+        return CurrAlerts;
     }
 
     /**
      * get all alerts associated with the event
      * @param e: events
      */
-    public List<Alert> getAlerts(Event e) {
-        return eventAlertsMap.get(e);
+    public Set<Alert> getAlerts(Event e) {
+        Set<Alert> alerts = new HashSet<>(eventAlertsMap.get(e));
+        return alerts;
+    }
+
+    /**
+     * get all alerts in the system, past, current or future
+     * @return all alerts
+     */
+    public Set<Alert> getAllAlerts(){
+        Set<Alert> result = new HashSet<>();
+        Set<Event> events = eventAlertsMap.keySet();
+        for (Event e: events){
+            result.addAll(eventAlertsMap.get(e));
+        }
+        return result;
+    }
+
+
+    // helper methods
+    /**
+     * helper method for adding the times of the alert to dateAlertsMap and allAlertTimes,
+     * @param alert: the alert to add
+     */
+    public void addtoTimesSet(Alert alert) {
+        for (LocalDateTime alertTime: alert.getTimes()) {
+            dateAlertsMap.putIfAbsent(alertTime, new ArrayList<>());
+            dateAlertsMap.get(alertTime).add(alert);
+            allAlertTimes.add(alertTime);
+        }
     }
 }

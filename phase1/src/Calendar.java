@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Calendar implements Serializable {
     /*
@@ -13,35 +14,21 @@ public class Calendar implements Serializable {
     private ArrayList<Event> myEvents = new ArrayList<>();
     private MemoSystem myMemos = new MemoSystem();
     private SeriesSystem mySeries  = new SeriesSystem();
+    private AlertSystem myAlerts = new AlertSystem();
     public LocalDateTime time = LocalDateTime.now();
 
-    public void update(){
-        time = time.plus(Period.ofDays(1));
-        LocalDate date = time.toLocalDate();
-
-        // update the status of events
-        for (Event event: myEvents) {
-            LocalDate start = event.getStartTime().toLocalDate();
-            LocalDate end = event.getEndTime().toLocalDate();
-            if (date.compareTo(start) >=0 && date.compareTo(end) <= 0 && !event.getStatus().equals("ongoing")) {
-                    event.changeStatus("ongoing");
-            } else if (date.compareTo(end) > 0 && !event.getStatus().equals("past")) {
-                event.changeStatus("past");
-            }
-        }
-    }
-
-    public String getTime(){
-        return time.toString();
-    }
-
-    /*
-    creates event, alerts,
-     */
+    //methods for creating events, alerts
     public void addEvent(Event e){
         myEvents.add(e);
     }
+    public void addIndividualAlert(Event e, String msg, LocalDateTime date){
+        myAlerts.addIndividualAlert(e, msg, date);
+    }
+    public void addFrequentAlert(Event e, String msg, Duration d){
+        myAlerts.addFrequentAlert(e, msg, d);
+    }
 
+    //methods for finding list of events: by tag, memo or date
     /**
      * find events by their tag
      * @param tag: the tag associated with an Event or multiple Events
@@ -64,6 +51,7 @@ public class Calendar implements Serializable {
 
     /**
      * find events by date
+     * @param date: date of event
      * @return A list of events that are happening during the input date
      */
     public ArrayList<Event> findEvent(LocalDate date) {
@@ -105,10 +93,93 @@ public class Calendar implements Serializable {
         }
     }
 
+
+    //methods for getting list of events: past, current or future
+    /**
+     * return list of events occurred in the past by time of calendar
+     * @return list of past events
+     */
+    public ArrayList<Event> getPastEvents(){
+        ArrayList<Event> events = new ArrayList<>();
+        if(myEvents == null){
+            return null;
+        }
+        else {
+            for (Event event : myEvents) {
+                if (event.getEndTime().isBefore(time)) {
+                    events.add(event);
+                }
+            }
+            return events;
+        }
+    }
+
+    /**
+     * return list of events currently occurring by time of calendar
+     * @return list of current events
+     */
+    public ArrayList<Event> getCurrentEvents(){
+        ArrayList<Event> eventsDay = findEvent(time.toLocalDate());
+        ArrayList<Event> events = new ArrayList<>();
+        if(eventsDay == null){
+            return null;
+        }
+        else {
+            for (Event event : eventsDay) {
+                if (event.getEndTime().isAfter(time) && event.getStartTime().isBefore(time)) {
+                    events.add(event);
+                }
+            }
+            return events;
+        }
+    }
+
+    /**
+     * return list of events occurring in the future by time of calendar
+     * @return list of future events
+     */
+    public ArrayList<Event> getFutureEvents(){
+        ArrayList<Event> events = new ArrayList<>();
+        if(myEvents == null){
+            return null;
+        }
+        else {
+            for (Event event : myEvents) {
+                if (event.getEndTime().isAfter(time)) {
+                    events.add(event);
+                }
+            }
+            return events;
+        }
+    }
+
+
+    //methods for time
+    public void update(){
+        time = time.plus(Period.ofDays(1));
+        LocalDate date = time.toLocalDate();
+
+        // update the status of events
+        for (Event event: myEvents) {
+            LocalDate start = event.getStartTime().toLocalDate();
+            LocalDate end = event.getEndTime().toLocalDate();
+            if (date.compareTo(start) >=0 && date.compareTo(end) <= 0 && !event.getStatus().equals("ongoing")) {
+                event.changeStatus("ongoing");
+            } else if (date.compareTo(end) > 0 && !event.getStatus().equals("past")) {
+                event.changeStatus("past");
+            }
+        }
+    }
+
+    public String getTime(){
+        return time.toString();
+    }
+
     public void reset(){
         myEvents = new ArrayList<>();
         time = LocalDateTime.now();
     }
+
 
     //Create a series from parameters
     public void addSeries(String name, Duration d, Period freq, int num, LocalDateTime first){
@@ -119,7 +190,11 @@ public class Calendar implements Serializable {
     /**
      * Create series from existing events
      */
-    public void addSeries(String name, Collection<Event> ls){
+    public void addSeries(String name, ArrayList<Integer> indexes){
+        ArrayList<Event> ls = new ArrayList<>();
+        for(Integer i : indexes){
+            ls.add(this.myEvents.get(i - 1));
+        }
         mySeries.createSeries(name, ls);
     }
 
@@ -127,6 +202,18 @@ public class Calendar implements Serializable {
         return mySeries.findEventsBySeries(name);
     }
 
+    //methods for getting alerts: all, based on events or current ones
+    public ArrayList<Alert> getAllAlerts(){
+        return new ArrayList<>(myAlerts.getAllAlerts());
+    }
+
+    public ArrayList<Alert> getAlerts(Event e){
+        return new ArrayList<>(myAlerts.getAlerts(e));
+    }
+
+    public ArrayList<Alert> getCurrAlerts(){
+        return new ArrayList<>(myAlerts.getCurrAlerts());
+    }
 
     //Display events
     public String toString(){
