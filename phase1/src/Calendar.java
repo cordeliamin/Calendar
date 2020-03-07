@@ -28,6 +28,10 @@ public class Calendar implements Serializable {
         myAlerts.addFrequentAlert(e, msg, d);
     }
 
+    public MemoSystem getMyMemos() {
+        return myMemos;
+    }
+
     //methods for finding list of events: by tag, memo or date
     /**
      * find events by their tag
@@ -95,6 +99,24 @@ public class Calendar implements Serializable {
 
 
     //methods for getting list of events: past, current or future
+
+    public ArrayList<Event> getMyEvents() {
+        return myEvents;
+    }
+
+
+    /**
+     * Get the names of all the events in this Calendar
+     * @return An Arraylist of the names of events
+     */
+    public ArrayList<String> getEventNames() {
+        ArrayList<String> names = new ArrayList<>();
+        for (Event e: myEvents) {
+            names.add(e.getEventName());
+        }
+        return names;
+    }
+
     /**
      * return list of events occurred in the past by time of calendar
      * @return list of past events
@@ -153,6 +175,18 @@ public class Calendar implements Serializable {
         }
     }
 
+    /**
+     * precondition: event included
+     * @param name: name of event
+     * @return event
+     */
+    public Event getEvent(String name){
+        for (Event event: myEvents){
+            if (event.getEventName().equals(name))
+                return event;
+        }
+        return null;
+    }
 
     //methods for time
     public void update(){

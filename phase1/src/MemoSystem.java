@@ -26,11 +26,9 @@ public class MemoSystem implements Serializable {
         }
     }
 
-    /** prints a list of all the memos stored in this MemoSystem */
-    public void browseMemos(){
-        for (Memo memo:memos) {
-            System.out.println(memo);
-        }
+    /** returns a list of all the memos stored in this MemoSystem */
+    public ArrayList<Memo> getMemos(){
+        return this.memos;
     }
 
     /**
