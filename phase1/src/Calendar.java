@@ -101,7 +101,7 @@ public class Calendar implements Serializable {
      */
     public ArrayList<Event> getPastEvents(){
         ArrayList<Event> events = new ArrayList<>();
-        if(myEvents == null){
+        if(myEvents == null || myEvents.isEmpty()){
             return null;
         }
         else {
@@ -140,7 +140,7 @@ public class Calendar implements Serializable {
      */
     public ArrayList<Event> getFutureEvents(){
         ArrayList<Event> events = new ArrayList<>();
-        if(myEvents == null){
+        if(myEvents == null || myEvents.isEmpty()){
             return null;
         }
         else {

@@ -3,6 +3,7 @@ import javax.swing.JOptionPane;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -26,7 +27,6 @@ public class Menus extends JFrame{
     private static JFrame f8 = new JFrame("View Memos");
     private static JFrame f9 = new JFrame("Create New Events");
 
-
     JButton yes = new JButton("Yes");
     JButton no = new JButton("No");
     JButton submit = new JButton("Submit");
@@ -43,16 +43,18 @@ public class Menus extends JFrame{
     JButton viewMemos = new JButton("View memos");
     JButton goBack = new JButton("Back");
 
-    JLabel existingAcc = new JLabel("Do you have an existing account?");
-    JLabel userLabel = new JLabel("Username:");
-    JLabel pswdLabel = new JLabel("Password:");
-    JLabel newFeature = new JLabel("You can create a new account in phase 2!");
-    JLabel incorrectCre = new JLabel("Please try again!");
-    JLabel alert = new JLabel("Alerts:");
-    JLabel memo = new JLabel("Memo:");
-    JLabel pastEvents = new JLabel("Past events:");
-    JLabel currentEvents = new JLabel("Current events:");
-    JLabel futureEvents = new JLabel("Future events:");
+    final protected JLabel existingAcc = new JLabel("Do you have an existing account?");
+    final protected JLabel userLabel = new JLabel("Username:");
+    final protected JLabel pswdLabel = new JLabel("Password:");
+    final protected JLabel newFeature = new JLabel("You can create a new account in phase 2!");
+    final protected JLabel incorrectCre = new JLabel("Please try again!");
+    final protected JLabel alert = new JLabel("Alerts:");
+    final protected JLabel memo = new JLabel("Memo:");
+    final protected JLabel pastEvents = new JLabel("Past events:");
+    final protected JLabel currentEvents = new JLabel("Current events:");
+    final protected JLabel futureEvents = new JLabel("Future events:");
+    final protected JLabel userName = new JLabel();
+
 
     public Menus() throws IOException {
         HashMap<String, String> users = getUsers(); //Creating a map of all users in the csv file
@@ -172,14 +174,12 @@ public class Menus extends JFrame{
         sm.readFromFile(serializedCalendarManagerInfo);
         Calendar myCalendar = sm.getCalendar();
         //System.out.println(myCalendar.getTime());
-
+        System.out.println(user + "THIS IS USER");
         JPanel gbPanel = new JPanel(new GridBagLayout());
-        JLabel userName = new JLabel();
         JLabel emptySpace = new JLabel(" ");
         userName.setBounds(100, 60, 80, 30);
         userName.setText(user);
         userLabel.setBounds(30, 60, 70, 30);
-
         addGB(gbPanel, userLabel, 0, 0);
         addGB(gbPanel, userName, 0, 1);
         addGB(gbPanel, emptySpace, 0, 2);
@@ -263,24 +263,28 @@ public class Menus extends JFrame{
         }
 
         userPanel.add(goBack);
-
         f.setSize(800, 800);
         f.add(userPanel);
         f.setLocationRelativeTo(null);
         f.setVisible(true);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        goBack.addActionListener(e -> {
-            f.dispose();
-            try {
+        goBack.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
                 f.dispose();
-                mainDisplay(user, f5);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            } catch (ClassNotFoundException ex) {
-                ex.printStackTrace();
+                try {
+                    f.dispose();
+                    mainDisplay(user, f5);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                } catch (ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
+
     }
 
     public void viewAlertsDisplay(String user, JFrame f){
@@ -308,7 +312,7 @@ public class Menus extends JFrame{
     }
 
     /**
-     * Adds component to the JPanel with proper constraints
+     * Adds component to the JPanel with GridBag layout with proper constraints
      * @param p: JPanel object
      * @param comp: component to be added
      * @param x: constraint's x-axis
