@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -28,6 +30,8 @@ public class Menus extends JFrame{
     private static JFrame f9 = new JFrame("Create New Events");
     private static JFrame f10 = new JFrame("Create New Memo");
     private static JFrame f11 = new JFrame("Events not in Calendar");
+    private static JFrame f12 = new JFrame("Create New Individual Alert");
+    private static JFrame f13 = new JFrame("Create New Frequent Alert");
 
 
     JButton yes = new JButton("Yes");
@@ -46,6 +50,8 @@ public class Menus extends JFrame{
     JButton viewMemos = new JButton("View memos");
     JButton goBack = new JButton("Back");
     JButton createMemo = new JButton("Create memo");
+    JButton createIAlert = new JButton("Create individual alert:");
+    JButton createFAlert = new JButton("Create frequent alert:");
 
     JLabel existingAcc = new JLabel("Do you have an existing account?");
     JLabel userLabel = new JLabel("Username:");
@@ -65,6 +71,8 @@ public class Menus extends JFrame{
     JLabel newEventMemo = new JLabel("Add a memo (optional):");
     JLabel newEventStartTime = new JLabel("Event start time (HH:MM format):");
     JLabel newEventStartDate = new JLabel("Event start time (DD-MM-YYYY format):");
+    JLabel date = new JLabel("Date:");
+    JLabel message = new JLabel("Message:");
 
     public Menus() throws IOException {
         HashMap<String, String> users = getUsers(); //Creating a map of all users in the csv file
@@ -299,23 +307,43 @@ public class Menus extends JFrame{
         display.setLayout(new BoxLayout(display, BoxLayout.Y_AXIS));
 
         //display title
-        JLabel titleCurrAlert = new JLabel("Current alerts:\n");
+        JLabel titleCurrAlert = new JLabel("Current alerts:");
         display.add(titleCurrAlert);
 
         //display the current alerts
+        if (calendar.getAllAlerts().isEmpty())
+            display.add(new JLabel("No current alerts!"));
+
         for (Alert alert: calendar.getCurrAlerts()){
             JLabel a = new JLabel(alert.toString());
             display.add(a);
         }
 
-        //display all alerts if pressed
-        JButton bAllAlert = new JButton("View all alerts");
-        bAllAlert.addActionListener(e -> {
-            for (Alert alert: calendar.getAllAlerts()){
-                JLabel a = new JLabel(alert.toString());
-                display.add(a);
-            }
+        //display all alerts
+        JLabel titleAllAlert = new JLabel("All alerts:");
+        display.add(titleAllAlert);
+        if (calendar.getAllAlerts().isEmpty())
+            display.add(new JLabel("No current alerts!"));
+
+        for (Alert alert: calendar.getAllAlerts()) {
+            JLabel a = new JLabel(alert.toString());
+            display.add(a);
+        }
+
+        //button for creating alerts
+        createIAlert.addActionListener(ae ->{
+            //I tried the try-catch block but it shows error that exception is never thrown
+            f.dispose();
+            createIAlertDisplay(calendar, f12);
         });
+
+        createFAlert.addActionListener(ae ->{
+            //I tried the try-catch block but it shows error that exception is never thrown
+            f.dispose();
+            createFAlertDisplay(calendar, f13);
+        });
+        display.add(createFAlert);
+        display.add(createIAlert);
 
         display.add(goBack);
         //perform the goback actions here... can we pull it out and make it a helper function?
@@ -338,6 +366,111 @@ public class Menus extends JFrame{
         f.setVisible(true);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+    }
+
+    public void createIAlertDisplay(Calendar myCalendar, JFrame f){
+        JPanel display = new JPanel();
+        f.add(new JLabel("Create Individual Alert"));
+        f.add(new JLabel("Enter: (1) Event Name, (2) Alert Message, (3) Alert Date in yyyy-mm-dd: HH:mm"));
+        JTextField eventTxt = new JTextField();
+        JTextField msgTxt = new JTextField();
+        JTextField dateTxt = new JTextField();
+        JLabel enterEvent = new JLabel("Event:");
+        JLabel enterMessage = new JLabel("Message");
+        JLabel enterDate = new JLabel("Date");
+
+        //display field:500*300
+        f.setSize(500, 300);
+        enterEvent.setBounds(25, 150, 25, 30);
+        eventTxt.setBounds(50, 150, 60, 30);
+        enterMessage.setBounds(120, 150, 30, 30);
+        msgTxt.setBounds(150, 150, 75, 30);
+        enterDate.setBounds(225, 150, 25, 30);
+        dateTxt.setBounds(250, 150, 25, 30);
+        submit.setBounds(200, 200, 90, 30);
+
+        JComponent[] arr = new JComponent[]{enterEvent, eventTxt, enterMessage, msgTxt, enterDate, dateTxt, submit};
+        for(JComponent i: arr){
+            display.add(i);
+        }
+        makeVisible(f);
+
+
+        //functions for submit button
+        submit.addActionListener(ae -> {
+            String name = eventTxt.getText();
+            String msg = msgTxt.getText();
+            String d = dateTxt.getText();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            LocalDateTime date = LocalDateTime.parse(d, formatter);
+
+            if (myCalendar.getEventNames().contains(name)) {
+                myCalendar.addIndividualAlert(myCalendar.getEvent(name), msg, date);
+            }
+        });
+
+        f.add(display);
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public void createFAlertDisplay(Calendar myCalendar, JFrame f){
+        JPanel display = new JPanel();
+        f.add(new JLabel("Create Individual Alert"));
+        f.add(new JLabel("Enter: (1) Event Name, (2) Alert Message, Alert Frequency every (3) number of (4) frequency"));
+        f.add(new JLabel("ex. every 1 d(for day) or every 6 h(for hours), only d/h permitted"));
+        JTextField eventTxt = new JTextField();
+        JTextField msgTxt = new JTextField();
+        JTextField nTxt = new JTextField();
+        JTextField fTxt = new JTextField();
+        JLabel enterEvent = new JLabel("Event:");
+        JLabel enterMessage = new JLabel("Message");
+        JLabel enterNumberOf = new JLabel("Frequency: every");
+
+        //display field:500*300
+        f.setSize(500, 300);
+        enterEvent.setBounds(25, 150, 25, 30);
+        eventTxt.setBounds(50, 150, 60, 30);
+        enterMessage.setBounds(120, 150, 30, 30);
+        msgTxt.setBounds(150, 150, 75, 30);
+        enterNumberOf.setBounds(225, 150, 50, 30);
+        nTxt.setBounds(275, 150, 25, 30);
+        fTxt.setBounds(300, 150, 25, 30);
+        submit.setBounds(200, 200, 90, 30);
+
+        JComponent[] arr = new JComponent[]{enterEvent, eventTxt, enterMessage, msgTxt, enterNumberOf, nTxt, fTxt, submit};
+        for(JComponent i: arr){
+            display.add(i);
+        }
+        makeVisible(f);
+
+        f.add(display);
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //functions for submit button
+        submit.addActionListener(ae -> {
+            String name = eventTxt.getText();
+            String msg = msgTxt.getText();
+            String num = nTxt.getText();
+            char freq = fTxt.getText().charAt(0);
+
+            if (myCalendar.getEventNames().contains(name)) {
+                Duration duration = null;
+                switch (freq) {
+                    case 'd':
+                        duration = Duration.ofDays(Long.parseLong(num));
+                        break;
+                    case 'h':
+                        duration = Duration.ofHours(Long.parseLong(num));
+                        break;
+                }
+                if (duration!= null)
+                    myCalendar.addFrequentAlert(myCalendar.getEvent(name), msg, duration);
+            }
+        });
     }
 
     public void viewMemosDisplay(String user, Calendar myCalendar, JFrame f){

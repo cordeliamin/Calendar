@@ -175,6 +175,18 @@ public class Calendar implements Serializable {
         }
     }
 
+    /**
+     * precondition: event included
+     * @param name: name of event
+     * @return event
+     */
+    public Event getEvent(String name){
+        for (Event event: myEvents){
+            if (event.getEventName().equals(name))
+                return event;
+        }
+        return null;
+    }
 
     //methods for time
     public void update(){
