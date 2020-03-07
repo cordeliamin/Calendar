@@ -60,6 +60,11 @@ public class Menus extends JFrame{
     JLabel pastEvents = new JLabel("Past events:");
     JLabel currentEvents = new JLabel("Current events:");
     JLabel futureEvents = new JLabel("Future events:");
+    JLabel newEventName = new JLabel("Event name:");
+    JLabel newEventDuration = new JLabel("Event duration in hours:");
+    JLabel newEventMemo = new JLabel("Add a memo (optional):");
+    JLabel newEventStartTime = new JLabel("Event start time (HH:MM format):");
+    JLabel newEventStartDate = new JLabel("Event start time (DD-MM-YYYY format):");
 
     public Menus() throws IOException {
         HashMap<String, String> users = getUsers(); //Creating a map of all users in the csv file
@@ -207,7 +212,7 @@ public class Menus extends JFrame{
         });
         viewAlerts.addActionListener(e -> {
             f.dispose();
-            viewAlertsDisplay(user, f7);
+            viewAlertsDisplay(user, myCalendar, f7);
         });
         viewMemos.addActionListener(e -> {
             f.dispose();
@@ -226,8 +231,6 @@ public class Menus extends JFrame{
         JLabel userName = new JLabel();
         JLabel emptySpace = new JLabel(" ");
         userName.setText(user);
-        userPanel.add(userLabel);
-        userPanel.add(userName);
         userPanel.add(emptySpace);
 
         userPanel.add(currentEvents);
@@ -290,7 +293,50 @@ public class Menus extends JFrame{
         });
     }
 
-    public void viewAlertsDisplay(String user, JFrame f){
+    public void viewAlertsDisplay(String user, Calendar calendar, JFrame f){
+
+        JPanel display = new JPanel();
+        display.setLayout(new BoxLayout(display, BoxLayout.Y_AXIS));
+
+        //display title
+        JLabel titleCurrAlert = new JLabel("Current alerts:\n");
+        display.add(titleCurrAlert);
+
+        //display the current alerts
+        for (Alert alert: calendar.getCurrAlerts()){
+            JLabel a = new JLabel(alert.toString());
+            display.add(a);
+        }
+
+        //display all alerts if pressed
+        JButton bAllAlert = new JButton("View all alerts");
+        bAllAlert.addActionListener(e -> {
+            for (Alert alert: calendar.getAllAlerts()){
+                JLabel a = new JLabel(alert.toString());
+                display.add(a);
+            }
+        });
+
+        display.add(goBack);
+        //perform the goback actions here... can we pull it out and make it a helper function?
+        goBack.addActionListener(e -> {
+            f.dispose();
+            try {
+                f.dispose();
+                mainDisplay(user, f5);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        //initialize
+        f.setSize(800, 800);
+        f.add(display);
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     }
 
@@ -387,7 +433,43 @@ public class Menus extends JFrame{
     }
 
     public void createEventsDisplay(String user, JFrame f){
+        JPanel gbPanel = new JPanel(new GridBagLayout());
+        JTextField eventName = new JTextField();
+        JTextField eventDuration = new JTextField();
+        JTextField eventStartDate = new JTextField(); //DD-MM-YYYY format
+        JTextField eventStartTime = new JTextField(); //HH:MM format
+        JTextField eventMemo = new JTextField();
 
+        submit.setBounds(200, 150, 90, 30);
+        newEventName.setBounds(50, 100, 70, 30);
+        newEventDuration.setBounds(300, 100, 70, 30);
+        eventName.setBounds(120, 100, 100, 30);
+        eventDuration.setBounds(370, 100, 100, 30);
+
+        f.setSize(500,300);
+        f.add(newEventName);
+        f.add(newEventDuration);
+        f.add(eventName);
+        f.add(eventDuration);
+        f.add(newEventMemo);
+        f.add(eventMemo);
+        f.add(submit);
+        f.add(newEventStartDate);
+        f.add(eventStartDate);
+        f.add(newEventStartTime);
+        f.add(eventStartTime);
+        makeVisible(f);
+
+        submit.addActionListener(ae -> {
+            String name = eventName.getText();
+            int duration = Integer.parseInt(eventDuration.getText());
+            LocalDateTime start = LocalDateTime.of(Integer.parseInt(eventStartDate.getText().substring(6)),
+                            Integer.parseInt(eventStartDate.getText().substring(3, 5)),
+                            Integer.parseInt(eventStartDate.getText().substring(0,2)),
+                                    Integer.parseInt(eventStartTime.getText().substring(0, 2)),
+                                            Integer.parseInt(eventStartTime.getText().substring(3)));
+            String memo = eventMemo.getText();
+        });
     }
 
 
@@ -435,7 +517,7 @@ public class Menus extends JFrame{
     }
 
     public static HashMap<String, String> getUsers() throws FileNotFoundException {
-        Scanner scanner = new Scanner(new FileInputStream("users.csv"));
+        Scanner scanner = new Scanner(new FileInputStream("./phase1/users.csv"));
         String[] login;
         HashMap<String, String> users = new HashMap<>();
         while (scanner.hasNextLine()) {
