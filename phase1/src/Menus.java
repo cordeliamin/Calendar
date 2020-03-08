@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -38,6 +39,7 @@ public class Menus extends JFrame {
     private static JFrame f16 = new JFrame("Find Event(s) by Tag");
     private static JFrame f17 = new JFrame("Find Event(s) by Memo");
     private static JFrame f18 = new JFrame("Invalid Memo Id number");
+    private static JFrame f19 = new JFrame("Invalid Event name");
 
 
     JButton yes = new JButton("Yes");
@@ -355,6 +357,7 @@ public class Menus extends JFrame {
         findEventByMemo.addActionListener(e -> {
             f.dispose();
             findEventMemoDisplay(user, myCalendar, f17);
+            viewMemosDisplay(user, myCalendar, f8);
         });
     }
 
@@ -478,6 +481,57 @@ public class Menus extends JFrame {
             addGB(userPanel, label, 0, 4);
 
         }
+    }
+
+    public void tagEventDisplay(Calendar myCalendar) {
+        JTextField eventText = new JTextField();
+        JTextField tagText = new JTextField();
+
+        submit.setBounds(200, 150, 90, 30);
+        newEventName.setBounds(50, 100, 70, 30);
+        tag.setBounds(300, 100, 70, 30);
+        eventText.setBounds(120, 100, 100, 30);
+        tagText.setBounds(370, 100, 100, 30);
+
+        f.setSize(500, 300);
+        f.add(newEventName);
+        f.add(tag);
+        f.add(eventText);
+        f.add(tagText);
+        f.add(submit);
+        makeVisible(f);
+
+        submit.addActionListener(ae -> {
+            String event = eventText.getText();
+            String tag1 = tagText.getText();
+
+            String[] eventArray = {event};
+
+            ArrayList<Event> eventList = eventNameToEventList(eventArray, myCalendar);
+
+            if (eventList != null) {
+
+                eventList.get(0).setTag(tag1);
+                System.out.println("Tag set to " + tag1);
+
+                f.setVisible(false);
+                f.dispose();
+
+            } else {
+                eventText.setText("");
+                tagText.setText("");
+                incorrectCre.setBounds(200, 70, 200, 30);
+                f.setVisible(false);
+                f19.setSize(500, 300);
+                f19.add(newEventName);
+                f19.add(tag);
+                f19.add(incorrectCre);
+                f19.add(eventText);
+                f19.add(tagText);
+                f19.add(submit);
+                makeVisible(f19);
+            }
+        });
     }
 
     public void viewAlertsDisplay(String user, Calendar calendar, JFrame f) {
