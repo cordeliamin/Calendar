@@ -564,26 +564,37 @@ public class Menus extends JFrame {
         addGB(display, createFAlert, 0, 6);
         addGB(display, createIAlert, 0, 7);
 
+        f.setSize(800, 800);
+        f.add(display);
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         //display all alerts if pressed
         bAllAlert.addActionListener(e -> {
-            for (Alert alert : calendar.getAllAlerts()) {
-                JLabel a = new JLabel(alert.toString());
-                addGB(display, a, 0, 8);
-            }
-            //display all alerts
-            JLabel titleAllAlert = new JLabel("All alerts:");
-            addGB(display, titleAllAlert, 0, 9);
-            if (calendar.getAllAlerts().isEmpty()) {
-                addGB(display, new JLabel("No current alerts!"), 0, 7);
-            }
-            for (Alert alert : calendar.getAllAlerts()) {
-                JLabel a = new JLabel(alert.toString());
-                addGB(display, a, 0, 10);
-            }
-        });
+            int y = 9;
 
+            f.setVisible(false);
+            JLabel titleAllAlert = new JLabel("All alerts:");
+            addGB(display, titleAllAlert, 0, 8);
+            if (calendar.getAllAlerts() == null || calendar.getAllAlerts().isEmpty()) {
+                addGB(display, new JLabel("No current alerts!"), 0, 9);
+            } else {
+                for (Alert alert : calendar.getAllAlerts()) {
+                    JLabel a = new JLabel(alert.toString());
+                    addGB(display, a, 0, y);
+                    y++;
+                }
+            }
+            f.setSize(800, 800);
+            f.add(display);
+            f.setLocationRelativeTo(null);
+            f.setVisible(true);
+            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        });
         //button for creating alerts
-        createIAlert.addActionListener(ae -> {
+        createIAlert.addActionListener(e -> {
             //I tried the try-catch block but it shows error that exception is never thrown
             f.dispose();
             createIAlertDisplay(calendar, f12);
@@ -594,13 +605,6 @@ public class Menus extends JFrame {
             f.dispose();
             createFAlertDisplay(calendar, f13);
         });
-
-        f.setSize(800, 800);
-        f.add(display);
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
     }
 
     public void createIAlertDisplay(Calendar myCalendar, JFrame f) {
@@ -627,7 +631,7 @@ public class Menus extends JFrame {
         dateTxt.setBounds(250, 150, 25, 30);
         submit.setBounds(200, 200, 90, 30);
 
-        JComponent[] arr = new JComponent[]{enterEvent, eventTxt, enterMessage, msgTxt, enterDate, dateTxt, submit};
+        JComponent[] arr = new JComponent[]{create_individual_alert, enterEvent, eventTxt, enterMessage, msgTxt, enterDate, dateTxt, submit};
         for (JComponent i : arr) {
             display.add(i);
         }
@@ -710,42 +714,43 @@ public class Menus extends JFrame {
     }
 
     public void viewMemosDisplay(String user, Calendar myCalendar, JFrame f) {
-        JPanel userPanel = new JPanel();
-        userPanel.setLayout(new BoxLayout(userPanel, BoxLayout.Y_AXIS));
+
+        JPanel display = new JPanel(new GridBagLayout());
         JLabel userName = new JLabel();
         JLabel emptySpace = new JLabel(" ");
+
+        userName.setBounds(100, 60, 80, 30);
         userName.setText(user);
-        userPanel.add(userLabel);
-        userPanel.add(userName);
-        userPanel.add(emptySpace);
+        userLabel.setBounds(30, 60, 70, 30);
 
-        MemoSystem myMemos = myCalendar.getMyMemos();
+        addGB(display, userLabel, 0, 0);
+        addGB(display, userName, 0, 1);
+        addGB(display, emptySpace, 0, 2);
 
-        userPanel.add(memos);
+        int y = 4;
 
-        if (myMemos.getMemos() != null) {
-            for (Memo memo1 : myMemos.getMemos()) {
-                JLabel label = new JLabel(memo1.toString());
-                userPanel.add(label);
-            }
+        if (myCalendar.getMyMemos() == null || myCalendar.getMyMemos().getMemos() == null) {
+            addGB(display, new JLabel("No memos"), 0, 4);
+        } else if (myCalendar.getMyMemos().isEmpty()) {
+            addGB(display, new JLabel("No memos"), 0, 4);
         } else {
-            JLabel label = new JLabel("No memos");
-            userPanel.add(label);
+            MemoSystem myMemos = myCalendar.getMyMemos();
+            for (Memo memo1 : myMemos.getMemos()) {
+                addGB(display, new JLabel(memo1.toString()), 0, y);
+                y++;
+            }
         }
 
-        userPanel.add(createMemo);
+        addGB(display, createMemo, 0, y + 1);
 
         f.setSize(800, 800);
-        f.add(userPanel);
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.add(display);
+        makeVisibleGB(f);
 
         createMemo.addActionListener(e -> {
             f.dispose();
             createMemoDisplay(user, myCalendar, f10);
         });
-
     }
 
     public void createMemoDisplay(String user, Calendar myCalendar, JFrame f) {
@@ -847,6 +852,12 @@ public class Menus extends JFrame {
     public void makeVisible(JFrame f) {
         f.setLocationRelativeTo(null);
         f.setLayout(null);
+        f.setVisible(true);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public void makeVisibleGB(JFrame f) {
+        f.setLocationRelativeTo(null);
         f.setVisible(true);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
