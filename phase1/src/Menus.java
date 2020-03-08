@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,10 +29,15 @@ public class Menus extends JFrame {
     private static JFrame f7 = new JFrame("View Alerts");
     private static JFrame f8 = new JFrame("View Memos");
     private static JFrame f9 = new JFrame("Create New Events");
-    private static JFrame f10 = new JFrame("Create New Memo");
+    private static JFrame f10 = new JFrame("Create New Memo for Event(s)");
     private static JFrame f11 = new JFrame("Events not in Calendar");
     private static JFrame f12 = new JFrame("Create New Individual Alert");
     private static JFrame f13 = new JFrame("Create New Frequent Alert");
+    private static JFrame f14 = new JFrame("Find Event(s)");
+    private static JFrame f15 = new JFrame("Find Event(s) by Date");
+    private static JFrame f16 = new JFrame("Find Event(s) by Tag");
+    private static JFrame f17 = new JFrame("Find Event(s) by Memo");
+    private static JFrame f18 = new JFrame("Invalid Memo Id number");
 
 
     JButton yes = new JButton("Yes");
@@ -52,6 +58,9 @@ public class Menus extends JFrame {
     JButton createIAlert = new JButton("Create individual alert:");
     JButton createFAlert = new JButton("Create frequent alert:");
     JButton bAllAlert = new JButton("View all alerts");
+    JButton findEventByDate = new JButton("Find Event by date");
+    JButton findEventByTag = new JButton("Find Event by tag");
+    JButton findEventByMemo = new JButton("Find Event by memo");
 
     JLabel existingAcc = new JLabel("Do you have an existing account?");
     JLabel userLabel = new JLabel("Username:");
@@ -71,8 +80,10 @@ public class Menus extends JFrame {
     JLabel newEventMemo = new JLabel("Add a memo (optional):");
     JLabel newEventStartTime = new JLabel("Event start time (HH:MM format):");
     JLabel newEventStartDate = new JLabel("Event start time (DD-MM-YYYY format):");
-    JLabel date = new JLabel("Date:");
+    JLabel date = new JLabel("Date (YYYY-MM-DD format):");
     JLabel message = new JLabel("Message:");
+    JLabel tag = new JLabel("Tag:");
+    JLabel memoid = new JLabel("Memo id number:");
 
     public Menus() throws IOException {
         HashMap<String, String> users = getUsers(); //Creating a map of all users in the csv file
@@ -317,6 +328,156 @@ public class Menus extends JFrame {
         f.setLocationRelativeTo(null);
         f.setVisible(true);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    }
+
+    public void findEventsDisplay(String user, Calendar myCalendar, JFrame f) {
+        JPanel gbPanel = new JPanel(new GridBagLayout());
+
+        addGB(gbPanel, findEventByDate, 0, 3);
+        addGB(gbPanel, findEventByTag, 0, 4);
+        addGB(gbPanel, findEventByMemo, 0, 5);
+
+        f.setSize(800, 800);
+        f.add(gbPanel);
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        findEventByDate.addActionListener(e -> {
+            f.dispose();
+            findEventDateDisplay(user, myCalendar, f15);
+        });
+        findEventByTag.addActionListener(e -> {
+            f.dispose();
+            findEventTagDisplay(user, myCalendar, f16);
+        });
+        findEventByMemo.addActionListener(e -> {
+            f.dispose();
+            findEventMemoDisplay(user, myCalendar, f17);
+        });
+    }
+
+    public void findEventDateDisplay(String user, Calendar myCalendar, JFrame f) {
+        JTextField dateText = new JTextField();
+
+        submit.setBounds(200, 150, 90, 30);
+        date.setBounds(50, 100, 70, 30);
+        dateText.setBounds(120, 100, 100, 30);
+
+        f.setSize(500, 300);
+        f.add(date);
+        f.add(dateText);
+        f.add(submit);
+        makeVisible(f);
+
+        submit.addActionListener(ae -> {
+            String date = dateText.getText();
+            LocalDate d = LocalDate.parse(date);
+
+            ArrayList<Event> events = myCalendar.findEvent(d);
+
+            f.dispose();
+
+            findEventsHelperfunc(events, user);
+        });
+    }
+
+    public void findEventTagDisplay(String user, Calendar myCalendar, JFrame f) {
+        JTextField tagText = new JTextField();
+
+        submit.setBounds(200, 150, 90, 30);
+        tag.setBounds(50, 100, 70, 30);
+        tagText.setBounds(120, 100, 100, 30);
+
+        f.setSize(500, 300);
+        f.add(tag);
+        f.add(tagText);
+        f.add(submit);
+        makeVisible(f);
+
+        submit.addActionListener(ae -> {
+            String tag1 = tagText.getText();
+
+            ArrayList<Event> events = myCalendar.findEvent(tag1);
+
+            f.dispose();
+
+            findEventsHelperfunc(events, user);
+        });
+    }
+
+    public void findEventMemoDisplay(String user, Calendar myCalendar, JFrame f) {
+
+        JTextField memoText = new JTextField();
+
+        submit.setBounds(200, 150, 90, 30);
+        memoid.setBounds(50, 100, 70, 30);
+        memoText.setBounds(120, 100, 100, 30);
+
+        f.setSize(500, 300);
+        f.add(memoid);
+        f.add(memoText);
+        f.add(submit);
+        makeVisible(f);
+
+
+        submit.addActionListener(ae -> {
+            String memoId = memoText.getText();
+            try {
+                int memoIdNum = Integer.parseInt(memoId);
+
+                Memo memo1 = myCalendar.getMyMemos().getMemo(memoIdNum);
+
+                ArrayList<Event> events = myCalendar.findEvent(memo1);
+
+                f.dispose();
+                findEventsHelperfunc(events, user);
+
+            } catch (NumberFormatException n) {
+                memoText.setText("");
+                incorrectCre.setBounds(200, 70, 200, 30);
+                f.setVisible(false);
+                f18.setSize(500, 300);
+                f18.add(memoid);
+                f18.add(incorrectCre);
+                f18.add(memoText);
+                f18.add(submit);
+                makeVisible(f18);
+            }
+
+
+        });
+    }
+
+    // helper function for findEventDateDisplay, findEventTagDisplay and findEventMemoDisplay
+    private void findEventsHelperfunc(ArrayList<Event> events, String user) {
+        JPanel userPanel = new JPanel(new GridBagLayout());
+        JLabel userName = new JLabel();
+        JLabel emptySpace = new JLabel(" ");
+        userName.setBounds(100, 60, 80, 30);
+        userName.setText(user);
+        userLabel.setBounds(30, 60, 70, 30);
+
+        addGB(userPanel, userLabel, 0, 0);
+        addGB(userPanel, userName, 0, 1);
+        addGB(userPanel, emptySpace, 0, 2);
+
+        userPanel.add(emptySpace);
+
+        addGB(userPanel, enterEvents, 0, 3);
+
+        if (events != null) { // displays events to screen
+            for (Event e : events) {
+                JLabel label = new JLabel(e.toString());
+                addGB(userPanel, label, 0, 4);
+            }
+        } else {
+            JLabel label = new JLabel("No events found.");
+            userPanel.add(label);
+            addGB(userPanel, label, 0, 4);
+
+        }
     }
 
     public void viewAlertsDisplay(String user, Calendar calendar, JFrame f) {
