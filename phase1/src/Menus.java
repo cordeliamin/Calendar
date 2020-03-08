@@ -687,6 +687,8 @@ public class Menus extends JFrame {
             }
         }
 
+        addGB(display, createMemo, 0, y + 1);
+
         f.setSize(800, 800);
         f.add(display);
         makeVisibleGB(f);
