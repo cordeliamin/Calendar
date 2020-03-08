@@ -79,7 +79,7 @@ public class Menus extends JFrame {
     JLabel newEventDuration = new JLabel("Event duration in hours:");
     JLabel newEventMemo = new JLabel("Add a memo (optional):");
     JLabel newEventStartTime = new JLabel("Event start time (HH:MM format):");
-    JLabel newEventStartDate = new JLabel("Event start time (DD-MM-YYYY format):");
+    JLabel newEventStartDate = new JLabel("Event start date (DD-MM-YYYY format):");
     JLabel date = new JLabel("Date (YYYY-MM-DD format):");
     JLabel message = new JLabel("Message:");
     JLabel tag = new JLabel("Tag:");
@@ -263,7 +263,7 @@ public class Menus extends JFrame {
         });
         createEvents.addActionListener(e -> {
             f.dispose();
-            createEventsDisplay(user, f9);
+            createEventsDisplay(user, myCalendar, f9);
         });
     }
 
@@ -728,7 +728,6 @@ public class Menus extends JFrame {
 
                 ArrayList<Event> events1 = eventNameToEventList(eventList, myCalendar);
                 myMemos.createMemo(events1, note1);
-
                 f.setVisible(false);
                 f.dispose();
 
@@ -750,7 +749,7 @@ public class Menus extends JFrame {
 
     }
 
-    public void createEventsDisplay(String user, JFrame f) {
+    public void createEventsDisplay(String user, Calendar myCalendar, JFrame f) {
         JPanel gbPanel = new JPanel(new GridBagLayout());
         JTextField eventName = new JTextField();
         JTextField eventDuration = new JTextField();
@@ -758,28 +757,32 @@ public class Menus extends JFrame {
         JTextField eventStartTime = new JTextField(); //HH:MM format
         JTextField eventMemo = new JTextField();
 
-        submit.setBounds(200, 150, 90, 30);
-        newEventName.setBounds(20, 100, 100, 30);
-        newEventDuration.setBounds(200, 100, 200, 30);
-        eventName.setBounds(120, 100, 100, 30);
-        eventDuration.setBounds(370, 100, 100, 30);
+
+        eventName.setPreferredSize(new Dimension(100, 30));
+        eventDuration.setPreferredSize(new Dimension(100, 30));
+        eventStartDate.setPreferredSize(new Dimension(100, 30));
+        eventStartTime.setPreferredSize(new Dimension(100, 30));
+        eventMemo.setPreferredSize(new Dimension(100, 30));
+
+        addGB(gbPanel, newEventName, 0, 0);
+        addGB(gbPanel, eventName, 3, 0);
+        addGB(gbPanel, newEventDuration, 0, 1);
+        addGB(gbPanel, eventDuration, 3, 1);
+        addGB(gbPanel, newEventMemo, 0, 2);
+        addGB(gbPanel, eventMemo, 3, 2);
+        addGB(gbPanel, newEventStartDate, 0, 3);
+        addGB(gbPanel, eventStartDate, 3, 3);
+        addGB(gbPanel, newEventStartTime, 0, 4);
+        addGB(gbPanel, eventStartTime, 3, 4);
+        addGB(gbPanel, submit, 2, 5);
 
         f.setSize(500, 300);
-        f.add(newEventName);
-        f.add(newEventDuration);
-        f.add(eventName);
-        f.add(eventDuration);
-        f.add(newEventMemo);
-        f.add(eventMemo);
-        f.add(submit);
-        f.add(newEventStartDate);
-        f.add(eventStartDate);
-        f.add(newEventStartTime);
-        f.add(eventStartTime);
-        makeVisible(f);
+        f.add(gbPanel);
+        makeVisibleGB(f);
 
         submit.addActionListener(ae -> {
             String name = eventName.getText();
+
             int duration = Integer.parseInt(eventDuration.getText());
             LocalDateTime start = LocalDateTime.of(Integer.parseInt(eventStartDate.getText().substring(6)),
                     Integer.parseInt(eventStartDate.getText().substring(3, 5)),
@@ -854,5 +857,4 @@ public class Menus extends JFrame {
         }
         return events;
     }
-
 }
