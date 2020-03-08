@@ -15,7 +15,6 @@ public class Event implements Serializable {
     /** A list of memos associated with this Event */
     private ArrayList<Memo> memos;
 
-
     public Event(String name, LocalDateTime start, LocalDateTime end){
         eventName = name;
         startTime = start;

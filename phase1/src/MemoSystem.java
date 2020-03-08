@@ -5,8 +5,10 @@ import java.util.List;
 public class MemoSystem implements Serializable {
     /* A system for handling the creation and storage of Memos */
 
-    /** A list of all the memos created */
-    public ArrayList<Memo> memos;
+    /**
+     * A list of all the memos created
+     */
+    public static ArrayList<Memo> memos;
 
     /**
      * creates a memo
@@ -18,7 +20,7 @@ public class MemoSystem implements Serializable {
         Memo memo = new Memo(note);
 
         // adds memo to the list of memos stored in this MemoSystem
-        this.memos.add(memo);
+        memos.add(memo);
 
         // adds memo to each event's memos from the input list of events
         for (Event event:events){
@@ -27,22 +29,31 @@ public class MemoSystem implements Serializable {
     }
 
     /** returns a list of all the memos stored in this MemoSystem */
-    public ArrayList<Memo> getMemos(){
-        return this.memos;
+    public ArrayList<Memo> getMemos() {
+        return memos;
     }
 
     /**
-     * get a memo by its id number
+     * get a memo by its id numberm
+     *
      * @param id: the id number of a memo in this MemoSystem
      * @return the memo with id number id
      */
     public Memo getMemo(int id) {
-        for (Memo memo:memos) {
-            if(memo.getIdnumber() == id) {
+        for (Memo memo : memos) {
+            if (memo.getIdNumber() == id) {
                 return memo;
             }
         }
         System.out.println("This is not a valid id number for a memo.");
         return null;
+    }
+
+    public boolean isEmpty() {
+        if (memos == null) {
+            return false;
+        } else {
+            return memos.isEmpty();
+        }
     }
 }
