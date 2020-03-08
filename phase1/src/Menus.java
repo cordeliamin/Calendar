@@ -791,7 +791,7 @@ public class Menus extends JFrame {
                 incorrectCre.setBounds(200, 70, 200, 30);
                 f.setVisible(false);
                 f11.setSize(500, 300);
-                f11.add(createEvents);
+                f11.add(enterEvents);
                 f11.add(note);
                 f11.add(incorrectCre);
                 f11.add(eventsText);
