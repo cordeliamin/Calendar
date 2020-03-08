@@ -51,6 +51,7 @@ public class Menus extends JFrame {
     JButton createMemo = new JButton("Create memo");
     JButton createIAlert = new JButton("Create individual alert:");
     JButton createFAlert = new JButton("Create frequent alert:");
+    JButton bAllAlert = new JButton("View all alerts");
 
     JLabel existingAcc = new JLabel("Do you have an existing account?");
     JLabel userLabel = new JLabel("Username:");
@@ -268,11 +269,9 @@ public class Menus extends JFrame {
         addGB(userPanel, userName, 0, 1);
         addGB(userPanel, emptySpace, 0, 2);
 
-        userPanel.add(emptySpace);
-
         addGB(userPanel, currentEvents, 0, 3);
 
-        if (myCalendar.getCurrentEvents() != null || !myCalendar.getCurrentEvents().isEmpty()) {
+        if (myCalendar.getCurrentEvents() != null ) {
             for (Event item : myCalendar.getCurrentEvents()) {
                 JLabel label = new JLabel(item.toString());
                 addGB(userPanel, label, 0, 4);
@@ -281,12 +280,12 @@ public class Menus extends JFrame {
             JLabel label = new JLabel("No current events");
             userPanel.add(label);
             addGB(userPanel, label, 0, 4);
-
         }
 
+        addGB(userPanel, emptySpace, 0, 2);
         addGB(userPanel, pastEvents, 0, 5);
 
-        if (myCalendar.getPastEvents() != null || !myCalendar.getPastEvents().isEmpty()) {
+        if (myCalendar.getPastEvents() != null) {
             for (Event item : myCalendar.getPastEvents()) {
                 JLabel label = new JLabel(item.toString());
                 userPanel.add(label);
@@ -298,9 +297,10 @@ public class Menus extends JFrame {
             addGB(userPanel, label, 0, 6);
         }
 
+        addGB(userPanel, emptySpace, 0, 2);
         addGB(userPanel, futureEvents, 0, 7);
 
-        if (myCalendar.getFutureEvents() != null || !myCalendar.getFutureEvents().isEmpty()) {
+        if (myCalendar.getFutureEvents() != null) {
             for (Event item : myCalendar.getFutureEvents()) {
                 JLabel label = new JLabel(item.toString());
                 userPanel.add(label);
@@ -317,75 +317,83 @@ public class Menus extends JFrame {
         f.setLocationRelativeTo(null);
         f.setVisible(true);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
     }
 
     public void viewAlertsDisplay(String user, Calendar calendar, JFrame f) {
 
-        JPanel display = new JPanel();
-        display.setLayout(new BoxLayout(display, BoxLayout.Y_AXIS));
-
-        //display title
+        JPanel display = new JPanel(new GridBagLayout());
+        JLabel userName = new JLabel();
+        JLabel emptySpace = new JLabel(" ");
         JLabel titleCurrAlert = new JLabel("Current alerts:\n");
-        // JLabel titleCurrAlert = new JLabel("Current alerts:");
-        display.add(titleCurrAlert);
+        userName.setBounds(100, 60, 80, 30);
+        userName.setText(user);
+        userLabel.setBounds(30, 60, 70, 30);
+
+        addGB(display, userLabel, 0, 0);
+        addGB(display, userName, 0, 1);
+        addGB(display, emptySpace, 0, 2);
+        addGB(display, titleCurrAlert, 0, 3);
 
         //display the current alerts
-        if (calendar.getAllAlerts().isEmpty()) {
-            display.add(new JLabel("No current alerts!"));
+        if (calendar.getAllAlerts().isEmpty() || calendar.getAllAlerts() == null) {
+            addGB(display, new JLabel("No current alerts!"), 0, 4);
         }
-        for (Alert alert : calendar.getCurrAlerts()) {
-            JLabel a = new JLabel(alert.toString());
-            display.add(a);
+        else {
+            for (Alert alert : calendar.getCurrAlerts()) {
+                JLabel a = new JLabel(alert.toString());
+                addGB(display, a, 0, 4);
+            }
         }
 
+        addGB(display, bAllAlert, 0, 5);
+        addGB(display, createFAlert, 0, 6);
+        addGB(display, createIAlert, 0, 7);
+
         //display all alerts if pressed
-        JButton bAllAlert = new JButton("View all alerts");
         bAllAlert.addActionListener(e -> {
             for (Alert alert : calendar.getAllAlerts()) {
                 JLabel a = new JLabel(alert.toString());
-                display.add(a);
+                addGB(display, a, 0, 8);
             }
             //display all alerts
             JLabel titleAllAlert = new JLabel("All alerts:");
-            display.add(titleAllAlert);
+            addGB(display, titleAllAlert, 0, 9);
             if (calendar.getAllAlerts().isEmpty()) {
-                display.add(new JLabel("No current alerts!"));
+                addGB(display, new JLabel("No current alerts!"), 0, 7);
             }
             for (Alert alert : calendar.getAllAlerts()) {
                 JLabel a = new JLabel(alert.toString());
-                display.add(a);
+                addGB(display, a, 0, 10);
             }
-
-            //button for creating alerts
-            createIAlert.addActionListener(ae -> {
-                //I tried the try-catch block but it shows error that exception is never thrown
-                f.dispose();
-                createIAlertDisplay(calendar, f12);
-            });
-
-            createFAlert.addActionListener(ae -> {
-                //I tried the try-catch block but it shows error that exception is never thrown
-                f.dispose();
-                createFAlertDisplay(calendar, f13);
-            });
-            display.add(createFAlert);
-            display.add(createIAlert);
-
-            //initialize
-            f.setSize(800, 800);
-            f.add(display);
-            f.setLocationRelativeTo(null);
-            f.setVisible(true);
-            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         });
+
+        //button for creating alerts
+        createIAlert.addActionListener(ae -> {
+            //I tried the try-catch block but it shows error that exception is never thrown
+            f.dispose();
+            createIAlertDisplay(calendar, f12);
+        });
+
+        createFAlert.addActionListener(ae -> {
+            //I tried the try-catch block but it shows error that exception is never thrown
+            f.dispose();
+            createFAlertDisplay(calendar, f13);
+        });
+
+        f.setSize(800, 800);
+        f.add(display);
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
     }
 
     public void createIAlertDisplay(Calendar myCalendar, JFrame f) {
+
         JPanel display = new JPanel();
-        f.add(new JLabel("Create Individual Alert"));
-        f.add(new JLabel("Enter: (1) Event Name, (2) Alert Message, (3) Alert Date in yyyy-mm-dd: HH:mm"));
+        JLabel create_individual_alert = new JLabel("Create Individual Alert");
+
+        // f.add(new JLabel("Enter: (1) Event Name, (2) Alert Message, (3) Alert Date in yyyy-mm-dd: HH:mm"));
         JTextField eventTxt = new JTextField();
         JTextField msgTxt = new JTextField();
         JTextField dateTxt = new JTextField();
@@ -395,6 +403,7 @@ public class Menus extends JFrame {
 
         //display field:500*300
         f.setSize(500, 300);
+        create_individual_alert.setBounds(0, 0, 100, 30);
         enterEvent.setBounds(25, 150, 25, 30);
         eventTxt.setBounds(50, 150, 60, 30);
         enterMessage.setBounds(120, 150, 30, 30);
@@ -407,8 +416,6 @@ public class Menus extends JFrame {
         for (JComponent i : arr) {
             display.add(i);
         }
-        makeVisible(f);
-
 
         //functions for submit button
         submit.addActionListener(ae -> {
