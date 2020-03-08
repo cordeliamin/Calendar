@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import javax.swing.JButton;
@@ -26,8 +25,6 @@ public class Menus extends JFrame{
     private static JFrame f7 = new JFrame("View Alerts");
     private static JFrame f8 = new JFrame("View Memos");
     private static JFrame f9 = new JFrame("Create New Events");
-    private static JFrame f10 = new JFrame("Create New Memo");
-    private static JFrame f11 = new JFrame("Events not in Calendar");
 
 
     JButton yes = new JButton("Yes");
@@ -45,26 +42,17 @@ public class Menus extends JFrame{
     JButton viewAlerts = new JButton("View alerts");
     JButton viewMemos = new JButton("View memos");
     JButton goBack = new JButton("Back");
-    JButton createMemo = new JButton("Create memo");
 
     JLabel existingAcc = new JLabel("Do you have an existing account?");
     JLabel userLabel = new JLabel("Username:");
     JLabel pswdLabel = new JLabel("Password:");
     JLabel newFeature = new JLabel("You can create a new account in phase 2!");
     JLabel incorrectCre = new JLabel("Please try again!");
-    JLabel enterEvents = new JLabel("Event(s):");
-    JLabel note = new JLabel("Note:");
     JLabel alert = new JLabel("Alerts:");
     JLabel memo = new JLabel("Memo:");
-    JLabel memos = new JLabel("Memos:");
     JLabel pastEvents = new JLabel("Past events:");
     JLabel currentEvents = new JLabel("Current events:");
     JLabel futureEvents = new JLabel("Future events:");
-    JLabel newEventName = new JLabel("Event name:");
-    JLabel newEventDuration = new JLabel("Event duration in hours:");
-    JLabel newEventMemo = new JLabel("Add a memo (optional):");
-    JLabel newEventStartTime = new JLabel("Event start time (HH:MM format):");
-    JLabel newEventStartDate = new JLabel("Event start time (DD-MM-YYYY format):");
 
     public Menus() throws IOException {
         HashMap<String, String> users = getUsers(); //Creating a map of all users in the csv file
@@ -212,11 +200,11 @@ public class Menus extends JFrame{
         });
         viewAlerts.addActionListener(e -> {
             f.dispose();
-            viewAlertsDisplay(user, myCalendar, f7);
+            viewAlertsDisplay(user, f7);
         });
         viewMemos.addActionListener(e -> {
             f.dispose();
-            viewMemosDisplay(user, myCalendar, f8);
+            viewMemosDisplay(user, f8);
         });
         createEvents.addActionListener(e -> {
             f.dispose();
@@ -231,6 +219,8 @@ public class Menus extends JFrame{
         JLabel userName = new JLabel();
         JLabel emptySpace = new JLabel(" ");
         userName.setText(user);
+        userPanel.add(userLabel);
+        userPanel.add(userName);
         userPanel.add(emptySpace);
 
         userPanel.add(currentEvents);
@@ -293,183 +283,16 @@ public class Menus extends JFrame{
         });
     }
 
-    public void viewAlertsDisplay(String user, Calendar calendar, JFrame f){
-
-        JPanel display = new JPanel();
-        display.setLayout(new BoxLayout(display, BoxLayout.Y_AXIS));
-
-        //display title
-        JLabel titleCurrAlert = new JLabel("Current alerts:\n");
-        display.add(titleCurrAlert);
-
-        //display the current alerts
-        for (Alert alert: calendar.getCurrAlerts()){
-            JLabel a = new JLabel(alert.toString());
-            display.add(a);
-        }
-
-        //display all alerts if pressed
-        JButton bAllAlert = new JButton("View all alerts");
-        bAllAlert.addActionListener(e -> {
-            for (Alert alert: calendar.getAllAlerts()){
-                JLabel a = new JLabel(alert.toString());
-                display.add(a);
-            }
-        });
-
-        display.add(goBack);
-        //perform the goback actions here... can we pull it out and make it a helper function?
-        goBack.addActionListener(e -> {
-            f.dispose();
-            try {
-                f.dispose();
-                mainDisplay(user, f5);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            } catch (ClassNotFoundException ex) {
-                ex.printStackTrace();
-            }
-        });
-
-        //initialize
-        f.setSize(800, 800);
-        f.add(display);
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public void viewAlertsDisplay(String user, JFrame f){
 
     }
 
-    public void viewMemosDisplay(String user, Calendar myCalendar, JFrame f){
-        JPanel userPanel = new JPanel();
-        userPanel.setLayout(new BoxLayout(userPanel, BoxLayout.Y_AXIS));
-        JLabel userName = new JLabel();
-        JLabel emptySpace = new JLabel(" ");
-        userName.setText(user);
-        userPanel.add(userLabel);
-        userPanel.add(userName);
-        userPanel.add(emptySpace);
-
-        MemoSystem myMemos = myCalendar.getMyMemos();
-
-        userPanel.add(memos);
-
-        if(myMemos.getMemos() != null){
-            for(Memo memo1 : myMemos.getMemos()){
-                JLabel label = new JLabel(memo1.toString());
-                userPanel.add(label);
-            }
-        }
-        else {
-            JLabel label = new JLabel("No memos");
-            userPanel.add(label);
-        }
-
-        userPanel.add(createMemo);
-
-        f.setSize(800, 800);
-        f.add(userPanel);
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        createMemo.addActionListener(e -> {
-            f.dispose();
-            createMemoDisplay(user, myCalendar, f10);
-        });
-
-    }
-
-    public void createMemoDisplay(String user, Calendar myCalendar, JFrame f) {
-        JTextField eventsText = new JTextField();
-        JTextField noteText = new JTextField();
-
-        submit.setBounds(200, 150, 90, 30);
-        enterEvents.setBounds(50, 100, 70, 30);
-        note.setBounds(300, 100, 70, 30);
-        eventsText.setBounds(120, 100, 100, 30);
-        noteText.setBounds(370, 100, 100, 30);
-
-        f.setSize(500,300);
-        f.add(enterEvents);
-        f.add(eventsText);
-        f.add(note);
-        f.add(noteText);
-        f.add(submit);
-        makeVisible(f);
-
-        MemoSystem myMemos = myCalendar.getMyMemos();
-
-        submit.addActionListener(ae -> {
-            String events = eventsText.getText();
-            String note1 = noteText.getText();
-            String[] eventList = events.split(",");
-
-            if(eventsInCalendar(eventList, myCalendar)){ // checks if the events entered are in the Calendar
-
-                ArrayList<Event> events1 = eventNameToEventList(eventList, myCalendar);
-                myMemos.createMemo(events1, note1);
-
-                f.setVisible(false);
-                f.dispose();
-
-            }
-            else{
-                eventsText.setText("");
-                noteText.setText("");
-                incorrectCre.setBounds(200, 70, 200, 30);
-                f.setVisible(false);
-                f11.setSize(500,300);
-                f11.add(createEvents);
-                f11.add(note);
-                f11.add(incorrectCre);
-                f11.add(eventsText);
-                f11.add(noteText);
-                f11.add(submit);
-                makeVisible(f11);
-            }
-        });
+    public void viewMemosDisplay(String user, JFrame f){
 
     }
 
     public void createEventsDisplay(String user, JFrame f){
-        JPanel gbPanel = new JPanel(new GridBagLayout());
-        JTextField eventName = new JTextField();
-        JTextField eventDuration = new JTextField();
-        JTextField eventStartDate = new JTextField(); //DD-MM-YYYY format
-        JTextField eventStartTime = new JTextField(); //HH:MM format
-        JTextField eventMemo = new JTextField();
 
-        submit.setBounds(200, 150, 90, 30);
-        newEventName.setBounds(50, 100, 70, 30);
-        newEventDuration.setBounds(300, 100, 70, 30);
-        eventName.setBounds(120, 100, 100, 30);
-        eventDuration.setBounds(370, 100, 100, 30);
-
-        f.setSize(500,300);
-        f.add(newEventName);
-        f.add(newEventDuration);
-        f.add(eventName);
-        f.add(eventDuration);
-        f.add(newEventMemo);
-        f.add(eventMemo);
-        f.add(submit);
-        f.add(newEventStartDate);
-        f.add(eventStartDate);
-        f.add(newEventStartTime);
-        f.add(eventStartTime);
-        makeVisible(f);
-
-        submit.addActionListener(ae -> {
-            String name = eventName.getText();
-            int duration = Integer.parseInt(eventDuration.getText());
-            LocalDateTime start = LocalDateTime.of(Integer.parseInt(eventStartDate.getText().substring(6)),
-                            Integer.parseInt(eventStartDate.getText().substring(3, 5)),
-                            Integer.parseInt(eventStartDate.getText().substring(0,2)),
-                                    Integer.parseInt(eventStartTime.getText().substring(0, 2)),
-                                            Integer.parseInt(eventStartTime.getText().substring(3)));
-            String memo = eventMemo.getText();
-        });
     }
 
 
@@ -526,37 +349,4 @@ public class Menus extends JFrame{
         }
         return users;
     }
-
-    // returns a boolean value for whether a given array of events are in the Calendar or not
-    public boolean eventsInCalendar(String[] events, Calendar myCalendar) {
-        ArrayList<Event> calEvents = myCalendar.getMyEvents();
-
-        for (int i = 0; i < events.length; i++ ) {
-            String event = events[i];
-            if (!myCalendar.getEventNames().contains(event)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    // converts an array of event names to a list of Events
-    public ArrayList<Event> eventNameToEventList(String[] array, Calendar myCalendar) {
-
-        ArrayList<Event> calEvents = myCalendar.getMyEvents();
-        ArrayList<Event> events = new ArrayList<>();
-
-        for (int i = 0; i < array.length; i++ ) {
-            String name = array[i];
-            for (Event e : calEvents){
-                if (e.getEventName().equals(name)) {
-                    events.add(e);
-                }
-            }
-        }
-        return events;
-    }
-
-
-
 }

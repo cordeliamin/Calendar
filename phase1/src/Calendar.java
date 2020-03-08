@@ -123,7 +123,7 @@ public class Calendar implements Serializable {
      */
     public ArrayList<Event> getPastEvents(){
         ArrayList<Event> events = new ArrayList<>();
-        if(myEvents == null){
+        if(myEvents == null || myEvents.isEmpty()){
             return null;
         }
         else {
@@ -162,7 +162,7 @@ public class Calendar implements Serializable {
      */
     public ArrayList<Event> getFutureEvents(){
         ArrayList<Event> events = new ArrayList<>();
-        if(myEvents == null){
+        if(myEvents == null || myEvents.isEmpty()){
             return null;
         }
         else {
@@ -175,6 +175,18 @@ public class Calendar implements Serializable {
         }
     }
 
+    /**
+     * precondition: event included
+     * @param name: name of event
+     * @return event
+     */
+    public Event getEvent(String name){
+        for (Event event: myEvents){
+            if (event.getEventName().equals(name))
+                return event;
+        }
+        return null;
+    }
 
     //methods for time
     public void update(){
