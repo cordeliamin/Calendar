@@ -82,7 +82,7 @@ public class Menus extends JFrame {
     JLabel newEventMemo = new JLabel("Add a memo (optional):");
     JLabel newEventStartTime = new JLabel("Event start time (HH:MM format):");
     JLabel newEventStartDate = new JLabel("Event start date (DD-MM-YYYY format):");
-    JLabel date = new JLabel("Date (YYYY-MM-DD format):");
+    JLabel date = new JLabel("Date (YYYY-MM-DD):");
     JLabel tag = new JLabel("Tag:");
     JLabel memoid = new JLabel("Memo id number:");
     JLabel selectEventLabel = new JLabel("Select Event");
@@ -393,8 +393,8 @@ public class Menus extends JFrame {
         JTextField dateText = new JTextField();
 
         submit.setBounds(200, 150, 90, 30);
-        date.setBounds(50, 100, 70, 30);
-        dateText.setBounds(120, 100, 100, 30);
+        date.setBounds(50, 100, 130, 30);
+        dateText.setBounds(180, 100, 100, 30);
 
         f.setSize(500, 300);
         f.add(date);
@@ -921,28 +921,59 @@ public class Menus extends JFrame {
         submit.addActionListener(ae -> {
             String events = eventsText.getText();
             String note1 = noteText.getText();
+
+
             String[] eventList = events.split(",");
 
-            if (eventsInCalendar(eventList, myCalendar)) { // checks if the events entered are in the Calendar
+            if (eventList.length != 0) {
 
-                ArrayList<Event> events1 = eventNameToEventList(eventList, myCalendar);
-                myMemos.createMemo(events1, note1);
-                f.setVisible(false);
-                f.dispose();
+                if (eventsInCalendar(eventList, myCalendar)) { // checks if the events entered are in the Calendar
 
+                    ArrayList<Event> events1 = eventNameToEventList(eventList, myCalendar);
+                    myMemos.createMemo(events1, note1);
+                    f.setVisible(false);
+                    f.dispose();
+
+                } else {
+                    eventsText.setText("");
+                    noteText.setText("");
+                    incorrectCre.setBounds(200, 70, 200, 30);
+                    f.setVisible(false);
+                    f11.setSize(500, 300);
+                    f11.add(enterEvents);
+                    f11.add(note);
+                    f11.add(incorrectCre);
+                    f11.add(eventsText);
+                    f11.add(noteText);
+                    f11.add(submit);
+                    makeVisible(f11);
+                }
             } else {
-                eventsText.setText("");
-                noteText.setText("");
-                incorrectCre.setBounds(200, 70, 200, 30);
-                f.setVisible(false);
-                f11.setSize(500, 300);
-                f11.add(enterEvents);
-                f11.add(note);
-                f11.add(incorrectCre);
-                f11.add(eventsText);
-                f11.add(noteText);
-                f11.add(submit);
-                makeVisible(f11);
+
+                String[] newEventsList = {events};
+
+                if (eventsInCalendar(newEventsList, myCalendar)) { // checks if the events entered are in the Calendar
+
+                    ArrayList<Event> events1 = eventNameToEventList(newEventsList, myCalendar);
+                    myMemos.createMemo(events1, note1);
+                    f.setVisible(false);
+                    f.dispose();
+
+                } else {
+                    eventsText.setText("");
+                    noteText.setText("");
+                    incorrectCre.setBounds(200, 70, 200, 30);
+                    f.setVisible(false);
+                    f11.setSize(500, 300);
+                    f11.add(enterEvents);
+                    f11.add(note);
+                    f11.add(incorrectCre);
+                    f11.add(eventsText);
+                    f11.add(noteText);
+                    f11.add(submit);
+                    makeVisible(f11);
+                }
+
             }
         });
 
