@@ -20,7 +20,9 @@ public class MemoSystem implements Serializable {
         Memo memo = new Memo(note);
 
         // adds memo to the list of memos stored in this MemoSystem
-        memos.add(memo);
+        if (memos != null) {
+            memos.add(memo);
+        }
 
         // adds memo to each event's memos from the input list of events
         for (Event event:events){
