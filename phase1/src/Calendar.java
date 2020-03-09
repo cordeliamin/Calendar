@@ -1,3 +1,5 @@
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -11,20 +13,22 @@ public class Calendar implements Serializable {
     /*
     Class Calendar is user-specific
      */
-    private ArrayList<Event> myEvents = new ArrayList<>();
-    private MemoSystem myMemos = new MemoSystem();
-    private SeriesSystem mySeries  = new SeriesSystem();
-    private AlertSystem myAlerts = new AlertSystem();
+    private static ArrayList<Event> myEvents = new ArrayList<>();
+    private static MemoSystem myMemos = new MemoSystem();
+    private static SeriesSystem mySeries = new SeriesSystem();
+    private static AlertSystem myAlerts = new AlertSystem();
     public LocalDateTime time = LocalDateTime.now();
 
     //methods for creating events, alerts
-    public void addEvent(Event e){
+    public void addEvent(Event e) {
         myEvents.add(e);
     }
-    public void addIndividualAlert(Event e, String msg, LocalDateTime date){
+
+    public void addIndividualAlert(Event e, String msg, LocalDateTime date) {
         myAlerts.addIndividualAlert(e, msg, date);
     }
-    public void addFrequentAlert(Event e, String msg, Duration d){
+
+    public void addFrequentAlert(Event e, String msg, Duration d) {
         myAlerts.addFrequentAlert(e, msg, d);
     }
 
@@ -33,6 +37,7 @@ public class Calendar implements Serializable {
     }
 
     //methods for finding list of events: by tag, memo or date
+
     /**
      * find events by their tag
      * @param tag: the tag associated with an Event or multiple Events
@@ -60,6 +65,7 @@ public class Calendar implements Serializable {
      */
     public ArrayList<Event> findEvent(LocalDate date) {
         ArrayList<Event> events = new ArrayList<>();
+        System.out.println(myEvents.toString() + "dfjsjfjsjfg");
         for (Event event: myEvents) {
             LocalDate start = event.getStartTime().toLocalDate();
             LocalDate end = event.getEndTime().toLocalDate();
@@ -104,7 +110,6 @@ public class Calendar implements Serializable {
         return myEvents;
     }
 
-
     /**
      * Get the names of all the events in this Calendar
      * @return An Arraylist of the names of events
@@ -125,8 +130,7 @@ public class Calendar implements Serializable {
         ArrayList<Event> events = new ArrayList<>();
         if(myEvents == null || myEvents.isEmpty()){
             return null;
-        }
-        else {
+        } else {
             for (Event event : myEvents) {
                 if (event.getEndTime().isBefore(time)) {
                     events.add(event);
@@ -145,8 +149,7 @@ public class Calendar implements Serializable {
         ArrayList<Event> events = new ArrayList<>();
         if(eventsDay == null){
             return null;
-        }
-        else {
+        } else {
             for (Event event : eventsDay) {
                 if (event.getEndTime().isAfter(time) && event.getStartTime().isBefore(time)) {
                     events.add(event);
@@ -164,8 +167,7 @@ public class Calendar implements Serializable {
         ArrayList<Event> events = new ArrayList<>();
         if(myEvents == null || myEvents.isEmpty()){
             return null;
-        }
-        else {
+        } else {
             for (Event event : myEvents) {
                 if (event.getEndTime().isAfter(time)) {
                     events.add(event);
@@ -255,9 +257,9 @@ public class Calendar implements Serializable {
         for(Event e : myEvents){
             s += e.toString() + "\n";
         }
-       if(s.length() != 0){
-           s = s.substring(0, s.length() - 1);
-       }
-       return s;
+        if(s.length() != 0){
+            s = s.substring(0, s.length() - 1);
+        }
+        return s;
     }
 }

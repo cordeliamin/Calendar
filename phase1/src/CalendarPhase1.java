@@ -13,41 +13,36 @@ public class CalendarPhase1 {
     // clock giving the current time
     public static LocalDateTime time;
 
+
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
         // display time when program runs
         time = LocalDateTime.now();
         System.out.println(time);
 
-        new Menus();
+        String serializedCalendarManagerInfo = "user.ser";
+        CalendarManager sm = new CalendarManager(serializedCalendarManagerInfo);
+        sm.readFromFile(serializedCalendarManagerInfo);
+
+        new Menus(sm);
 
         /*
         Prompt user to log in
         User input username and password
         Read external User.csv file to compare credentials, loop if credentials do not match
          */
-        String userName = "user";
-        String password;
-//        do{
-//            Scanner s = new Scanner(System.in);
-//            System.out.print("Enter usename: ");
-//            userName = s.nextLine();
-////            userName = JOptionPane.showInputDialog("Please enter your user user name to log in");
-//            System.out.print("Enter password: ");
-//            password = s.nextLine();
-////            password = JOptionPane.showInputDialog("Please enter your password to log in");
-//        }while (!login(userName, password, users));
-        System.out.println("Successfully logged in as " + userName);
 
         /*
         Constructing the Calendar from the User's .ser file
          */
-        String serializedCalendarManagerInfo = userName + ".ser";
-        CalendarManager sm = new CalendarManager(serializedCalendarManagerInfo);
-        sm.readFromFile(serializedCalendarManagerInfo);
-        Calendar myCalendar = sm.getCalendar();
-        myCalendar.update();
-        System.out.println(myCalendar.getTime());
+//        String serializedCalendarManagerInfo = userName + ".ser";
+//        CalendarManager sm = new CalendarManager(serializedCalendarManagerInfo);
+//        sm.readFromFile(serializedCalendarManagerInfo);
+//        Calendar myCalendar = sm.getCalendar();
+//        myCalendar.update();
+//        System.out.println(myCalendar.getTime());
+
+
         //Testing series creation
 //        myCalendar.addSeries("series 1", Duration.ofHours(1), Period.ofDays(1), 3, LocalDateTime.now());
 //        myCalendar.reset();
@@ -73,7 +68,6 @@ public class CalendarPhase1 {
         /*
         Save the calendar to the user's .ser file before exiting
          */
-        sm.saveToFile(serializedCalendarManagerInfo);
     }
 
 

@@ -12,8 +12,10 @@ public class Event implements Serializable {
     /** whether this Event is "past", "ongoing" or "future" */
     private String status;
 
-    /** A list of memos associated with this Event */
-    private ArrayList<Memo> memos;
+    /**
+     * A list of memos associated with this Event
+     */
+    public static ArrayList<Memo> memos;
 
     public Event(String name, LocalDateTime start, LocalDateTime end){
         eventName = name;

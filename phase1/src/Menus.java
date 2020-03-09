@@ -45,6 +45,7 @@ public class Menus extends JFrame {
     JButton yes = new JButton("Yes");
     JButton no = new JButton("No");
     JButton submit = new JButton("Submit");
+    JButton submit2 = new JButton("Submit");
     JButton viewEvents = new JButton("View all events");
     JButton createEvents = new JButton("Create events");
     JButton viewPastEvents = new JButton("Past events");
@@ -87,9 +88,13 @@ public class Menus extends JFrame {
     JLabel tag = new JLabel("Tag:");
     JLabel memoid = new JLabel("Memo id number:");
 
-    public Menus() throws IOException {
+    public Menus(CalendarManager sm) throws IOException {
         HashMap<String, String> users = getUsers(); //Creating a map of all users in the csv file
-        accountButton(f);
+
+        Calendar myCalendar = sm.getCalendar();
+        myCalendar.update();
+
+        accountButton(sm, myCalendar, f);
     }
 
     /**
@@ -118,7 +123,7 @@ public class Menus extends JFrame {
      *
      * @param f: pre-fixed JFrame
      */
-    public void accountButton(JFrame f) throws IOException {
+    public void accountButton(CalendarManager sm, Calendar c, JFrame f) throws IOException {
         HashMap<String, String> users = getUsers(); //Creating a map of all users in the csv file
 
         yes.setBounds(70, 100, 90, 30);
@@ -135,7 +140,7 @@ public class Menus extends JFrame {
         //action listener
         yes.addActionListener(arg0 -> {
             f.dispose();
-            accountLogIn(users, f2); // prompt user to log in
+            accountLogIn(sm, c, users, f2); // prompt user to log in
         });
         no.addActionListener(e -> {
             f.dispose();
@@ -165,7 +170,7 @@ public class Menus extends JFrame {
      * @param users: a HashMap of all users in the external .csv file
      * @param f:     pre-fixed JFrame
      */
-    public void accountLogIn(HashMap<String, String> users, JFrame f) {
+    public void accountLogIn(CalendarManager sm, Calendar c, HashMap<String, String> users, JFrame f) {
         JTextField userText = new JTextField();
         JPasswordField pswdText = new JPasswordField();
 
@@ -193,7 +198,7 @@ public class Menus extends JFrame {
                 f4.setVisible(false);
                 f4.dispose();
                 try {
-                    mainDisplay(user, f5);
+                    mainDisplay(sm, c, user, f5);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
@@ -219,16 +224,10 @@ public class Menus extends JFrame {
     /**
      * Prompts user to select different functions
      *
-     * @param user: specific user that logged in
-     * @param f:    pre-fixed JFrame
+     * @param user : specific user that logged in
+     * @param f    :    pre-fixed JFrame
      */
-    public void mainDisplay(String user, JFrame f) throws IOException, ClassNotFoundException {
-
-        String serializedCalendarManagerInfo = user + ".ser";
-        CalendarManager sm = new CalendarManager(serializedCalendarManagerInfo);
-        sm.readFromFile(serializedCalendarManagerInfo);
-        Calendar myCalendar = sm.getCalendar();
-        //System.out.println(myCalendar.getTime());
+    public void mainDisplay(CalendarManager sm, Calendar c, String user, JFrame f) throws IOException, ClassNotFoundException {
 
         JPanel gbPanel = new JPanel(new GridBagLayout());
         JLabel userName = new JLabel();
@@ -253,19 +252,19 @@ public class Menus extends JFrame {
 
         viewEvents.addActionListener(e -> {
             f.dispose();
-            viewEventsDisplay(user, myCalendar, f6);
+            viewEventsDisplay(user, c, f6);
         });
         viewAlerts.addActionListener(e -> {
             f.dispose();
-            viewAlertsDisplay(user, myCalendar, f7);
+            viewAlertsDisplay(user, c, f7);
         });
         viewMemos.addActionListener(e -> {
             f.dispose();
-            viewMemosDisplay(user, myCalendar, f8);
+            viewMemosDisplay(user, c, f8);
         });
         createEvents.addActionListener(e -> {
             f.dispose();
-            createEventsDisplay(user, myCalendar, f9);
+            createEventsDisplay(sm, c, f9);
         });
     }
 
@@ -803,14 +802,14 @@ public class Menus extends JFrame {
 
     }
 
-    public void createEventsDisplay(String user, Calendar myCalendar, JFrame f) {
+    public void createEventsDisplay(CalendarManager sm, Calendar myCalendar, JFrame f) {
+
         JPanel gbPanel = new JPanel(new GridBagLayout());
         JTextField eventName = new JTextField();
         JTextField eventDuration = new JTextField();
         JTextField eventStartDate = new JTextField(); //DD-MM-YYYY format
         JTextField eventStartTime = new JTextField(); //HH:MM format
         JTextField eventMemo = new JTextField();
-
 
         eventName.setPreferredSize(new Dimension(100, 30));
         eventDuration.setPreferredSize(new Dimension(100, 30));
@@ -828,22 +827,43 @@ public class Menus extends JFrame {
         addGB(gbPanel, eventStartDate, 3, 3);
         addGB(gbPanel, newEventStartTime, 0, 4);
         addGB(gbPanel, eventStartTime, 3, 4);
-        addGB(gbPanel, submit, 2, 5);
+        addGB(gbPanel, submit2, 2, 5);
 
         f.setSize(500, 300);
         f.add(gbPanel);
         makeVisibleGB(f);
 
-        submit.addActionListener(ae -> {
+        submit2.addActionListener(ae -> {
             String name = eventName.getText();
-
             int duration = Integer.parseInt(eventDuration.getText());
+            String m = eventMemo.getText();
+            Memo memo = new Memo(m);
             LocalDateTime start = LocalDateTime.of(Integer.parseInt(eventStartDate.getText().substring(6)),
                     Integer.parseInt(eventStartDate.getText().substring(3, 5)),
                     Integer.parseInt(eventStartDate.getText().substring(0, 2)),
                     Integer.parseInt(eventStartTime.getText().substring(0, 2)),
                     Integer.parseInt(eventStartTime.getText().substring(3)));
-            String memo = eventMemo.getText();
+
+            int endHour = Integer.parseInt(eventStartTime.getText().substring(0, 2)) + duration;
+
+            LocalDateTime end = LocalDateTime.of(Integer.parseInt(eventStartDate.getText().substring(6)),
+                    Integer.parseInt(eventStartDate.getText().substring(3, 5)),
+                    Integer.parseInt(eventStartDate.getText().substring(0, 2)),
+                    endHour,
+                    Integer.parseInt(eventStartTime.getText().substring(3)));
+
+            Event event = new Event(name, start, end);
+            event.memos.add(memo);
+            myCalendar.addEvent(event);
+
+
+            //save myCalendar instance
+            try {
+                sm.saveToFile("user.ser");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            f.dispose();
         });
     }
 
@@ -874,16 +894,19 @@ public class Menus extends JFrame {
      * @param y:    constraint's y-axis
      */
     private void addGB(JPanel p, Component comp, int x, int y) {
+
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.insets = new Insets(5, 5, 5, 5);
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.gridx = x;
         constraints.gridy = y;
         p.add(comp, constraints);
+
     }
 
     // returns a boolean value for whether a given array of events are in the Calendar or not
     public boolean eventsInCalendar(String[] events, Calendar myCalendar) {
+
         ArrayList<Event> calEvents = myCalendar.getMyEvents();
 
         for (int i = 0; i < events.length; i++) {
