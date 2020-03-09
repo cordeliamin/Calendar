@@ -50,7 +50,7 @@ public class Menus extends JFrame {
     JButton submit = new JButton("Submit");
     JButton submit2 = new JButton("Submit");
     JButton submit3 = new JButton("Submit");
-    JButton sumbit4 = new JButton("Submit");
+    JButton submit4 = new JButton("Submit");
     JButton viewEvents = new JButton("View all events");
     JButton createEvents = new JButton("Create events");
     JButton viewAlerts = new JButton("View alerts");
