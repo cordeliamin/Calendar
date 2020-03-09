@@ -11,3 +11,5 @@ HOW IT WORKS:
 2. Proceed after logging in with the correct credentials, you will be directed to the main menu where you can select different options including Create Event, Show Event, Show Memos and Show Alerts, under different screens you will see different options and functions that are required in phase 1;
 
 3. If you want to proceed to other functions, please re-run the program for it to run; extension feature for a GoBack button has been implemented for phase 2 where you will be able to go back on a previous menu.
+
+Note: please create events first then add alerts, only add memos/alerts to events that exists
