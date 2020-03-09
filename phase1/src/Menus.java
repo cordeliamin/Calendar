@@ -850,28 +850,59 @@ public class Menus extends JFrame {
         submit.addActionListener(ae -> {
             String events = eventsText.getText();
             String note1 = noteText.getText();
+
+
             String[] eventList = events.split(",");
 
-            if (eventsInCalendar(eventList, myCalendar)) { // checks if the events entered are in the Calendar
+            if (eventList.length != 0) {
 
-                ArrayList<Event> events1 = eventNameToEventList(eventList, myCalendar);
-                myMemos.createMemo(events1, note1);
-                f.setVisible(false);
-                f.dispose();
+                if (eventsInCalendar(eventList, myCalendar)) { // checks if the events entered are in the Calendar
 
+                    ArrayList<Event> events1 = eventNameToEventList(eventList, myCalendar);
+                    myMemos.createMemo(events1, note1);
+                    f.setVisible(false);
+                    f.dispose();
+
+                } else {
+                    eventsText.setText("");
+                    noteText.setText("");
+                    incorrectCre.setBounds(200, 70, 200, 30);
+                    f.setVisible(false);
+                    f11.setSize(500, 300);
+                    f11.add(enterEvents);
+                    f11.add(note);
+                    f11.add(incorrectCre);
+                    f11.add(eventsText);
+                    f11.add(noteText);
+                    f11.add(submit);
+                    makeVisible(f11);
+                }
             } else {
-                eventsText.setText("");
-                noteText.setText("");
-                incorrectCre.setBounds(200, 70, 200, 30);
-                f.setVisible(false);
-                f11.setSize(500, 300);
-                f11.add(enterEvents);
-                f11.add(note);
-                f11.add(incorrectCre);
-                f11.add(eventsText);
-                f11.add(noteText);
-                f11.add(submit);
-                makeVisible(f11);
+
+                String[] newEventsList = {events};
+
+                if (eventsInCalendar(newEventsList, myCalendar)) { // checks if the events entered are in the Calendar
+
+                    ArrayList<Event> events1 = eventNameToEventList(newEventsList, myCalendar);
+                    myMemos.createMemo(events1, note1);
+                    f.setVisible(false);
+                    f.dispose();
+
+                } else {
+                    eventsText.setText("");
+                    noteText.setText("");
+                    incorrectCre.setBounds(200, 70, 200, 30);
+                    f.setVisible(false);
+                    f11.setSize(500, 300);
+                    f11.add(enterEvents);
+                    f11.add(note);
+                    f11.add(incorrectCre);
+                    f11.add(eventsText);
+                    f11.add(noteText);
+                    f11.add(submit);
+                    makeVisible(f11);
+                }
+
             }
         });
 

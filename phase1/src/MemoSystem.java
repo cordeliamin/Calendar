@@ -8,7 +8,7 @@ public class MemoSystem implements Serializable {
     /**
      * A list of all the memos created
      */
-    public static ArrayList<Memo> memos;
+    public ArrayList<Memo> memos;
 
     /**
      * creates a memo
