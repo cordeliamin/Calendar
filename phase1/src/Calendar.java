@@ -211,6 +211,9 @@ public class Calendar implements Serializable {
     public void reset(){
         myEvents = new ArrayList<>();
         time = LocalDateTime.now();
+        mySeries = new SeriesSystem();
+        myMemos = new MemoSystem();
+        myAlerts = new AlertSystem();
     }
 
 
