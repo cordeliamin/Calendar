@@ -40,6 +40,7 @@ public class Menus extends JFrame {
     private static JFrame f17 = new JFrame("Find Event(s) by Memo");
     private static JFrame f18 = new JFrame("Invalid Memo Id number");
     private static JFrame f19 = new JFrame("Invalid Event name");
+    private static JFrame f20 = new JFrame("Memos for Event");
 
 
     JButton yes = new JButton("Yes");
@@ -108,7 +109,7 @@ public class Menus extends JFrame {
     }
 
     public static HashMap<String, String> getUsers() throws FileNotFoundException {
-        Scanner scanner = new Scanner(new FileInputStream("./phase1/users.csv"));
+        Scanner scanner = new Scanner(new FileInputStream("users.csv"));
         String[] login;
         HashMap<String, String> users = new HashMap<>();
         while (scanner.hasNextLine()) {
@@ -480,6 +481,80 @@ public class Menus extends JFrame {
             addGB(userPanel, label, 0, 4);
 
         }
+    }
+
+    public void selectEventDisplay(String user, Calendar myCalendar, JFrame f) {
+
+        JTextField eventNameText = new JTextField();
+
+        submit.setBounds(200, 150, 90, 30);
+        newEventName.setBounds(50, 100, 70, 30);
+        eventNameText.setBounds(120, 100, 100, 30);
+
+        f.setSize(500, 300);
+        f.add(newEventName);
+        f.add(eventNameText);
+        f.add(submit);
+        makeVisible(f);
+
+
+        submit.addActionListener(ae -> {
+            String eventName = eventNameText.getText();
+
+            String[] eventArray = {eventName};
+
+            ArrayList<Event> eventList = eventNameToEventList(eventArray, myCalendar);
+
+            if (eventList != null) {
+
+                Event e = eventList.get(0);
+
+                f.setVisible(false);
+                f.dispose();
+
+                JPanel userPanel = new JPanel(new GridBagLayout());
+                JLabel userName = new JLabel();
+                JLabel emptySpace = new JLabel(" ");
+                userName.setBounds(100, 60, 80, 30);
+                userName.setText(user);
+                userLabel.setBounds(30, 60, 70, 30);
+
+                addGB(userPanel, userLabel, 0, 0);
+                addGB(userPanel, userName, 0, 1);
+                addGB(userPanel, emptySpace, 0, 2);
+
+                addGB(userPanel, memos, 0, 3);
+
+                if (!e.getMemos().isEmpty()) {
+                    for (Memo memo1 : e.getMemos()) {
+                        JLabel label = new JLabel(memo1.toString());
+                        addGB(userPanel, label, 0, 4);
+                    }
+                } else {
+                    JLabel label = new JLabel("No memos");
+                    userPanel.add(label);
+                    addGB(userPanel, label, 0, 4);
+                }
+
+                f20.setSize(800, 800);
+                f20.add(userPanel);
+                f20.setLocationRelativeTo(null);
+                f20.setVisible(true);
+                f20.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+            } else {
+                eventNameText.setText("");
+                incorrectCre.setBounds(200, 70, 200, 30);
+                f.setVisible(false);
+                f19.setSize(500, 300);
+                f19.add(newEventName);
+                f19.add(incorrectCre);
+                f19.add(eventNameText);
+                f19.add(submit);
+                makeVisible(f19);
+            }
+
+        });
     }
 
     public void tagEventDisplay(Calendar myCalendar) {
