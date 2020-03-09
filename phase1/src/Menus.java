@@ -325,6 +325,10 @@ public class Menus extends JFrame {
             addGB(userPanel, label, 0, 8);
         }
 
+        JLabel time = new JLabel("Current time: " + myCalendar.getTime());
+        userPanel.add(time);
+        addGB(userPanel, time, 0, 10);
+
         f.setSize(800, 800);
         f.add(userPanel);
         f.setLocationRelativeTo(null);
@@ -683,7 +687,7 @@ public class Menus extends JFrame {
 
     public void createIAlertDisplay(Calendar myCalendar, JFrame f) {
 
-        JPanel display = new JPanel();
+        JPanel gbPanel = new JPanel(new GridBagLayout());
         JLabel create_individual_alert = new JLabel("Create Individual Alert");
 
         // f.add(new JLabel("Enter: (1) Event Name, (2) Alert Message, (3) Alert Date in yyyy-mm-dd: HH:mm"));
@@ -694,21 +698,32 @@ public class Menus extends JFrame {
         JLabel enterMessage = new JLabel("Message");
         JLabel enterDate = new JLabel("Date");
 
-        //display field:500*300
-        f.setSize(500, 300);
-        create_individual_alert.setBounds(0, 0, 100, 30);
-        enterEvent.setBounds(25, 150, 25, 30);
-        eventTxt.setBounds(50, 150, 60, 30);
-        enterMessage.setBounds(120, 150, 30, 30);
-        msgTxt.setBounds(150, 150, 75, 30);
-        enterDate.setBounds(225, 150, 25, 30);
-        dateTxt.setBounds(250, 150, 25, 30);
-        submit.setBounds(200, 200, 90, 30);
+//        //display field:500*300
+//        f.setSize(500, 300);
+//        create_individual_alert.setBounds(0, 0, 100, 30);
+//        enterEvent.setBounds(25, 150, 25, 30);
+//        eventTxt.setBounds(50, 150, 60, 30);
+//        enterMessage.setBounds(120, 150, 30, 30);
+//        msgTxt.setBounds(150, 150, 75, 30);
+//        enterDate.setBounds(225, 150, 25, 30);
+//        dateTxt.setBounds(250, 150, 25, 30);
+//        submit.setBounds(200, 200, 90, 30);
 
-        JComponent[] arr = new JComponent[]{create_individual_alert, enterEvent, eventTxt, enterMessage, msgTxt, enterDate, dateTxt, submit};
-        for (JComponent i : arr) {
-            display.add(i);
+        JComponent[] arr = new JComponent[]{eventTxt, msgTxt, dateTxt};
+        for (JComponent i: arr){
+            i.setPreferredSize(new Dimension(100, 30));
         }
+
+        JComponent[] arr2 = new JComponent[]{create_individual_alert, enterEvent, eventTxt, enterMessage, msgTxt, enterDate, dateTxt, submit};
+        addGB(gbPanel, new JLabel("Enter: (1) Event Name, (2) Alert Message, (3) " +
+                "Alert Date in yyyy-mm-dd: HH:mm"), 0, 0);
+        addGB(gbPanel, enterEvent, 0, 1);
+        addGB(gbPanel, eventTxt, 3, 1);
+        addGB(gbPanel, enterMessage, 0, 2);
+        addGB(gbPanel, msgTxt, 3, 2);
+        addGB(gbPanel, enterDate, 0, 3);
+        addGB(gbPanel, dateTxt, 3, 3);
+        addGB(gbPanel, submit2, 2, 5);
 
         //functions for submit button
         submit.addActionListener(ae -> {
@@ -723,14 +738,13 @@ public class Menus extends JFrame {
             }
         });
 
-        f.add(display);
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setSize(500, 300);
+        f.add(gbPanel);
+        makeVisibleGB(f);
     }
 
     public void createFAlertDisplay(Calendar myCalendar, JFrame f) {
-        JPanel display = new JPanel();
+        JPanel display = new JPanel(new GridBagLayout());
         f.add(new JLabel("Create Individual Alert"));
         f.add(new JLabel("Enter: (1) Event Name, (2) Alert Message, Alert Frequency every (3) number of (4) frequency"));
         f.add(new JLabel("ex. every 1 d(for day) or every 6 h(for hours), only d/h permitted"));

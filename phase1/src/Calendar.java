@@ -145,18 +145,13 @@ public class Calendar implements Serializable {
      * @return list of current events
      */
     public ArrayList<Event> getCurrentEvents(){
-        ArrayList<Event> eventsDay = findEvent(time.toLocalDate());
         ArrayList<Event> events = new ArrayList<>();
-        if(eventsDay == null){
-            return null;
-        } else {
-            for (Event event : eventsDay) {
-                if (event.getEndTime().isAfter(time) && event.getStartTime().isBefore(time)) {
-                    events.add(event);
-                }
+        for (Event event : myEvents) {
+            if (event.getEndTime().isAfter(time) && event.getStartTime().isBefore(time)) {
+                events.add(event);
             }
-            return events;
         }
+        return events;
     }
 
     /**
@@ -169,7 +164,7 @@ public class Calendar implements Serializable {
             return null;
         } else {
             for (Event event : myEvents) {
-                if (event.getEndTime().isAfter(time)) {
+                if (event.getStartTime().isAfter(time)) {
                     events.add(event);
                 }
             }
