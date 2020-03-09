@@ -65,7 +65,6 @@ public class Calendar implements Serializable {
      */
     public ArrayList<Event> findEvent(LocalDate date) {
         ArrayList<Event> events = new ArrayList<>();
-        System.out.println(myEvents.toString() + "dfjsjfjsjfg");
         for (Event event: myEvents) {
             LocalDate start = event.getStartTime().toLocalDate();
             LocalDate end = event.getEndTime().toLocalDate();
@@ -96,13 +95,11 @@ public class Calendar implements Serializable {
             }
         }
         if (events.isEmpty()) {
-            System.out.println("No events found.");
             return null;
         } else {
             return events;
         }
     }
-
 
     //methods for getting list of events: past, current or future
 
