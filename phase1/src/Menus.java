@@ -513,7 +513,7 @@ public class Menus extends JFrame {
 
         JTextField eventNameText = new JTextField();
 
-        submit3.setBounds(200, 150, 90, 30);
+        submit.setBounds(200, 150, 90, 30);
         newEventName.setBounds(50, 100, 70, 30);
         eventNameText.setBounds(120, 100, 100, 30);
 
@@ -523,7 +523,7 @@ public class Menus extends JFrame {
         f.add(submit);
         makeVisible(f);
 
-        submit3.addActionListener(ae -> {
+        submit.addActionListener(ae -> {
             String eventName = eventNameText.getText();
 
             String[] eventArray = {eventName};
@@ -538,14 +538,14 @@ public class Menus extends JFrame {
                 f.dispose();
 
                 JPanel userPanel = new JPanel(new GridBagLayout());
-                JLabel userName = new JLabel();
+                JLabel eventName1 = new JLabel();
                 JLabel emptySpace = new JLabel(" ");
-                userName.setBounds(100, 60, 80, 30);
-                userName.setText(user);
-                userLabel.setBounds(30, 60, 70, 30);
+                eventName1.setBounds(100, 60, 80, 30);
+                eventName1.setText(eventName);
+                newEventName.setBounds(30, 60, 70, 30);
 
-                addGB(userPanel, userLabel, 0, 0);
-                addGB(userPanel, userName, 0, 1);
+                addGB(userPanel, newEventName, 0, 0);
+                addGB(userPanel, eventName1, 0, 1);
                 addGB(userPanel, emptySpace, 0, 2);
                 addGB(userPanel, memos, 0, 3);
 
