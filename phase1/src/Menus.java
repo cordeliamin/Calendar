@@ -741,6 +741,16 @@ public class Menus extends JFrame {
         addGB(gbPanel, dateTxt, 3, 3);
         addGB(gbPanel, submit2, 2, 5);
 
+        StringBuffer allNames = new StringBuffer();
+        for (String s : myCalendar.getEventNames()) {
+            allNames.append(s);
+            allNames.append(" ");
+        }
+        JLabel eventsNames = new JLabel(allNames.toString());
+        addGB(gbPanel, eventsNames, 0, 0);
+
+
+
         //functions for submit button
         submit.addActionListener(ae -> {
             String name = eventTxt.getText();
@@ -749,6 +759,7 @@ public class Menus extends JFrame {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             LocalDateTime date = LocalDateTime.parse(d, formatter);
 
+            System.out.println(myCalendar.getEventNames());
             if (myCalendar.getEventNames().contains(name)) {
                 myCalendar.addIndividualAlert(myCalendar.getEvent(name), msg, date);
                 System.out.println("added!!");
@@ -795,16 +806,23 @@ public class Menus extends JFrame {
             i.setPreferredSize(new Dimension(150, 30));
         }
 
-        addGB(gbPanel, enterEvent, 0, 0);
-        addGB(gbPanel, eventTxt, 3, 0);
-        addGB(gbPanel, enterMessage, 0, 1);
-        addGB(gbPanel, msgTxt, 3, 1);
-        addGB(gbPanel, enterNumberOf, 0, 2);
-        addGB(gbPanel, nTxt, 3, 2);
+        StringBuffer allNames = new StringBuffer();
+        for (String s : myCalendar.getEventNames()) {
+            allNames.append(s);
+            allNames.append(" ");
+        }
+        JLabel eventsNames = new JLabel(allNames.toString());
+        addGB(gbPanel, eventsNames, 0, 0);
+
+        addGB(gbPanel, enterEvent, 0, 1);
+        addGB(gbPanel, eventTxt, 3, 1);
+        addGB(gbPanel, enterMessage, 0, 2);
+        addGB(gbPanel, msgTxt, 3, 2);
+        addGB(gbPanel, enterNumberOf, 0, 3);
+        addGB(gbPanel, nTxt, 3, 3);
         addGB(gbPanel, enterFreq, 0, 4);
         addGB(gbPanel, fTxt, 3, 4);
         addGB(gbPanel, submit, 2, 5);
-
 
 
         //functions for submit button
