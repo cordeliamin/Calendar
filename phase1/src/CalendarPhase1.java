@@ -13,7 +13,6 @@ public class CalendarPhase1 {
     // clock giving the current time
     public static LocalDateTime time;
 
-
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
         // display time when program runs

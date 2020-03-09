@@ -41,21 +41,17 @@ public class Menus extends JFrame {
     private static JFrame f18 = new JFrame("Invalid Memo Id number");
     private static JFrame f19 = new JFrame("Invalid Event name");
     private static JFrame f20 = new JFrame("Memos for Event");
+    private static JFrame f21 = new JFrame("Select Event(s)");
+    private static JFrame f22 = new JFrame("Tag Event");
 
 
     JButton yes = new JButton("Yes");
     JButton no = new JButton("No");
     JButton submit = new JButton("Submit");
     JButton submit2 = new JButton("Submit");
+    JButton submit3 = new JButton("Submit");
     JButton viewEvents = new JButton("View all events");
     JButton createEvents = new JButton("Create events");
-    JButton viewPastEvents = new JButton("Past events");
-    JButton viewCurrentEvents = new JButton("Select");
-    JButton viewFutureEvents = new JButton("Select");
-    JButton individualEvent = new JButton("Select");
-    JButton eventSeries = new JButton("Select");
-    JButton individualAlert = new JButton("Individual");
-    JButton frequencyAlert = new JButton("Frequency");
     JButton viewAlerts = new JButton("View alerts");
     JButton viewMemos = new JButton("View memos");
     JButton createMemo = new JButton("Create memo");
@@ -65,6 +61,9 @@ public class Menus extends JFrame {
     JButton findEventByDate = new JButton("Find Event by date");
     JButton findEventByTag = new JButton("Find Event by tag");
     JButton findEventByMemo = new JButton("Find Event by memo");
+    JButton selectEvent = new JButton("Select");
+    JButton findEvents = new JButton("Select");
+    JButton tagEvents = new JButton("Select");
 
     JLabel existingAcc = new JLabel("Do you have an existing account?");
     JLabel userLabel = new JLabel("Username:");
@@ -73,8 +72,7 @@ public class Menus extends JFrame {
     JLabel incorrectCre = new JLabel("Please try again!");
     JLabel enterEvents = new JLabel("Event(s):");
     JLabel note = new JLabel("Note:");
-    JLabel alert = new JLabel("Alerts:");
-    JLabel memo = new JLabel("Memo:");
+
     JLabel memos = new JLabel("Memos:");
     JLabel pastEvents = new JLabel("Past events:");
     JLabel currentEvents = new JLabel("Current events:");
@@ -85,9 +83,11 @@ public class Menus extends JFrame {
     JLabel newEventStartTime = new JLabel("Event start time (HH:MM format):");
     JLabel newEventStartDate = new JLabel("Event start date (DD-MM-YYYY format):");
     JLabel date = new JLabel("Date (YYYY-MM-DD format):");
-    JLabel message = new JLabel("Message:");
     JLabel tag = new JLabel("Tag:");
     JLabel memoid = new JLabel("Memo id number:");
+    JLabel selectEventLabel = new JLabel("Select Event");
+    JLabel findEventLabel = new JLabel("Find Event");
+    JLabel tagEventLabel = new JLabel("Tag Event");
 
     public Menus(CalendarManager sm) throws IOException {
         HashMap<String, String> users = getUsers(); //Creating a map of all users in the csv file
@@ -284,46 +284,74 @@ public class Menus extends JFrame {
 
         addGB(userPanel, currentEvents, 0, 3);
 
-        if (myCalendar.getCurrentEvents() != null ) {
+        int i = 4;
+
+        if (myCalendar.getCurrentEvents() != null && !myCalendar.getCurrentEvents().isEmpty()) {
             for (Event item : myCalendar.getCurrentEvents()) {
                 JLabel label = new JLabel(item.toString());
-                addGB(userPanel, label, 0, 4);
+                addGB(userPanel, label, 0, i);
+                i++;
             }
         } else {
             JLabel label = new JLabel("No current events");
-            userPanel.add(label);
-            addGB(userPanel, label, 0, 4);
+            addGB(userPanel, label, 0, i);
         }
 
-        addGB(userPanel, emptySpace, 0, 2);
-        addGB(userPanel, pastEvents, 0, 5);
+        addGB(userPanel, emptySpace, 0, i + 1);
+        addGB(userPanel, pastEvents, 0, i + 2);
 
-        if (myCalendar.getPastEvents() != null) {
+        i = i + 3;
+
+        if (myCalendar.getPastEvents() != null && !myCalendar.getPastEvents().isEmpty()) {
             for (Event item : myCalendar.getPastEvents()) {
                 JLabel label = new JLabel(item.toString());
-                userPanel.add(label);
-                addGB(userPanel, label, 0, 6);
+                addGB(userPanel, label, 0, i);
+                i++;
             }
         } else {
             JLabel label = new JLabel("No past events");
-            userPanel.add(label);
-            addGB(userPanel, label, 0, 6);
+            addGB(userPanel, label, 0, i);
         }
 
         addGB(userPanel, emptySpace, 0, 2);
-        addGB(userPanel, futureEvents, 0, 7);
+        addGB(userPanel, futureEvents, 0, i + 1);
 
-        if (myCalendar.getFutureEvents() != null) {
+        i = i + 2;
+        if (myCalendar.getFutureEvents() != null && !myCalendar.getFutureEvents().isEmpty()) {
             for (Event item : myCalendar.getFutureEvents()) {
                 JLabel label = new JLabel(item.toString());
-                userPanel.add(label);
-                addGB(userPanel, label, 0, 8);
+                addGB(userPanel, label, 0, i);
+                i++;
             }
         } else {
             JLabel label = new JLabel("No future events");
-            userPanel.add(label);
-            addGB(userPanel, label, 0, 8);
+            addGB(userPanel, label, 0, i);
         }
+        i = i + 1;
+
+        addGB(userPanel, selectEventLabel, 0, i);
+        addGB(userPanel, selectEvent, 0, i + 1);
+        addGB(userPanel, findEventLabel, 0, i + 2);
+        addGB(userPanel, findEvents, 0, i + 3);
+        addGB(userPanel, tagEventLabel, 0, i + 4);
+        addGB(userPanel, tagEvents, 0, i + 5);
+
+        selectEvent.addActionListener(a -> {
+            f.dispose();
+            selectEventDisplay(user, myCalendar, f21);
+        });
+        findEvents.addActionListener(e -> {
+            f.dispose();
+            findEventsDisplay(user, myCalendar, f14);
+        });
+        tagEvents.addActionListener(ae -> {
+            f.dispose();
+            tagEventDisplay(myCalendar, f22);
+        });
+
+        JLabel time = new JLabel("Current time: " + myCalendar.getTime());
+        userPanel.add(time);
+        addGB(userPanel, time, 0, 10);
 
         f.setSize(800, 800);
         f.add(userPanel);
@@ -448,8 +476,6 @@ public class Menus extends JFrame {
                 f18.add(submit);
                 makeVisible(f18);
             }
-
-
         });
     }
 
@@ -487,7 +513,7 @@ public class Menus extends JFrame {
 
         JTextField eventNameText = new JTextField();
 
-        submit.setBounds(200, 150, 90, 30);
+        submit3.setBounds(200, 150, 90, 30);
         newEventName.setBounds(50, 100, 70, 30);
         eventNameText.setBounds(120, 100, 100, 30);
 
@@ -497,8 +523,7 @@ public class Menus extends JFrame {
         f.add(submit);
         makeVisible(f);
 
-
-        submit.addActionListener(ae -> {
+        submit3.addActionListener(ae -> {
             String eventName = eventNameText.getText();
 
             String[] eventArray = {eventName};
@@ -522,26 +547,24 @@ public class Menus extends JFrame {
                 addGB(userPanel, userLabel, 0, 0);
                 addGB(userPanel, userName, 0, 1);
                 addGB(userPanel, emptySpace, 0, 2);
-
                 addGB(userPanel, memos, 0, 3);
+
+                int i = 4;
 
                 if (!e.getMemos().isEmpty()) {
                     for (Memo memo1 : e.getMemos()) {
                         JLabel label = new JLabel(memo1.toString());
-                        addGB(userPanel, label, 0, 4);
+                        addGB(userPanel, label, 0, i);
+                        i++;
                     }
                 } else {
                     JLabel label = new JLabel("No memos");
                     userPanel.add(label);
-                    addGB(userPanel, label, 0, 4);
+                    addGB(userPanel, label, 0, i);
                 }
-
                 f20.setSize(800, 800);
                 f20.add(userPanel);
-                f20.setLocationRelativeTo(null);
-                f20.setVisible(true);
-                f20.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+                makeVisibleGB(f20);
             } else {
                 eventNameText.setText("");
                 incorrectCre.setBounds(200, 70, 200, 30);
@@ -553,11 +576,10 @@ public class Menus extends JFrame {
                 f19.add(submit);
                 makeVisible(f19);
             }
-
         });
     }
 
-    public void tagEventDisplay(Calendar myCalendar) {
+    public void tagEventDisplay(Calendar myCalendar, JFrame f) {
         JTextField eventText = new JTextField();
         JTextField tagText = new JTextField();
 
@@ -683,7 +705,7 @@ public class Menus extends JFrame {
 
     public void createIAlertDisplay(Calendar myCalendar, JFrame f) {
 
-        JPanel display = new JPanel();
+        JPanel gbPanel = new JPanel(new GridBagLayout());
         JLabel create_individual_alert = new JLabel("Create Individual Alert");
 
         // f.add(new JLabel("Enter: (1) Event Name, (2) Alert Message, (3) Alert Date in yyyy-mm-dd: HH:mm"));
@@ -694,21 +716,32 @@ public class Menus extends JFrame {
         JLabel enterMessage = new JLabel("Message");
         JLabel enterDate = new JLabel("Date");
 
-        //display field:500*300
-        f.setSize(500, 300);
-        create_individual_alert.setBounds(0, 0, 100, 30);
-        enterEvent.setBounds(25, 150, 25, 30);
-        eventTxt.setBounds(50, 150, 60, 30);
-        enterMessage.setBounds(120, 150, 30, 30);
-        msgTxt.setBounds(150, 150, 75, 30);
-        enterDate.setBounds(225, 150, 25, 30);
-        dateTxt.setBounds(250, 150, 25, 30);
-        submit.setBounds(200, 200, 90, 30);
+//        //display field:500*300
+//        f.setSize(500, 300);
+//        create_individual_alert.setBounds(0, 0, 100, 30);
+//        enterEvent.setBounds(25, 150, 25, 30);
+//        eventTxt.setBounds(50, 150, 60, 30);
+//        enterMessage.setBounds(120, 150, 30, 30);
+//        msgTxt.setBounds(150, 150, 75, 30);
+//        enterDate.setBounds(225, 150, 25, 30);
+//        dateTxt.setBounds(250, 150, 25, 30);
+//        submit.setBounds(200, 200, 90, 30);
 
-        JComponent[] arr = new JComponent[]{create_individual_alert, enterEvent, eventTxt, enterMessage, msgTxt, enterDate, dateTxt, submit};
-        for (JComponent i : arr) {
-            display.add(i);
+        JComponent[] arr = new JComponent[]{eventTxt, msgTxt, dateTxt};
+        for (JComponent i: arr){
+            i.setPreferredSize(new Dimension(100, 30));
         }
+
+        JComponent[] arr2 = new JComponent[]{create_individual_alert, enterEvent, eventTxt, enterMessage, msgTxt, enterDate, dateTxt, submit};
+        addGB(gbPanel, new JLabel("Enter: (1) Event Name, (2) Alert Message, (3) " +
+                "Alert Date in yyyy-mm-dd: HH:mm"), 0, 0);
+        addGB(gbPanel, enterEvent, 0, 1);
+        addGB(gbPanel, eventTxt, 3, 1);
+        addGB(gbPanel, enterMessage, 0, 2);
+        addGB(gbPanel, msgTxt, 3, 2);
+        addGB(gbPanel, enterDate, 0, 3);
+        addGB(gbPanel, dateTxt, 3, 3);
+        addGB(gbPanel, submit2, 2, 5);
 
         //functions for submit button
         submit.addActionListener(ae -> {
@@ -723,14 +756,13 @@ public class Menus extends JFrame {
             }
         });
 
-        f.add(display);
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setSize(500, 300);
+        f.add(gbPanel);
+        makeVisibleGB(f);
     }
 
     public void createFAlertDisplay(Calendar myCalendar, JFrame f) {
-        JPanel display = new JPanel();
+        JPanel display = new JPanel(new GridBagLayout());
         f.add(new JLabel("Create Individual Alert"));
         f.add(new JLabel("Enter: (1) Event Name, (2) Alert Message, Alert Frequency every (3) number of (4) frequency"));
         f.add(new JLabel("ex. every 1 d(for day) or every 6 h(for hours), only d/h permitted"));
@@ -962,13 +994,13 @@ public class Menus extends JFrame {
             event.memos.add(memo);
             myCalendar.addEvent(event);
 
-
             //save myCalendar instance
             try {
                 sm.saveToFile("user.ser");
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
             f.dispose();
         });
     }

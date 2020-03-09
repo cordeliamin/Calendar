@@ -65,7 +65,6 @@ public class Calendar implements Serializable {
      */
     public ArrayList<Event> findEvent(LocalDate date) {
         ArrayList<Event> events = new ArrayList<>();
-        System.out.println(myEvents.toString() + "dfjsjfjsjfg");
         for (Event event: myEvents) {
             LocalDate start = event.getStartTime().toLocalDate();
             LocalDate end = event.getEndTime().toLocalDate();
@@ -96,13 +95,11 @@ public class Calendar implements Serializable {
             }
         }
         if (events.isEmpty()) {
-            System.out.println("No events found.");
             return null;
         } else {
             return events;
         }
     }
-
 
     //methods for getting list of events: past, current or future
 
@@ -145,18 +142,13 @@ public class Calendar implements Serializable {
      * @return list of current events
      */
     public ArrayList<Event> getCurrentEvents(){
-        ArrayList<Event> eventsDay = findEvent(time.toLocalDate());
         ArrayList<Event> events = new ArrayList<>();
-        if(eventsDay == null){
-            return null;
-        } else {
-            for (Event event : eventsDay) {
-                if (event.getEndTime().isAfter(time) && event.getStartTime().isBefore(time)) {
-                    events.add(event);
-                }
+        for (Event event : myEvents) {
+            if (event.getEndTime().isAfter(time) && event.getStartTime().isBefore(time)) {
+                events.add(event);
             }
-            return events;
         }
+        return events;
     }
 
     /**
@@ -169,7 +161,7 @@ public class Calendar implements Serializable {
             return null;
         } else {
             for (Event event : myEvents) {
-                if (event.getEndTime().isAfter(time)) {
+                if (event.getStartTime().isAfter(time)) {
                     events.add(event);
                 }
             }
@@ -214,6 +206,9 @@ public class Calendar implements Serializable {
     public void reset(){
         myEvents = new ArrayList<>();
         time = LocalDateTime.now();
+        mySeries = new SeriesSystem();
+        myMemos = new MemoSystem();
+        myAlerts = new AlertSystem();
     }
 
 
