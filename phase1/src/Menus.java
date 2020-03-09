@@ -51,6 +51,7 @@ public class Menus extends JFrame {
     JButton submit = new JButton("Submit");
     JButton submit2 = new JButton("Submit");
     JButton submit3 = new JButton("Submit");
+    JButton submit4 = new JButton("Submit");
     JButton viewEvents = new JButton("View all events");
     JButton createEvents = new JButton("Create events");
     JButton viewAlerts = new JButton("View alerts");
@@ -258,7 +259,7 @@ public class Menus extends JFrame {
         });
         viewAlerts.addActionListener(e -> {
             f.dispose();
-            viewAlertsDisplay(user, sm, c, f7);
+            viewAlertsDisplay(user, c, f7);
         });
         viewMemos.addActionListener(e -> {
             f.dispose();
@@ -518,7 +519,7 @@ public class Menus extends JFrame {
 
         JTextField eventNameText = new JTextField();
 
-        submit.setBounds(200, 150, 90, 30);
+        submit3.setBounds(200, 150, 90, 30);
         newEventName.setBounds(50, 100, 70, 30);
         eventNameText.setBounds(120, 100, 100, 30);
 
@@ -528,7 +529,7 @@ public class Menus extends JFrame {
         f.add(submit);
         makeVisible(f);
 
-        submit.addActionListener(ae -> {
+        submit3.addActionListener(ae -> {
             String eventName = eventNameText.getText();
 
             String[] eventArray = {eventName};
@@ -543,14 +544,14 @@ public class Menus extends JFrame {
                 f.dispose();
 
                 JPanel userPanel = new JPanel(new GridBagLayout());
-                JLabel eventName1 = new JLabel();
+                JLabel userName = new JLabel();
                 JLabel emptySpace = new JLabel(" ");
-                eventName1.setBounds(100, 60, 80, 30);
-                eventName1.setText(eventName);
-                newEventName.setBounds(30, 60, 70, 30);
+                userName.setBounds(100, 60, 80, 30);
+                userName.setText(user);
+                userLabel.setBounds(30, 60, 70, 30);
 
-                addGB(userPanel, newEventName, 0, 0);
-                addGB(userPanel, eventName1, 0, 1);
+                addGB(userPanel, userLabel, 0, 0);
+                addGB(userPanel, userName, 0, 1);
                 addGB(userPanel, emptySpace, 0, 2);
                 addGB(userPanel, memos, 0, 3);
 
@@ -635,7 +636,7 @@ public class Menus extends JFrame {
         });
     }
 
-    public void viewAlertsDisplay(String user, CalendarManager sm, Calendar calendar, JFrame f) {
+    public void viewAlertsDisplay(String user, Calendar calendar, JFrame f) {
 
         JPanel display = new JPanel(new GridBagLayout());
         JLabel userName = new JLabel();
@@ -698,17 +699,17 @@ public class Menus extends JFrame {
         createIAlert.addActionListener(e -> {
             //I tried the try-catch block but it shows error that exception is never thrown
             f.dispose();
-            createIAlertDisplay(sm, calendar, f12);
+            createIAlertDisplay(calendar, f12);
         });
 
         createFAlert.addActionListener(ae -> {
             //I tried the try-catch block but it shows error that exception is never thrown
             f.dispose();
-            createFAlertDisplay(sm, calendar, f13);
+            createFAlertDisplay(calendar, f13);
         });
     }
 
-    public void createIAlertDisplay(CalendarManager sm, Calendar myCalendar, JFrame f) {
+    public void createIAlertDisplay(Calendar myCalendar, JFrame f) {
 
         JPanel gbPanel = new JPanel(new GridBagLayout());
         JLabel create_individual_alert = new JLabel("Create Individual Alert");
@@ -717,9 +718,9 @@ public class Menus extends JFrame {
         JTextField eventTxt = new JTextField();
         JTextField msgTxt = new JTextField();
         JTextField dateTxt = new JTextField();
-        JLabel enterEvent = new JLabel("Event name to add alert to:");
-        JLabel enterMessage = new JLabel("Alert message");
-        JLabel enterDate = new JLabel("Alert Date in yyyy-mm-dd HH:mm");
+        JLabel enterEvent = new JLabel("Event:");
+        JLabel enterMessage = new JLabel("Message");
+        JLabel enterDate = new JLabel("Date");
 
 //        //display field:500*300
 //        f.setSize(500, 300);
@@ -734,10 +735,12 @@ public class Menus extends JFrame {
 
         JComponent[] arr = new JComponent[]{eventTxt, msgTxt, dateTxt};
         for (JComponent i: arr){
-            i.setPreferredSize(new Dimension(150, 30));
+            i.setPreferredSize(new Dimension(100, 30));
         }
 
         JComponent[] arr2 = new JComponent[]{create_individual_alert, enterEvent, eventTxt, enterMessage, msgTxt, enterDate, dateTxt, submit};
+        addGB(gbPanel, new JLabel("Enter: (1) Event Name, (2) Alert Message, (3) " +
+                "Alert Date in yyyy-mm-dd: HH:mm"), 0, 0);
         addGB(gbPanel, enterEvent, 0, 1);
         addGB(gbPanel, eventTxt, 3, 1);
         addGB(gbPanel, enterMessage, 0, 2);
@@ -745,16 +748,6 @@ public class Menus extends JFrame {
         addGB(gbPanel, enterDate, 0, 3);
         addGB(gbPanel, dateTxt, 3, 3);
         addGB(gbPanel, submit2, 2, 5);
-
-        StringBuffer allNames = new StringBuffer();
-        for (String s : myCalendar.getEventNames()) {
-            allNames.append(s);
-            allNames.append(" ");
-        }
-        JLabel eventsNames = new JLabel(allNames.toString());
-        addGB(gbPanel, eventsNames, 0, 0);
-
-
 
         //functions for submit button
         submit.addActionListener(ae -> {
@@ -764,16 +757,8 @@ public class Menus extends JFrame {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             LocalDateTime date = LocalDateTime.parse(d, formatter);
 
-            System.out.println(myCalendar.getEventNames());
             if (myCalendar.getEventNames().contains(name)) {
                 myCalendar.addIndividualAlert(myCalendar.getEvent(name), msg, date);
-                System.out.println("added!!");
-                try {
-                    sm.saveToFile("user.ser");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                f.dispose();
             }
         });
 
@@ -782,53 +767,47 @@ public class Menus extends JFrame {
         makeVisibleGB(f);
     }
 
-    public void createFAlertDisplay(CalendarManager sm, Calendar myCalendar, JFrame f) {
-        JPanel gbPanel = new JPanel(new GridBagLayout());
+    public void createFAlertDisplay(Calendar myCalendar, JFrame f) {
+        JPanel display = new JPanel(new GridBagLayout());
+
         JTextField eventTxt = new JTextField();
         JTextField msgTxt = new JTextField();
         JTextField nTxt = new JTextField();
         JTextField fTxt = new JTextField();
-        JLabel enterEvent = new JLabel("Event name to add to:");
-        JLabel enterMessage = new JLabel("Alert message");
-        JLabel enterNumberOf = new JLabel("Frequency: every number of (ex. 4)");
-        JLabel enterFreq = new JLabel("Frequency: d(for day), h(for hours)");
+        JLabel enterEvent = new JLabel("Event:");
+        JLabel enterMessage = new JLabel("Message");
+        JLabel enterNumberOf = new JLabel("Frequency: every");
 
-//        //display field:500*300
-//        f.setSize(500, 300);
-//        enterEvent.setBounds(25, 150, 25, 30);
-//        eventTxt.setBounds(50, 150, 60, 30);
-//        enterMessage.setBounds(120, 150, 30, 30);
-//        msgTxt.setBounds(150, 150, 75, 30);
-//        enterNumberOf.setBounds(225, 150, 50, 30);
-//        nTxt.setBounds(275, 150, 25, 30);
-//        fTxt.setBounds(300, 150, 25, 30);
-//        submit.setBounds(200, 200, 90, 30);
+        //display field:500*300
+        //f.setSize(500, 300);
+        //enterEvent.setBounds(25, 150, 25, 30);
+        //eventTxt.setBounds(50, 150, 60, 30);
+        //enterMessage.setBounds(120, 150, 30, 30);
+        //msgTxt.setBounds(150, 150, 75, 30);
+        //enterNumberOf.setBounds(225, 150, 50, 30);
+        //nTxt.setBounds(275, 150, 25, 30);
+        //fTxt.setBounds(300, 150, 25, 30);
+        //submit.setBounds(200, 200, 90, 30);
 
-        JComponent[] arr1 = new JComponent[]{enterEvent, eventTxt, enterMessage, msgTxt, enterNumberOf, nTxt, fTxt, submit};
+        addGB(display, new JLabel("Create Individual Alert"), 0, 1);
+        addGB(display, new JLabel("Enter: (1) Event Name, (2) Alert Message, Alert Frequency every (3) number of (4) frequency"), 0, 2);
+        addGB(display, new JLabel("ex. every 1 d(for day) or every 6 h(for hours), only d/h permitted"), 0, 3);
 
-        JComponent[] arr2 = new JComponent[]{eventTxt, msgTxt, nTxt, fTxt};
-        for (JComponent i: arr2){
-            i.setPreferredSize(new Dimension(150, 30));
+        JComponent[] arr = new JComponent[]{eventTxt, msgTxt, nTxt};
+        for (JComponent i : arr) {
+            i.setPreferredSize(new Dimension(100, 30));
         }
+        addGB(display, enterEvent, 0, 4);
+        addGB(display, eventTxt, 1, 4);
+        addGB(display, enterMessage, 0, 5);
+        addGB(display, msgTxt, 1, 5);
+        addGB(display, enterNumberOf, 0, 6);
+        addGB(display, nTxt, 1, 6);
+        addGB(display, submit4, 1, 7);
 
-        StringBuffer allNames = new StringBuffer();
-        for (String s : myCalendar.getEventNames()) {
-            allNames.append(s);
-            allNames.append(" ");
-        }
-        JLabel eventsNames = new JLabel(allNames.toString());
-        addGB(gbPanel, eventsNames, 0, 0);
-
-        addGB(gbPanel, enterEvent, 0, 1);
-        addGB(gbPanel, eventTxt, 3, 1);
-        addGB(gbPanel, enterMessage, 0, 2);
-        addGB(gbPanel, msgTxt, 3, 2);
-        addGB(gbPanel, enterNumberOf, 0, 3);
-        addGB(gbPanel, nTxt, 3, 3);
-        addGB(gbPanel, enterFreq, 0, 4);
-        addGB(gbPanel, fTxt, 3, 4);
-        addGB(gbPanel, submit, 2, 5);
-
+        f.setSize(800, 800);
+        f.add(display);
+        makeVisibleGB(f);
 
         //functions for submit button
         submit.addActionListener(ae -> {
@@ -849,18 +828,8 @@ public class Menus extends JFrame {
                 }
                 if (duration != null)
                     myCalendar.addFrequentAlert(myCalendar.getEvent(name), msg, duration);
-                    try {
-                        sm.saveToFile("user.ser");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    f.dispose();
             }
         });
-
-        f.setSize(500, 300);
-        f.add(gbPanel);
-        makeVisible(f);
     }
 
     public void viewMemosDisplay(String user, Calendar myCalendar, JFrame f) {
