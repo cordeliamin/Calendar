@@ -13,10 +13,10 @@ public class Calendar implements Serializable {
     /*
     Class Calendar is user-specific
      */
-    private static ArrayList<Event> myEvents = new ArrayList<>();
-    private static MemoSystem myMemos = new MemoSystem();
-    private static SeriesSystem mySeries = new SeriesSystem();
-    private static AlertSystem myAlerts = new AlertSystem();
+    private ArrayList<Event> myEvents = new ArrayList<>();
+    private MemoSystem myMemos = new MemoSystem();
+    private SeriesSystem mySeries = new SeriesSystem();
+    private AlertSystem myAlerts = new AlertSystem();
     public LocalDateTime time = LocalDateTime.now();
 
     //methods for creating events, alerts

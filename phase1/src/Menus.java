@@ -108,7 +108,7 @@ public class Menus extends JFrame {
     }
 
     public static HashMap<String, String> getUsers() throws FileNotFoundException {
-        Scanner scanner = new Scanner(new FileInputStream("users.csv"));
+        Scanner scanner = new Scanner(new FileInputStream("./phase1/users.csv"));
         String[] login;
         HashMap<String, String> users = new HashMap<>();
         while (scanner.hasNextLine()) {
