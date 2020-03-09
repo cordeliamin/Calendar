@@ -50,6 +50,7 @@ public class Menus extends JFrame {
     JButton submit = new JButton("Submit");
     JButton submit2 = new JButton("Submit");
     JButton submit3 = new JButton("Submit");
+    JButton submit4 = new JButton("Submit");
     JButton viewEvents = new JButton("View all events");
     JButton createEvents = new JButton("Create events");
     JButton viewAlerts = new JButton("View alerts");
@@ -644,21 +645,22 @@ public class Menus extends JFrame {
         addGB(display, userName, 0, 1);
         addGB(display, emptySpace, 0, 2);
         addGB(display, titleCurrAlert, 0, 3);
-
+        int i = 4;
         //display the current alerts
         if (calendar.getAllAlerts().isEmpty() || calendar.getAllAlerts() == null) {
             addGB(display, new JLabel("No current alerts!"), 0, 4);
-        }
-        else {
+        } else {
             for (Alert alert : calendar.getCurrAlerts()) {
                 JLabel a = new JLabel(alert.toString());
-                addGB(display, a, 0, 4);
+                addGB(display, a, 0, i);
+                i++;
             }
         }
+        i = i + 1;
 
-        addGB(display, bAllAlert, 0, 5);
-        addGB(display, createFAlert, 0, 6);
-        addGB(display, createIAlert, 0, 7);
+        addGB(display, bAllAlert, 0, i);
+        addGB(display, createFAlert, 0, i + 1);
+        addGB(display, createIAlert, 0, i + 2);
 
         f.setSize(800, 800);
         f.add(display);
@@ -728,7 +730,7 @@ public class Menus extends JFrame {
 //        submit.setBounds(200, 200, 90, 30);
 
         JComponent[] arr = new JComponent[]{eventTxt, msgTxt, dateTxt};
-        for (JComponent i: arr){
+        for (JComponent i : arr) {
             i.setPreferredSize(new Dimension(100, 30));
         }
 
@@ -756,16 +758,14 @@ public class Menus extends JFrame {
             }
         });
 
-        f.setSize(500, 300);
+        f.setSize(800, 800);
         f.add(gbPanel);
         makeVisibleGB(f);
     }
 
     public void createFAlertDisplay(Calendar myCalendar, JFrame f) {
         JPanel display = new JPanel(new GridBagLayout());
-        f.add(new JLabel("Create Individual Alert"));
-        f.add(new JLabel("Enter: (1) Event Name, (2) Alert Message, Alert Frequency every (3) number of (4) frequency"));
-        f.add(new JLabel("ex. every 1 d(for day) or every 6 h(for hours), only d/h permitted"));
+
         JTextField eventTxt = new JTextField();
         JTextField msgTxt = new JTextField();
         JTextField nTxt = new JTextField();
@@ -775,26 +775,35 @@ public class Menus extends JFrame {
         JLabel enterNumberOf = new JLabel("Frequency: every");
 
         //display field:500*300
-        f.setSize(500, 300);
-        enterEvent.setBounds(25, 150, 25, 30);
-        eventTxt.setBounds(50, 150, 60, 30);
-        enterMessage.setBounds(120, 150, 30, 30);
-        msgTxt.setBounds(150, 150, 75, 30);
-        enterNumberOf.setBounds(225, 150, 50, 30);
-        nTxt.setBounds(275, 150, 25, 30);
-        fTxt.setBounds(300, 150, 25, 30);
-        submit.setBounds(200, 200, 90, 30);
+        //f.setSize(500, 300);
+        //enterEvent.setBounds(25, 150, 25, 30);
+        //eventTxt.setBounds(50, 150, 60, 30);
+        //enterMessage.setBounds(120, 150, 30, 30);
+        //msgTxt.setBounds(150, 150, 75, 30);
+        //enterNumberOf.setBounds(225, 150, 50, 30);
+        //nTxt.setBounds(275, 150, 25, 30);
+        //fTxt.setBounds(300, 150, 25, 30);
+        //submit.setBounds(200, 200, 90, 30);
 
-        JComponent[] arr = new JComponent[]{enterEvent, eventTxt, enterMessage, msgTxt, enterNumberOf, nTxt, fTxt, submit};
+        addGB(display, new JLabel("Create Individual Alert"), 0, 1);
+        addGB(display, new JLabel("Enter: (1) Event Name, (2) Alert Message, Alert Frequency every (3) number of (4) frequency"), 0, 2);
+        addGB(display, new JLabel("ex. every 1 d(for day) or every 6 h(for hours), only d/h permitted"), 0, 3);
+
+        JComponent[] arr = new JComponent[]{eventTxt, msgTxt, nTxt};
         for (JComponent i : arr) {
-            display.add(i);
+            i.setPreferredSize(new Dimension(100, 30));
         }
-        makeVisible(f);
+        addGB(display, enterEvent, 0, 4);
+        addGB(display, eventTxt, 1, 4);
+        addGB(display, enterMessage, 0, 5);
+        addGB(display, msgTxt, 1, 5);
+        addGB(display, enterNumberOf, 0, 6);
+        addGB(display, nTxt, 1, 6);
+        addGB(display, submit4, 1, 7);
 
+        f.setSize(800, 800);
         f.add(display);
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        makeVisibleGB(f);
 
         //functions for submit button
         submit.addActionListener(ae -> {
