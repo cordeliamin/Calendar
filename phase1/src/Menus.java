@@ -259,7 +259,7 @@ public class Menus extends JFrame {
         });
         viewAlerts.addActionListener(e -> {
             f.dispose();
-            viewAlertsDisplay(user, c, f7);
+            viewAlertsDisplay(user, sm, c, f7);
         });
         viewMemos.addActionListener(e -> {
             f.dispose();
@@ -636,7 +636,7 @@ public class Menus extends JFrame {
         });
     }
 
-    public void viewAlertsDisplay(String user, Calendar calendar, JFrame f) {
+    public void viewAlertsDisplay(String user, CalendarManager sm, Calendar calendar, JFrame f) {
 
         JPanel display = new JPanel(new GridBagLayout());
         JLabel userName = new JLabel();
@@ -699,17 +699,17 @@ public class Menus extends JFrame {
         createIAlert.addActionListener(e -> {
             //I tried the try-catch block but it shows error that exception is never thrown
             f.dispose();
-            createIAlertDisplay(calendar, f12);
+            createIAlertDisplay(sm, calendar, f12);
         });
 
         createFAlert.addActionListener(ae -> {
             //I tried the try-catch block but it shows error that exception is never thrown
             f.dispose();
-            createFAlertDisplay(calendar, f13);
+            createFAlertDisplay(sm, calendar, f13);
         });
     }
 
-    public void createIAlertDisplay(Calendar myCalendar, JFrame f) {
+    public void createIAlertDisplay(CalendarManager sm, Calendar myCalendar, JFrame f) {
 
         JPanel gbPanel = new JPanel(new GridBagLayout());
         JLabel create_individual_alert = new JLabel("Create Individual Alert");
@@ -759,6 +759,12 @@ public class Menus extends JFrame {
 
             if (myCalendar.getEventNames().contains(name)) {
                 myCalendar.addIndividualAlert(myCalendar.getEvent(name), msg, date);
+                try {
+                    sm.saveToFile("user.ser");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                f.dispose();
             }
         });
 
@@ -828,6 +834,12 @@ public class Menus extends JFrame {
                 }
                 if (duration != null)
                     myCalendar.addFrequentAlert(myCalendar.getEvent(name), msg, duration);
+                    try {
+                        sm.saveToFile("user.ser");
+                    } catch (IOException e) {
+                      e.printStackTrace();
+                 }
+                    f.dispose();
             }
         });
     }
