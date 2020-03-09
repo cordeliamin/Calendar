@@ -761,7 +761,7 @@ public class Menus extends JFrame {
         makeVisibleGB(f);
     }
 
-    public void createFAlertDisplay(Calendar myCalendar, JFrame f) {
+    public void createFAlertDisplay(CalendarManager sm, Calendar myCalendar, JFrame f) {
         JPanel display = new JPanel(new GridBagLayout());
         f.add(new JLabel("Create Individual Alert"));
         f.add(new JLabel("Enter: (1) Event Name, (2) Alert Message, Alert Frequency every (3) number of (4) frequency"));
