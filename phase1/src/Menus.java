@@ -43,6 +43,7 @@ public class Menus extends JFrame {
     private static JFrame f20 = new JFrame("Memos for Event");
     private static JFrame f21 = new JFrame("Select Event(s)");
     private static JFrame f22 = new JFrame("Tag Event");
+    private static JFrame f23 = new JFrame("Events");
 
 
     JButton yes = new JButton("Yes");
@@ -410,7 +411,7 @@ public class Menus extends JFrame {
 
             f.dispose();
 
-            findEventsHelperfunc(events, user);
+            findEventsHelperfunc(events, user, f23);
         });
     }
 
@@ -434,7 +435,7 @@ public class Menus extends JFrame {
 
             f.dispose();
 
-            findEventsHelperfunc(events, user);
+            findEventsHelperfunc(events, user, f23);
         });
     }
 
@@ -463,7 +464,7 @@ public class Menus extends JFrame {
                 ArrayList<Event> events = myCalendar.findEvent(memo1);
 
                 f.dispose();
-                findEventsHelperfunc(events, user);
+                findEventsHelperfunc(events, user, f23);
 
             } catch (NumberFormatException n) {
                 memoText.setText("");
@@ -480,7 +481,7 @@ public class Menus extends JFrame {
     }
 
     // helper function for findEventDateDisplay, findEventTagDisplay and findEventMemoDisplay
-    private void findEventsHelperfunc(ArrayList<Event> events, String user) {
+    private void findEventsHelperfunc(ArrayList<Event> events, String user, JFrame f) {
         JPanel userPanel = new JPanel(new GridBagLayout());
         JLabel userName = new JLabel();
         JLabel emptySpace = new JLabel(" ");
@@ -507,6 +508,10 @@ public class Menus extends JFrame {
             addGB(userPanel, label, 0, 4);
 
         }
+
+        f.setSize(800, 800);
+        f.add(userPanel);
+        makeVisibleGB(f);
     }
 
     public void selectEventDisplay(String user, Calendar myCalendar, JFrame f) {
