@@ -43,8 +43,8 @@ public class EventMenuController extends Controller {
         ObservableList<Event> eventTableItems = FXCollections.observableArrayList();
         eventTableItems.addAll(userCalendar.getMyEvents());
         eventTable.setItems(eventTableItems);
-        eventSort.getItems().addAll("Default", "Past", "Current", "Upcoming");
-        eventSort.setValue("Default");
+        eventSort.getItems().addAll("All", "Past", "Current", "Upcoming");
+        eventSort.setValue("All");
         eventSort.getSelectionModel().selectedItemProperty().addListener(
                 (v, oldVal, newVal) -> sortEventTable(newVal));
     }
@@ -54,10 +54,13 @@ public class EventMenuController extends Controller {
         switch (sortBy) {
             case "Past":
                 eventTable.getItems().addAll(userCalendar.getPastEvents());
+                break;
             case "Current":
                 eventTable.getItems().addAll(userCalendar.getCurrentEvents());
+                break;
             case "Upcoming":
                 eventTable.getItems().addAll(userCalendar.getFutureEvents());
+                break;
             default:
                 eventTable.getItems().addAll(userCalendar.getMyEvents());
         }

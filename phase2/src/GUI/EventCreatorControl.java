@@ -11,7 +11,7 @@ import CalendarSystem.Event;
 
 public class EventCreatorControl extends Controller {
 
-    @FXML private TableView<Event> eventTable;
+    private TableView<Event> eventTable;
     @FXML private TextField eventName;
     @FXML private DatePicker eventStartDate;
     @FXML private TextField eventStartTime;
@@ -30,29 +30,50 @@ public class EventCreatorControl extends Controller {
         String nameInput = eventName.getText();
         String startInput = eventStartDate.getEditor().getText();
         String endInput = eventEndDate.getEditor().getText();
-        if (hasErrors(nameInput, startInput, endInput)) {
+        if (hasFormatErrors(nameInput, startInput, endInput)) {
             errorMsg.setVisible(true);
         } else {
-            String [] startDate = startInput.split("/");
-            String [] endDate = endInput.split("/");
-            String [] startTime = eventStartTime.getText().split(":");
-            String [] endTime = eventEndTime.getText().split(":");
-            LocalDateTime start = LocalDateTime.of(Integer.parseInt(startDate[2]),
-                    Integer.parseInt(startDate[1]), Integer.parseInt(startDate[0]),
-                    Integer.parseInt(startTime[0]), Integer.parseInt(startTime[1]));
-            LocalDateTime end = LocalDateTime.of(Integer.parseInt(endDate[2]),
-                    Integer.parseInt(endDate[1]), Integer.parseInt(endDate[0]),
-                    Integer.parseInt(endTime[0]), Integer.parseInt(endTime[1]));
-            Event newEvent = new Event(nameInput, start, end);
-            userCalendar.addEvent(newEvent);
-            eventTable.getItems().add(newEvent);
-            successMsg.setVisible(true);
-            eventName.clear();
-            eventStartDate.getEditor().clear();
-            eventStartTime.clear();
-            eventEndDate.getEditor().clear();
-            eventEndTime.clear();
+            LocalDateTime[] timeInterval = convertToDates(startInput, endInput);
+            if (timeInterval[1].isAfter(timeInterval[0])) {
+                Event newEvent = new Event(nameInput, timeInterval[0], timeInterval[1]);
+                userCalendar.addEvent(newEvent);
+                eventTable.getItems().add(newEvent);
+                successMsg.setVisible(true);
+                clearFields();
+            } else {
+                displayInvalidDateInput();
+            }
         }
+    }
+
+    private void clearFields() {
+        eventName.clear();
+        eventStartDate.getEditor().clear();
+        eventStartTime.clear();
+        eventEndDate.getEditor().clear();
+        eventEndTime.clear();
+    }
+
+    private void displayInvalidDateInput() {
+        errorMsg.setVisible(true);
+        startDateLab.setTextFill(Paint.valueOf("red"));
+        endDateLab.setTextFill(Paint.valueOf("red"));
+        startTimeLab.setTextFill(Paint.valueOf("red"));
+        endTimeLab.setTextFill(Paint.valueOf("red"));
+    }
+
+    private LocalDateTime[] convertToDates(String startInput, String endInput) {
+        String [] startDate = startInput.split("/");
+        String [] endDate = endInput.split("/");
+        String [] startTime = eventStartTime.getText().split(":");
+        String [] endTime = eventEndTime.getText().split(":");
+        LocalDateTime start = LocalDateTime.of(Integer.parseInt(startDate[2]),
+                Integer.parseInt(startDate[1]), Integer.parseInt(startDate[0]),
+                Integer.parseInt(startTime[0]), Integer.parseInt(startTime[1]));
+        LocalDateTime end = LocalDateTime.of(Integer.parseInt(endDate[2]),
+                Integer.parseInt(endDate[1]), Integer.parseInt(endDate[0]),
+                Integer.parseInt(endTime[0]), Integer.parseInt(endTime[1]));
+        return new LocalDateTime[] {start, end};
     }
 
     protected void setTableToModify(TableView<Event> eventTable) {
@@ -69,14 +90,14 @@ public class EventCreatorControl extends Controller {
         endTimeLab.setTextFill(Paint.valueOf("black"));
     }
 
-    private boolean hasErrors(String nameInput, String startInput, String endInput) {
+    private boolean hasFormatErrors(String nameInput, String startInput, String endInput) {
         boolean hasError = false;
 
         Pattern dateRule = Pattern.compile("^[0-3][0-9]/[01][0-9]/([0-9]+)$");
         Matcher matchSDate = dateRule.matcher(startInput);
         Matcher matchEDate = dateRule.matcher(endInput);
 
-        Pattern timeRule = Pattern.compile("(0[1-9]|1[0-9]|2[0-3]):[0-5][0-9]");
+        Pattern timeRule = Pattern.compile("^([01][0-9]|2[0-3]):[0-5][0-9]$");
         Matcher matchSTime = timeRule.matcher(eventStartTime.getText());
         Matcher matchETime = timeRule.matcher(eventEndTime.getText());
 

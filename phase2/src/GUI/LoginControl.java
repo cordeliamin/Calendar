@@ -15,8 +15,8 @@ import CalendarSystem.CalendarManager;
 public class LoginControl extends Controller {
 
     @FXML private Label errorIn;
-    @FXML TextField userInfo;
-    @FXML PasswordField passInfo;
+    @FXML private TextField userInfo;
+    @FXML private PasswordField passInfo;
 
     @FXML private void login() throws ClassNotFoundException, IOException {
         String user = userInfo.getText();
