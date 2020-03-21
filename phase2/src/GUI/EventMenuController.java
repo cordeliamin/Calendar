@@ -1,6 +1,5 @@
 package GUI;
 
-import CalendarSystem.CalendarManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -29,20 +28,20 @@ public class EventMenuController extends Controller {
     @FXML TableColumn<Event, LocalDateTime> eventEnd;
 
     @FXML private void goBackToMenu() throws IOException {
-        FXMLLoader loader = setScreenAndGetLoader("MainMenuScene.fxml", returnToMenu);
-        MainMenuControl menu = loader.getController();
-        menu.setCalendar(calendarManager);
+        setScreen("MainMenuScene.fxml", returnToMenu);
     }
 
     @Override
-    protected void setCalendar(CalendarManager calMan) {
-        super.setCalendar(calMan);
+    protected void initScreen() {
+        //Populate eventTable
         eventName.setCellValueFactory(new PropertyValueFactory<>("eventName"));
         eventStart.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         eventEnd.setCellValueFactory(new PropertyValueFactory<>("endTime"));
         ObservableList<Event> eventTableItems = FXCollections.observableArrayList();
-        eventTableItems.addAll(userCalendar.getMyEvents());
+        eventTableItems.addAll(getCalendar().getMyEvents());
         eventTable.setItems(eventTableItems);
+
+        //Populate eventSort and set it so it activates on a new selection
         eventSort.getItems().addAll("All", "Past", "Current", "Upcoming");
         eventSort.setValue("All");
         eventSort.getSelectionModel().selectedItemProperty().addListener(
@@ -53,16 +52,16 @@ public class EventMenuController extends Controller {
         eventTable.getItems().clear();
         switch (sortBy) {
             case "Past":
-                eventTable.getItems().addAll(userCalendar.getPastEvents());
+                eventTable.getItems().addAll(getCalendar().getPastEvents());
                 break;
             case "Current":
-                eventTable.getItems().addAll(userCalendar.getCurrentEvents());
+                eventTable.getItems().addAll(getCalendar().getCurrentEvents());
                 break;
             case "Upcoming":
-                eventTable.getItems().addAll(userCalendar.getFutureEvents());
+                eventTable.getItems().addAll(getCalendar().getFutureEvents());
                 break;
             default:
-                eventTable.getItems().addAll(userCalendar.getMyEvents());
+                eventTable.getItems().addAll(getCalendar().getMyEvents());
         }
     }
 
@@ -77,7 +76,7 @@ public class EventMenuController extends Controller {
         loader.setLocation(getClass().getResource("EventCreatorScene.fxml"));
         Parent newScene = loader.load();
         EventCreatorControl eventMaker = loader.getController();
-        eventMaker.setCalendar(calendarManager);
+        eventMaker.setCalendar(getCalendarManager());
         eventMaker.setTableToModify(eventTable);
 
         //Set and display scene to new stage

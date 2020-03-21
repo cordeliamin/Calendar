@@ -1,7 +1,6 @@
 package GUI;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -18,15 +17,17 @@ public class LoginControl extends Controller {
     @FXML private TextField userInfo;
     @FXML private PasswordField passInfo;
 
+    @Override
+    protected void initScreen() { setCalendar(null); }
+
     @FXML private void login() throws ClassNotFoundException, IOException {
         String user = userInfo.getText();
         String pswd = passInfo.getText();
         HashMap<String, String> users = getUsers();
         if (users.containsKey(user)) {
             if (users.get(user).equals(pswd)) {
-                FXMLLoader loader = setScreenAndGetLoader("MainMenuScene.fxml", userInfo);
-                MainMenuControl menu = loader.getController();
-                menu.setCalendar(new CalendarManager(user + ".ser"));
+                setCalendar(new CalendarManager(user + ".ser"));
+                setScreen("MainMenuScene.fxml", userInfo);
             } else {
                 errorIn.setVisible(true);
             }

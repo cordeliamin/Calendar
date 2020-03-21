@@ -3,6 +3,8 @@ package GUI;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.paint.Paint;
+
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.time.LocalDateTime;
@@ -25,7 +27,7 @@ public class EventCreatorControl extends Controller {
     @FXML private Label endDateLab;
     @FXML private Label endTimeLab;
 
-    @FXML private void createEvent() {
+    @FXML private void createEvent() throws IOException {
         hideMessage();
         String nameInput = eventName.getText();
         String startInput = eventStartDate.getEditor().getText();
@@ -36,8 +38,9 @@ public class EventCreatorControl extends Controller {
             LocalDateTime[] timeInterval = convertToDates(startInput, endInput);
             if (timeInterval[1].isAfter(timeInterval[0])) {
                 Event newEvent = new Event(nameInput, timeInterval[0], timeInterval[1]);
-                userCalendar.addEvent(newEvent);
+                getCalendar().addEvent(newEvent);
                 eventTable.getItems().add(newEvent);
+                getCalendarManager().saveToFile();
                 successMsg.setVisible(true);
                 clearFields();
             } else {

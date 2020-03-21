@@ -38,7 +38,7 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="90.0" text="Memos">
+            <Button fx:id="memoButton" mnemonicParsing="false" onAction="#viewMemos" prefHeight="60.0" prefWidth="90.0" text="Memos">
                <font>
                   <Font name="Microsoft Sans Serif" size="16.0" />
                </font>
