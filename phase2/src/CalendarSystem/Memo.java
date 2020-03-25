@@ -33,6 +33,23 @@ public class Memo implements Serializable {
         return this.note;
     }
 
+    // Editing the memo
+
+    /**
+     * Sets this Memo's note to a new note.
+     * @param newNote: the new note to be stored in this Memo
+     */
+    public void setNote(String newNote) {
+        this.note = newNote;
+    }
+
+    /**
+     * Adds on a message to this Memo's current note.
+     */
+    public void addToNote(String note1) {
+        this.note += note1;
+    }
+
     @Override
     public String toString() {
         return "Memo " + this.idNum + ": " + this.note;

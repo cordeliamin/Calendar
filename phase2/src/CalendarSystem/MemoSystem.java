@@ -11,7 +11,11 @@ public class MemoSystem implements Serializable {
     /**
      * A list of all the memos created
      */
-    public ArrayList<Memo> memos = new ArrayList<>();
+    public ArrayList<Memo> memos;
+
+    public MemoSystem() {
+        this.memos = new ArrayList<>();
+    }
 
     /**
      * creates a memo
@@ -23,9 +27,7 @@ public class MemoSystem implements Serializable {
         Memo memo = new Memo(note);
 
         // adds memo to the list of memos stored in this MemoSystem
-        if (memos != null) {
-            memos.add(memo);
-        }
+        this.memos.add(memo);
 
         // adds memo to each event's memos from the input list of events
         for (Event event:events){
@@ -39,7 +41,7 @@ public class MemoSystem implements Serializable {
     }
 
     /**
-     * get a memo by its id numberm
+     * get a memo by its id number
      *
      * @param id: the id number of a memo in this MemoSystem
      * @return the memo with id number id
@@ -52,6 +54,19 @@ public class MemoSystem implements Serializable {
         }
         System.out.println("This is not a valid id number for a memo.");
         return null;
+    }
+
+    /**
+     * Deletes specified memo from the list of memos.
+     * @param memo: a memo in this list
+     */
+    public void deleteMemo(Memo memo) {
+        if(this.memos.contains(memo)) {
+            this.memos.remove(memo);
+            System.out.println("Memo deleted");
+        } else {
+            System.out.println("Entered invalid Memo");
+        }
     }
 
     public boolean isEmpty() {
