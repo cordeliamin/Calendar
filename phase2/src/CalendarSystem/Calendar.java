@@ -31,6 +31,17 @@ public class Calendar implements Serializable {
         myAlerts.addFrequentAlert(e, msg, d);
     }
 
+    //methods for deleting events, alerts
+
+    public void deleteEvent(Event e) {
+        this.myEvents.remove(e);
+        this.myAlerts.removeEvent(e);
+    }
+
+    public void deleteAlert(Alert a) {
+        this.myAlerts.deleteAlert(a);
+    }
+
     public MemoSystem getMyMemos() {
         return myMemos;
     }

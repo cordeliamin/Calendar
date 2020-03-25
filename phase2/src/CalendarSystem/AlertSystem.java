@@ -2,6 +2,7 @@ package CalendarSystem;
 
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.ArrayList;
@@ -85,6 +86,31 @@ public class AlertSystem implements Serializable{
         return result;
     }
 
+    /**
+     * Removes specified event from this eventAlertsMap.
+     */
+    public void removeEvent(Event e) {
+        this.eventAlertsMap.remove(e);
+    }
+
+    /**
+     * Delete an Alert
+     */
+    public void deleteAlert(Alert alert) {
+        // removes alert from dateAlertsMap
+        for (LocalDateTime alertTime : alert.getTimes()) {
+            dateAlertsMap.get(alertTime).remove(alert);
+            if (dateAlertsMap.get(alertTime).isEmpty()) { // no other alerts at alertTime, so removes alertTime
+                dateAlertsMap.remove(alertTime);
+                allAlertTimes.remove(alertTime);
+            }
+        }
+
+        // removes alert from eventAlertsMap
+        for (Event e: eventAlertsMap.keySet()) {
+            eventAlertsMap.get(e).remove(alert);
+        }
+    }
 
     // helper methods
     /**
