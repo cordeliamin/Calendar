@@ -33,8 +33,22 @@ public abstract class Alert implements Serializable {
         this.times.add(date);
     }
 
+    protected void removefromTimes(LocalDateTime date) {this.times.remove(date);}
+
+    protected void resetTimes() {this.times = new ArrayList<>();}
+
     public LocalDateTime getEventTime(){
         return this.eventTime;
+    }
+
+    //Edit Alert
+
+    public void setName(String newName) {
+        this.name = newName;
+    }
+
+    public void setMessage(String newMessage) {
+        this.message = newMessage;
     }
 
 }

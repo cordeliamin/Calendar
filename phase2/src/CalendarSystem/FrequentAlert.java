@@ -12,6 +12,13 @@ public class FrequentAlert extends Alert{
         setTimesHelper();
     }
 
+    // Edit FrequentAlert
+    public void changeFrequency(Duration newDur) {
+        this.resetTimes();
+        this.frequency = newDur;
+        setTimesHelper();
+    }
+
     private void setTimesHelper(){
         LocalDateTime t = getEventTime();
         do{

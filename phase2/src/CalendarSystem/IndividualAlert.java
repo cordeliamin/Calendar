@@ -10,4 +10,12 @@ public class IndividualAlert extends Alert{
         time = t;
         addtoTimes(time);
     }
+
+    //Edit IndividualAlert
+    public void changeTime(LocalDateTime newTime) {
+        this.removefromTimes(this.time);
+        this.time = newTime;
+        addtoTimes(this.time);
+    }
+
 }

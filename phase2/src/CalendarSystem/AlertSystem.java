@@ -112,6 +112,13 @@ public class AlertSystem implements Serializable{
         }
     }
 
+    public void deleteAllAlertsforEvent(Event e) {
+        for (Alert a: this.eventAlertsMap.get(e)) {
+            deleteAlert(a);
+        }
+        this.eventAlertsMap.remove(e);
+    }
+
     // helper methods
     /**
      * helper method for adding the times of the alert to dateAlertsMap and allAlertTimes,
