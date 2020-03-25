@@ -42,6 +42,10 @@ public class Calendar implements Serializable {
         this.myAlerts.deleteAlert(a);
     }
 
+    public void deleteAllAlertsforEvent(Event e) {
+        this.myAlerts.deleteAllAlertsforEvent(e);
+    }
+
     public void deleteMemo(Memo m) {
         this.myMemos.deleteMemo(m);
         for (Event e: this.myEvents) {
@@ -58,6 +62,17 @@ public class Calendar implements Serializable {
 
     public MemoSystem getMyMemos() {
         return myMemos;
+    }
+
+    // Edit events
+
+    /**
+     * Change time of an Event
+     */
+    public void changeEventTime(Event event, LocalDateTime start, LocalDateTime end) {
+        event.setStartTime(start);
+        event.setEndTime(end);
+        this.deleteAllAlertsforEvent(event);
     }
 
     //methods for finding list of events: by tag, memo or date
