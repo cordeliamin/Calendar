@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane hgap="3.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="550.0" vgap="8.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.EventCreatorControl">
+<GridPane hgap="3.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="550.0" stylesheets="@Default.css" vgap="8.0" xmlns="http://javafx.com/javafx/8.0.171-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.EventCreatorControl">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
@@ -56,10 +56,10 @@
          </font>
       </Label>
       <Label fx:id="successMsg" text="Event Created!" textFill="#3df210" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-      <Label fx:id="errorMsg" prefHeight="40.0" prefWidth="112.0" text="ERROR: Invalid Input!" textFill="RED" visible="false" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-      <DatePicker fx:id="eventStartDate" GridPane.rowIndex="3" />
+      <Label fx:id="errorMsg" prefHeight="28.0" prefWidth="165.0" styleClass="label-error" text="Invalid Input!" textFill="RED" visible="false" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+      <DatePicker fx:id="eventStartDate" promptText="DD/MM/YYYY" GridPane.rowIndex="3" />
       <ComboBox prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-      <DatePicker fx:id="eventEndDate" GridPane.rowIndex="5" />
+      <DatePicker fx:id="eventEndDate" promptText="DD/MM/YYYY" GridPane.rowIndex="5" />
       <TextField fx:id="eventEndTime" promptText="HH:MM format" GridPane.columnIndex="2" GridPane.rowIndex="5" />
       <Label fx:id="endDateLab" text="Event End Date: *" GridPane.rowIndex="4" />
       <Label fx:id="endTimeLab" text="Event End Time: *" GridPane.columnIndex="2" GridPane.rowIndex="4" />

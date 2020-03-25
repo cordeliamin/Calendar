@@ -49,7 +49,8 @@ public abstract class Controller {
         loader.setLocation(getClass().getResource(fxmlFileName));
         Parent newRoot = loader.load();
         Stage window = (Stage) item.getScene().getWindow();
-        window.setScene(new Scene(newRoot, 900, 600));
+        Scene newScreen = new Scene(newRoot, 900, 600);
+        window.setScene(newScreen);
         Controller controller = loader.getController();
         controller.setCalendar(calendarManager);
         controller.initScreen();

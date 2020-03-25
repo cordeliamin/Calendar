@@ -49,12 +49,7 @@ public class Calendar implements Serializable {
                 events.add(event);
             }
         }
-        if (events.isEmpty()) {
-            System.out.println("No events found.");
-            return null;
-        } else {
-            return events;
-        }
+        return events;
     }
 
     /**
@@ -71,12 +66,7 @@ public class Calendar implements Serializable {
                 events.add(event);
             }
         }
-        if (events.isEmpty()) {
-            System.out.println("No events found.");
-            return null;
-        } else {
-            return events;
-        }
+        return events;
     }
 
     /**
@@ -93,11 +83,7 @@ public class Calendar implements Serializable {
                 }
             }
         }
-        if (events.isEmpty()) {
-            return null;
-        } else {
-            return events;
-        }
+        return events;
     }
 
     //methods for getting list of events: past, current or future

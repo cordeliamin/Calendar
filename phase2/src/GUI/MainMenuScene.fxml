@@ -12,11 +12,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.MainMenuControl">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@Default.css" xmlns="http://javafx.com/javafx/8.0.171-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.MainMenuControl">
    <top>
-      <ToolBar prefHeight="63.0" prefWidth="900.0" BorderPane.alignment="CENTER">
+      <ToolBar prefHeight="63.0" prefWidth="900.0" styleClass="side-menu" BorderPane.alignment="CENTER">
          <items>
-            <Button fx:id="logOutButton" mnemonicParsing="false" onAction="#logOut" prefHeight="34.0" prefWidth="88.0" style="-fx-background-color: #e83535;" text="Log Out" textFill="#030303">
+            <Button fx:id="logOutButton" mnemonicParsing="false" onAction="#logOut" prefHeight="34.0" prefWidth="88.0" styleClass="button-red" text="Log Out">
                <font>
                   <Font name="Serif Regular" size="14.0" />
                </font>
@@ -24,6 +24,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
+            <Label fx:id="monthYearLabel" text="Label" />
             <Label fx:id="sysClock" alignment="TOP_LEFT" text="Label" />
          </items>
       </ToolBar>
@@ -62,7 +63,7 @@
       </VBox>
    </right>
    <center>
-      <GridPane gridLinesVisible="true" BorderPane.alignment="CENTER">
+      <GridPane fx:id="monthlyCalendar" BorderPane.alignment="CENTER">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
