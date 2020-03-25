@@ -31,7 +31,7 @@ public class Calendar implements Serializable {
         myAlerts.addFrequentAlert(e, msg, d);
     }
 
-    //methods for deleting events, alerts
+    //methods for deleting events, alerts, memos
 
     public void deleteEvent(Event e) {
         this.myEvents.remove(e);
@@ -40,6 +40,20 @@ public class Calendar implements Serializable {
 
     public void deleteAlert(Alert a) {
         this.myAlerts.deleteAlert(a);
+    }
+
+    public void deleteMemo(Memo m) {
+        this.myMemos.deleteMemo(m);
+        for (Event e: this.myEvents) {
+            e.deleteMemo(m);
+        }
+    }
+
+    public void deleteAllMemosforEvent(Event e) {
+        for (Memo m : e.getMemos()) {
+            this.myMemos.deleteMemo(m);
+        }
+        e.deleteAllMemos();
     }
 
     public MemoSystem getMyMemos() {

@@ -52,6 +52,8 @@ public class Event implements Serializable {
 
     public String getStatus() { return this.status; }
 
+    // Edit Event
+
     /**
      * change the status of this Event to "past", "ongoing" or "future"
      * @param newStatus: "past" || "ongoing" || "future"
@@ -59,6 +61,16 @@ public class Event implements Serializable {
     public void changeStatus(String newStatus) {
         this.status = newStatus;
     }
+
+    public void setEventName(String newName) {this.eventName = newName;}
+
+    public void setStartTime(LocalDateTime newStart) {this.startTime = newStart;}
+
+    public void setEndTime(LocalDateTime newEnd) {this.endTime = newEnd;}
+
+    public void deleteMemo(Memo memo) {memos.remove(memo);}
+
+    public void deleteAllMemos() {memos = new ArrayList<>();}
 
     public void setTag(String tag) { this.tag = tag; }
 
