@@ -4,10 +4,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.paint.Paint;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.time.LocalDateTime;
 import CalendarSystem.Event;
+import javafx.util.StringConverter;
 
 
 public class EventCreatorControl extends Controller {
@@ -120,5 +123,31 @@ public class EventCreatorControl extends Controller {
             hasError = true;
         }
         return hasError;
+    }
+
+    public void initialize() {
+        String pattern = "dd/MM/yyyy";
+        StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
+            DateTimeFormatter dateFormatter =
+                    DateTimeFormatter.ofPattern(pattern);
+            @Override
+            public String toString(LocalDate date) {
+                if (date != null) {
+                    return dateFormatter.format(date);
+                } else {
+                    return "";
+                }
+            }
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, dateFormatter);
+                } else {
+                    return null;
+                }
+            }
+        };
+        eventStartDate.setConverter(converter);
+        eventEndDate.setConverter(converter);
     }
 }
