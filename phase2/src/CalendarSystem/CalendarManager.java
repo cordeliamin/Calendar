@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 public class CalendarManager  {
     private Calendar calendar;
     private String filePath;
+    private String userPath;
     private static final Logger logger = Logger.getLogger(CalendarManager.class.getName());
     private static final Handler consoleHandler = new ConsoleHandler();
 
@@ -20,7 +21,8 @@ public class CalendarManager  {
      */
     public CalendarManager(String filePath) throws ClassNotFoundException, IOException {
         this.calendar = new Calendar();
-        this.filePath = filePath;
+        this.userPath = filePath;
+        this.filePath = filePath + "default.ser";
 
         // Associate the handler with the logger.
         logger.setLevel(Level.ALL);
@@ -29,6 +31,26 @@ public class CalendarManager  {
 
         // Reads serializable objects from file.
         // Populates the record list using stored data, if it exists.
+        File file = new File(filePath);
+        if (file.exists()) {
+            readFromFile();
+        } else {
+            file.createNewFile();
+        }
+    }
+
+    public void createCalendar(String name) throws IOException {
+        saveToFile();
+        this.filePath = this.userPath + name + ".ser";
+        this.calendar = new Calendar();
+        File file = new File(filePath);
+        file.createNewFile();
+        saveToFile();
+    }
+
+    public void selectCalendar(String name) throws ClassNotFoundException, IOException{
+        saveToFile();
+        this.filePath = this.userPath + name + ".ser";
         File file = new File(filePath);
         if (file.exists()) {
             readFromFile();

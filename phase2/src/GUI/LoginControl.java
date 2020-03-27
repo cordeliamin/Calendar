@@ -1,5 +1,6 @@
 package GUI;
 
+import CalendarSystem.Calendar;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -26,8 +27,9 @@ public class LoginControl extends Controller {
         HashMap<String, String> users = getUsers();
         if (users.containsKey(user)) {
             if (users.get(user).equals(pswd)) {
-                setCalendar(new CalendarManager(user + ".ser"));
-                setScreen("MainMenuScene.fxml", userInfo);
+                CalendarManager cm = new CalendarManager("./user_data/" + user + "_");
+                setCalendar(cm);
+                setScreen("SelectCalendarScene.fxml", userInfo);
             } else {
                 errorIn.setVisible(true);
             }
