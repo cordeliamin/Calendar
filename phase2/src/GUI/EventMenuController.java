@@ -6,21 +6,23 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import CalendarSystem.Event;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class EventMenuController extends Controller {
 
     @FXML Button returnToMenu;
     @FXML Button eventCreator;
+    @FXML Button searchEvent;
+    @FXML TextField searchBar;
     @FXML ChoiceBox<String> eventSort;
     @FXML TableView<Event> eventTable;
     @FXML TableColumn<Event, String> eventName;
@@ -82,5 +84,28 @@ public class EventMenuController extends Controller {
         //Set and display scene to new stage
         eventMakerWindow.setScene(new Scene(newScene, 600, 350));
         eventMakerWindow.showAndWait();
+    }
+
+    @FXML private void searchForEvent() {
+        String userInput = searchBar.getText();
+        eventTable.getItems().clear();
+        if (!userInput.equals("")) {
+            eventTable.getItems().addAll(getCalendar().findEventsBySeries(userInput));
+            eventTable.getItems().addAll(getCalendar().findEvent(userInput));
+            if (getCalendar().getEvent(userInput) != null) {
+                eventTable.getItems().add(getCalendar().getEvent(userInput));
+            }
+            if (isDateFormat(userInput)) {
+                String[] date = userInput.split("/");
+                eventTable.getItems().addAll(getCalendar().findEvent(LocalDate.of(
+                        Integer.parseInt(date[2]), Integer.parseInt(date[1]), Integer.parseInt(date[0]))));
+            }
+        }
+    }
+
+    private Boolean isDateFormat(String date) {
+        Pattern dateRule = Pattern.compile("^[0-3][0-9]/[01][0-9]/([0-9]+)$");
+        Matcher matchDate = dateRule.matcher(date);
+        return matchDate.matches();
     }
 }

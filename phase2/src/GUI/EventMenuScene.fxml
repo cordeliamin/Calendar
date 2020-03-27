@@ -45,7 +45,7 @@
          <children>
             <VBox prefHeight="62.0" prefWidth="184.0">
                <children>
-                  <Label text="Sort Events By:" />
+                  <Label text="Show Events:" />
                   <ChoiceBox fx:id="eventSort" prefWidth="150.0" />
                </children>
                <padding>
@@ -61,8 +61,8 @@
                   </Label>
                   <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <TextField prefHeight="26.0" prefWidth="126.0" />
-                        <Button mnemonicParsing="false" text="Go" />
+                        <TextField fx:id="searchBar" prefHeight="35.0" prefWidth="123.0" />
+                        <Button fx:id="searchEvent" mnemonicParsing="false" onAction="#searchForEvent" text="Go" />
                      </children>
                   </HBox>
                </children>

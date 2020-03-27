@@ -88,11 +88,11 @@ public class EventCreatorControl extends Controller {
     @FXML private void hideMessage() {
         errorMsg.setVisible(false);
         successMsg.setVisible(false);
-        eventNameLab.setTextFill(Paint.valueOf("black"));
-        startDateLab.setTextFill(Paint.valueOf("black"));
-        endDateLab.setTextFill(Paint.valueOf("black"));
-        startTimeLab.setTextFill(Paint.valueOf("black"));
-        endTimeLab.setTextFill(Paint.valueOf("black"));
+        eventNameLab.getStyleClass().add("label");
+        startDateLab.getStyleClass().add("label");
+        endDateLab.getStyleClass().add("label");
+        startTimeLab.getStyleClass().add("label");
+        endTimeLab.getStyleClass().add("label");
     }
 
     private boolean hasFormatErrors(String nameInput, String startInput, String endInput) {
@@ -125,6 +125,7 @@ public class EventCreatorControl extends Controller {
         return hasError;
     }
 
+    @FXML
     public void initialize() {
         String pattern = "dd/MM/yyyy";
         StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {

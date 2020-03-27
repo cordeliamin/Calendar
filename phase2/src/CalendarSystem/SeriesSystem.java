@@ -37,7 +37,7 @@ public class SeriesSystem implements Serializable {
     /**
      *
      * @param seriesName The name of the series to search for
-     * @return Returns the events in the series if it exists, null otherwise
+     * @return Returns the events in the series if it exists, an empty list otherwise
      */
     public Collection<Event> findEventsBySeries(String seriesName){
         for(Series s : this.mySeries){
@@ -45,6 +45,6 @@ public class SeriesSystem implements Serializable {
                 return s.getEvents();
             }
         }
-        return null;
+        return new ArrayList<>();
     }
 }

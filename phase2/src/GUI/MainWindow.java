@@ -20,6 +20,7 @@ public class MainWindow extends Application {
         Parent login = FXMLLoader.load(getClass().getResource("LoginScene.fxml"));
         primaryStage.setTitle("Calendar");
         primaryStage.setScene(new Scene(login, 900, 600));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 }

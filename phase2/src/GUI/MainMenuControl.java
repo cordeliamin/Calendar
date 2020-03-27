@@ -6,7 +6,9 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -18,12 +20,13 @@ import java.util.ArrayList;
 
 public class MainMenuControl extends Controller {
 
-    @FXML Button logOutButton;
-    @FXML Button eventButton;
-    @FXML Button memoButton;
-    @FXML Label sysClock;
-    @FXML Label monthYearLabel;
-    @FXML GridPane monthlyCalendar;
+    @FXML private Button logOutButton;
+    @FXML private Button eventButton;
+    @FXML private Button memoButton;
+    @FXML private Label sysClock;
+    @FXML private Label monthYearLabel;
+    @FXML private GridPane monthlyCalendar;
+    @FXML private ChoiceBox<String> calendarSelect;
 
     @FXML private void logOut() throws IOException {
         getCalendarManager().saveToFile();
@@ -42,12 +45,13 @@ public class MainMenuControl extends Controller {
     protected void initScreen() {
         initClock();
         initMonthlyCalendar();
+        initCalendarSelect();
     }
 
     private void initClock() {
         Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
             LocalDateTime currentTime = LocalDateTime.now();
-            sysClock.setText("Current Time: " + currentTime.getHour() + ":" +
+            sysClock.setText("Time: \n" + currentTime.getHour() + ":" +
                     currentTime.getMinute() + ":" + currentTime.getSecond());
             monthYearLabel.setText("\t" + currentTime.getMonth().toString() + ", " +
                     currentTime.getYear() + "\t\t");
@@ -91,5 +95,27 @@ public class MainMenuControl extends Controller {
         }
     }
 
+    private void initCalendarSelect() {
+        calendarSelect.getItems().addAll(getCalendarManager().getUserCalendars());
+        calendarSelect.setValue(getCalendarManager().getUserCalendars().get(0));
+        calendarSelect.getSelectionModel().selectedItemProperty().addListener(
+                (v, oldVal, newVal) -> {
+                    try {
+                        getCalendarManager().selectCalendar(newVal);
+                        initMonthlyCalendar();
+                    } catch (ClassNotFoundException |  IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @FXML private void createCalendar() {
+        CalendarCreatorPopUp popUp = new CalendarCreatorPopUp(getCalendarManager());
+        String newCal = popUp.getNewCalendarName();
+        if (!newCal.equals("") && getCalendarManager().getUserCalendars().contains(newCal)) {
+            calendarSelect.getItems().add(newCal);
+            calendarSelect.setValue(newCal);
+        }
+    }
 
 }

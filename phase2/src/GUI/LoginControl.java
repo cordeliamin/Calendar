@@ -29,7 +29,7 @@ public class LoginControl extends Controller {
             if (users.get(user).equals(pswd)) {
                 CalendarManager cm = new CalendarManager("./user_data/" + user + "_");
                 setCalendar(cm);
-                setScreen("SelectCalendarScene.fxml", userInfo);
+                setScreen("MainMenuScene.fxml", userInfo);
             } else {
                 errorIn.setVisible(true);
             }

@@ -23,7 +23,7 @@ public class Event implements Serializable {
         eventName = name;
         startTime = start;
         endTime = end;
-        tag = null;
+        tag = "";
         status = "future";
         memos = new ArrayList<>();
     }

@@ -1,6 +1,8 @@
 package CalendarSystem;
 
+import javax.print.DocFlavor;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -31,7 +33,7 @@ public class CalendarManager  {
 
         // Reads serializable objects from file.
         // Populates the record list using stored data, if it exists.
-        File file = new File(filePath);
+        File file = new File(this.filePath);
         if (file.exists()) {
             readFromFile();
         } else {
@@ -91,5 +93,21 @@ public class CalendarManager  {
 
     public Calendar getCalendar(){
         return this.calendar;
+    }
+
+    public ArrayList<String> getUserCalendars() {
+        File userData = new File("user_data");
+        String username = userPath.substring(12);
+        ArrayList<String> userCalendars = new ArrayList<>();
+        if (userData.isDirectory()) {
+            File[] sample = userData.listFiles();
+            if (sample != null) {
+                for (File f: sample) {
+                    userCalendars.add(f.getName().replace(username, "").
+                            replace(".ser", ""));
+                }
+            }
+        }
+        return userCalendars;
     }
 }

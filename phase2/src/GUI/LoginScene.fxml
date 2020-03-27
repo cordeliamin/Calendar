@@ -32,6 +32,7 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <padding>
       <Insets bottom="10.0" left="30.0" right="10.0" top="10.0" />
@@ -61,15 +62,6 @@
             <ImageView fitHeight="312.0" fitWidth="346.0" layoutX="178.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Images/calendarlogo.png" />
-               </image>
-            </ImageView>
-         </children>
-      </AnchorPane>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
-         <children>
-            <ImageView fitHeight="79.0" fitWidth="226.0" layoutX="348.0" layoutY="-36.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@Images/uoftcompsci.png" />
                </image>
             </ImageView>
          </children>
