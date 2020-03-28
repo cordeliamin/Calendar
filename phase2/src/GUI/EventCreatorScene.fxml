@@ -57,12 +57,20 @@
       </Label>
       <Label fx:id="successMsg" text="Event Created!" textFill="#3df210" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="8" />
       <Label fx:id="errorMsg" prefHeight="28.0" prefWidth="165.0" styleClass="label-error" text="Invalid Input!" textFill="RED" visible="false" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-      <DatePicker fx:id="eventStartDate" GridPane.rowIndex="3" />
-      <ComboBox prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-      <DatePicker fx:id="eventEndDate" GridPane.rowIndex="5" />
-      <TextField fx:id="eventEndTime" promptText="HH:MM format" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+      <DatePicker fx:id="eventStartDate" promptText="DD/MM/YYYY" GridPane.rowIndex="3" />
+      <ComboBox fx:id="memoOptions" editable="true" prefWidth="150.0" promptText="Enter Memo" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+      <DatePicker fx:id="eventEndDate" promptText="DD/MM/YYYY" GridPane.rowIndex="5" />
+      <TextField fx:id="eventEndTime" promptText="HH:MM format" GridPane.columnIndex="2" GridPane.rowIndex="5">
+         <cursor>
+            <Cursor fx:constant="TEXT" />
+         </cursor></TextField>
       <Label fx:id="endDateLab" text="Event End Date: *" GridPane.rowIndex="4" />
       <Label fx:id="endTimeLab" text="Event End Time: *" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="47.0" prefWidth="88.0" style="-fx-font-size: 10;" text="Set as Series" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
    </children>
    <padding>
       <Insets bottom="20.0" left="10.0" right="10.0" top="20.0" />

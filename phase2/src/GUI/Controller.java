@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 
@@ -42,15 +43,19 @@ public abstract class Controller {
     protected void initScreen() {}
 
     /*
-     * Sets Screen as described in setScreen() and returns FXML Loader for passing
+     * Sets Main Screen as described in setScreen() and returns FXML Loader for passing
      * additional info to new Scene controller
      */
     protected FXMLLoader setScreenAndGetLoader(String fxmlFileName, Node item) throws IOException {
+        return setNewWindowAndGetLoader(fxmlFileName, (Stage) item.getScene().getWindow(), 900, 600);
+    }
+
+    protected FXMLLoader setNewWindowAndGetLoader(String fxmlFileName, Stage window,
+                                                  int width, int height) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(fxmlFileName));
         Parent newRoot = loader.load();
-        Stage window = (Stage) item.getScene().getWindow();
-        Scene newScreen = new Scene(newRoot, 900, 600);
+        Scene newScreen = new Scene(newRoot, width, height);
         window.setScene(newScreen);
         Controller controller = loader.getController();
         controller.setCalendar(calendarManager);

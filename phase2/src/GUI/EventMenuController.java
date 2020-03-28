@@ -72,17 +72,16 @@ public class EventMenuController extends Controller {
         Stage eventMakerWindow = new Stage();
         eventMakerWindow.setTitle("Create Event");
         eventMakerWindow.initModality(Modality.APPLICATION_MODAL);
+        eventMakerWindow.setResizable(false);
 
         //Create new scene to display
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("EventCreatorScene.fxml"));
-        Parent newScene = loader.load();
+        FXMLLoader loader = setNewWindowAndGetLoader("EventCreatorScene.fxml",
+                eventMakerWindow, 600, 350);
+
+        //Pass in additional table data
         EventCreatorControl eventMaker = loader.getController();
-        eventMaker.setCalendar(getCalendarManager());
         eventMaker.setTableToModify(eventTable);
 
-        //Set and display scene to new stage
-        eventMakerWindow.setScene(new Scene(newScene, 600, 350));
         eventMakerWindow.showAndWait();
     }
 

@@ -1,21 +1,23 @@
 package GUI;
 
+import CalendarSystem.Memo;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.paint.Paint;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.time.LocalDateTime;
 import CalendarSystem.Event;
 import javafx.util.StringConverter;
 
-
 public class EventCreatorControl extends Controller {
 
     private TableView<Event> eventTable;
+    @FXML private ComboBox<String> memoOptions;
     @FXML private TextField eventName;
     @FXML private DatePicker eventStartDate;
     @FXML private TextField eventStartTime;
@@ -28,6 +30,14 @@ public class EventCreatorControl extends Controller {
     @FXML private Label startTimeLab;
     @FXML private Label endDateLab;
     @FXML private Label endTimeLab;
+
+    @Override
+    protected void initScreen() {
+        initDatePicker();
+        for (Memo m : getCalendar().getMyMemos().getMemos()) {
+            memoOptions.getItems().add(m.getNote());
+        }
+    }
 
     @FXML private void createEvent() throws IOException {
         hideMessage();
@@ -42,6 +52,7 @@ public class EventCreatorControl extends Controller {
                 Event newEvent = new Event(nameInput, timeInterval[0], timeInterval[1]);
                 getCalendar().addEvent(newEvent);
                 eventTable.getItems().add(newEvent);
+                setEventMemo(newEvent);
                 getCalendarManager().saveToFile();
                 successMsg.setVisible(true);
                 clearFields();
@@ -57,6 +68,33 @@ public class EventCreatorControl extends Controller {
         eventStartTime.clear();
         eventEndDate.getEditor().clear();
         eventEndTime.clear();
+        memoOptions.getEditor().setText("");
+    }
+
+    private void initDatePicker() {
+        String pattern = "dd/MM/yyyy";
+        StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
+            DateTimeFormatter dateFormatter =
+                    DateTimeFormatter.ofPattern(pattern);
+            @Override
+            public String toString(LocalDate date) {
+                if (date != null) {
+                    return dateFormatter.format(date);
+                } else {
+                    return "";
+                }
+            }
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, dateFormatter);
+                } else {
+                    return null;
+                }
+            }
+        };
+        eventStartDate.setConverter(converter);
+        eventEndDate.setConverter(converter);
     }
 
     private void displayInvalidDateInput() {
@@ -125,30 +163,20 @@ public class EventCreatorControl extends Controller {
         return hasError;
     }
 
-    @FXML
-    public void initialize() {
-        String pattern = "dd/MM/yyyy";
-        StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter =
-                    DateTimeFormatter.ofPattern(pattern);
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
+    private void setEventMemo(Event newEvent) {
+        ArrayList<Event> eventsToAdd = new ArrayList<>();
+        eventsToAdd.add(newEvent);
+        String selectedMemo = memoOptions.getValue();
+        if (!selectedMemo.equals("") &&
+                !memoOptions.getItems().contains(selectedMemo)) {
+            getCalendar().getMyMemos().createMemo(eventsToAdd, selectedMemo);
+            memoOptions.getItems().add(selectedMemo);
+        } else if (memoOptions.getItems().contains(selectedMemo)) {
+            for (Memo m : getCalendar().getMyMemos().getMemos()) {
+                if (m.getNote().equals(selectedMemo)) {
+                    newEvent.getMemos().add(m);
                 }
             }
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
-        };
-        eventStartDate.setConverter(converter);
-        eventEndDate.setConverter(converter);
+        }
     }
 }
