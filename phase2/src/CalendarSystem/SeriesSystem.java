@@ -14,6 +14,10 @@ public class SeriesSystem implements Serializable {
     public void createSeries(String name, Collection<Event> ls){
         Series s = new Series(name, ls);
         mySeries.add(s);
+
+        for (Event e: ls){
+            e.associateSeries(s);
+        }
     }
 
     //Construct a series given duration, frequency, and number of events
@@ -33,6 +37,15 @@ public class SeriesSystem implements Serializable {
         createSeries(name, newEvents);
         return newEvents;
     }
+
+    /**
+     * Add event(s) to a series.
+     */
+    public void addEvent(Series series, Event e){
+        series.addEvent(e);
+        e.associateSeries(series);
+    }
+
 
     /**
      *
