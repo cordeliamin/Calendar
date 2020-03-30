@@ -246,12 +246,8 @@ public class Calendar implements Serializable {
     /**
      * Create series from existing events
      */
-    public void addSeries(String name, ArrayList<Integer> indexes){
-        ArrayList<Event> ls = new ArrayList<>();
-        for(Integer i : indexes){
-            ls.add(this.myEvents.get(i - 1));
-        }
-        mySeries.createSeries(name, ls);
+    public void addSeries(String name, ArrayList<Event> events){
+        mySeries.createSeries(name, events);
     }
 
     public Collection<Event> findEventsBySeries(String name){
@@ -285,7 +281,10 @@ public class Calendar implements Serializable {
     public void shareEvent(Event e, Calendar friendCalendar ){
         // I have a couple of questions in regards to this method
         //1. How are users associated with their calendars
+        // A: their calendars are named <username>_<calendarName>.ser (there will always
+        // be a calendar called default for every user).
         //2. Should we be passing on an event name, or will the UI be enable our users to select event objects
+        // A: The UI can select Event objects
         if (this.myEvents.contains(e)) {
             friendCalendar.addEvent(e);
         }

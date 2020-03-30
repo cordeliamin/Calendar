@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -110,11 +111,44 @@ public class MainMenuControl extends Controller {
     }
 
     @FXML private void createCalendar() {
-        CalendarCreatorPopUp popUp = new CalendarCreatorPopUp(getCalendarManager());
-        String newCal = popUp.getNewCalendarName();
-        if (!newCal.equals("") && getCalendarManager().getUserCalendars().contains(newCal)) {
-            calendarSelect.getItems().add(newCal);
-            calendarSelect.setValue(newCal);
+        Label invalidNameLabel = new Label("Invalid Calendar Name!");
+        invalidNameLabel.getStyleClass().add("label-error");
+        invalidNameLabel.setVisible(false);
+        Label instructions = new Label("New Calendar Name:");
+        Button createCalendarButton = new Button("Create Calendar");
+        TextField userInput = new TextField();
+        PopUp newCalNameInpt = new PopUp("Create New Calendar");
+        newCalNameInpt.getContent().addAll(invalidNameLabel, instructions, userInput, createCalendarButton);
+        createCalendarButton.setOnAction(e -> {
+            if (isValidName(userInput.getText(), invalidNameLabel)) {
+                try {
+                    getCalendarManager().createCalendar(userInput.getText());
+                    calendarSelect.getItems().add(userInput.getText());
+                    calendarSelect.setValue(userInput.getText());
+                    newCalNameInpt.exit();
+                } catch (IOException io) {
+                    io.printStackTrace();
+                }
+            }
+        });
+        newCalNameInpt.display();
+    }
+
+    /*
+     * Helper for createCalendar()
+     */
+    private boolean isValidName(String input, Label errorLabel) {
+        if (input == null) {input = "";}
+        if (input.equals("") || input.contains(".") || input.contains(" ")) {
+            errorLabel.setText("Invalid Calendar Name!");
+            errorLabel.setVisible(true);
+            return false;
+        } else if (getCalendarManager().getUserCalendars().contains(input)){
+            errorLabel.setText("This Calendar Already Exists!");
+            errorLabel.setVisible(true);
+            return false;
+        } else {
+            return true;
         }
     }
 
