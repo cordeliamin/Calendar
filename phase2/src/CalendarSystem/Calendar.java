@@ -282,4 +282,12 @@ public class Calendar implements Serializable {
         }
         return s;
     }
+    public void shareEvent(Event e, Calendar friendCalendar ){
+        // I have a couple of questions in regards to this method
+        //1. How are users associated with their calendars
+        //2. Should we be passing on an event name, or will the UI be enable our users to select event objects
+        if (this.myEvents.contains(e)) {
+            friendCalendar.addEvent(e);
+        }
+    }
 }

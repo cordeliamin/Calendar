@@ -17,6 +17,7 @@ public class SeriesSystem implements Serializable {
 
         for (Event e: ls){
             e.associateSeries(s);
+            // TODO: this method has not been implemented
         }
     }
 
