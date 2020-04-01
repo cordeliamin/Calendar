@@ -61,12 +61,11 @@ public class EventMenuController extends Controller {
             if (change.getList().size() > 1) {
                 linkEventOpt.setVisible(true);
                 deleteEvent.setVisible(true);
+            } else if (change.getList().size() == 1) {
+                deleteEvent.setVisible(true);
+                linkEventOpt.setVisible(false);
             } else {
                 linkEventOpt.setVisible(false);
-                deleteEvent.setVisible(false);
-            }if (change.getList().size() == 1) {
-                deleteEvent.setVisible(true);
-            } else {
                 deleteEvent.setVisible(false);
             }
         });
