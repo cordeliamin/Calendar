@@ -32,4 +32,9 @@ public class FrequentAlert extends Alert{
             t = t.plus(this.frequency);
         }
     }
+
+    @Override
+    public String getAlertType() {
+        return "f";
+    }
 }

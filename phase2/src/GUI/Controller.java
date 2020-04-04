@@ -2,13 +2,19 @@ package GUI;
 
 import CalendarSystem.CalendarManager;
 import CalendarSystem.Calendar;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import javafx.util.StringConverter;
+
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public abstract class Controller {
 
@@ -63,4 +69,43 @@ public abstract class Controller {
         return loader;
     }
 
+    protected StringConverter<LocalDate> getDateConverter(){
+        String pattern = "dd/MM/yyyy";
+        StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
+            DateTimeFormatter dateFormatter =
+                    DateTimeFormatter.ofPattern(pattern);
+            @Override
+            public String toString(LocalDate date) {
+                if (date != null) {
+                    return dateFormatter.format(date);
+                } else {
+                    return "";
+                }
+            }
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, dateFormatter);
+                } else {
+                    return null;
+                }
+            }
+        };
+        return converter;
+    }
+
+
+    protected FXMLLoader openWindowAndGetLoader(String title, String file) throws IOException {
+        //Make New pop up window
+        Stage window = new Stage();
+        window.setTitle(title);
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setResizable(false);
+
+        //Create new scene to display
+        FXMLLoader loader = setNewWindowAndGetLoader(file, window, 600, 350);
+
+        window.showAndWait();
+        return loader;
+    }
 }

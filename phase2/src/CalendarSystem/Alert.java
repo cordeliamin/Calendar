@@ -41,6 +41,8 @@ public abstract class Alert implements Serializable {
         return this.eventTime;
     }
 
+    public abstract String getAlertType();
+
     //Edit Alert
 
     public void setName(String newName) {

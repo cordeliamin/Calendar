@@ -18,4 +18,8 @@ public class IndividualAlert extends Alert{
         addtoTimes(this.time);
     }
 
+    @Override
+    public String getAlertType() {
+        return "i";
+    }
 }

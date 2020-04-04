@@ -23,6 +23,7 @@ public class MainMenuControl extends Controller {
     @FXML private Button logOutButton;
     @FXML private Button eventButton;
     @FXML private Button memoButton;
+    @FXML private Button alertButton;
     @FXML private Label sysClock;
     @FXML private Label monthYearLabel;
     @FXML private GridPane monthlyCalendar;
@@ -39,6 +40,10 @@ public class MainMenuControl extends Controller {
 
     @FXML private void viewMemos() throws IOException {
         setScreen("MemoMenuScene.fxml", memoButton);
+    }
+
+    @FXML private void viewAlerts() throws IOException {
+        setScreen("AlertMenuScene.fxml", alertButton);
     }
 
     @Override
