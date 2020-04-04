@@ -167,6 +167,7 @@ public class EventCreatorControl extends Controller {
         ArrayList<Event> eventsToAdd = new ArrayList<>();
         eventsToAdd.add(newEvent);
         String selectedMemo = memoOptions.getValue();
+        if (selectedMemo == null) {selectedMemo = "";}
         if (!selectedMemo.equals("") &&
                 !memoOptions.getItems().contains(selectedMemo)) {
             getCalendar().getMyMemos().createMemo(eventsToAdd, selectedMemo);
@@ -175,6 +176,7 @@ public class EventCreatorControl extends Controller {
             for (Memo m : getCalendar().getMyMemos().getMemos()) {
                 if (m.getNote().equals(selectedMemo)) {
                     newEvent.getMemos().add(m);
+                    break;
                 }
             }
         }

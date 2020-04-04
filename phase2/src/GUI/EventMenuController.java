@@ -1,6 +1,7 @@
 package GUI;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,21 +11,23 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import CalendarSystem.Event;
 import javafx.stage.Modality;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class EventMenuController extends Controller {
 
     @FXML Button returnToMenu;
-    @FXML Button eventCreator;
-    @FXML Button searchEvent;
     @FXML TextField searchBar;
     @FXML ChoiceBox<String> eventSort;
     @FXML TableView<Event> eventTable;
+    @FXML MenuItem linkEventOpt;
+    @FXML MenuItem deleteEvent;
     @FXML TableColumn<Event, String> eventName;
     @FXML TableColumn<Event, LocalDateTime> eventStart;
     @FXML TableColumn<Event, LocalDateTime> eventEnd;
@@ -42,12 +45,30 @@ public class EventMenuController extends Controller {
         ObservableList<Event> eventTableItems = FXCollections.observableArrayList();
         eventTableItems.addAll(getCalendar().getMyEvents());
         eventTable.setItems(eventTableItems);
+        initSelectionSettings();
 
         //Populate eventSort and set it so it activates on a new selection
         eventSort.getItems().addAll("All", "Past", "Current", "Upcoming");
         eventSort.setValue("All");
         eventSort.getSelectionModel().selectedItemProperty().addListener(
                 (v, oldVal, newVal) -> sortEventTable(newVal));
+    }
+
+    private void initSelectionSettings() {
+        eventTable.setPlaceholder(new Label("No Events Found"));
+        eventTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        eventTable.getSelectionModel().getSelectedItems().addListener((ListChangeListener<Event>) change -> {
+            if (change.getList().size() > 1) {
+                linkEventOpt.setVisible(true);
+                deleteEvent.setVisible(true);
+            } else if (change.getList().size() == 1) {
+                deleteEvent.setVisible(true);
+                linkEventOpt.setVisible(false);
+            } else {
+                linkEventOpt.setVisible(false);
+                deleteEvent.setVisible(false);
+            }
+        });
     }
 
     @FXML private void sortEventTable(String sortBy) {
@@ -83,6 +104,32 @@ public class EventMenuController extends Controller {
         eventMaker.setTableToModify(eventTable);
 
         eventMakerWindow.showAndWait();
+    }
+
+    @FXML private void linkEvents() {
+        Label instructions = new Label("Event Series Name:");
+        TextField eventsName = new TextField();
+        Button createSeries = new Button("Create Series");
+        PopUp linkName = new PopUp("Series Name", 9.0, 40, 50, 10, 20);
+        linkName.getContent().addAll(instructions, eventsName, createSeries);
+        createSeries.setOnAction(e -> {
+            try {
+                if (!eventsName.getText().equals("")) {
+                    ArrayList<Event> toLink = new ArrayList<>(eventTable.getSelectionModel().getSelectedItems());
+                    getCalendar().addSeries(eventsName.getText(), toLink);
+                }
+            } catch (NullPointerException nullp) {}
+            linkName.exit();
+        });
+        linkName.display();
+    }
+
+    @FXML private void deleteEvents() {
+        ArrayList<Event> items = new ArrayList<>(eventTable.getSelectionModel().getSelectedItems());
+        for (Event e : items) {
+            getCalendar().deleteEvent(e);
+            eventTable.getItems().remove(e);
+        }
     }
 
     @FXML private void searchForEvent() {

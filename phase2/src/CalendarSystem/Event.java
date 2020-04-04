@@ -77,4 +77,7 @@ public class Event implements Serializable {
     public String toString(){
         return this.eventName + "\t" + this.startTime.toString() + " to " + this.endTime.toString();
     }
+    public void associateSeries(Series s){
+        // TODO: yet to be implemented
+    }
 }
