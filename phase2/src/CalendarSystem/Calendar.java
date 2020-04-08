@@ -76,6 +76,14 @@ public class Calendar implements Serializable {
         this.deleteAllAlertsforEvent(event);
     }
 
+    public void changeEventName(Event event, String new_name) {
+        event.setEventName(new_name);
+    }
+
+    public void changeEventTag(String tag, Event event) {
+        event.setTag(tag);
+    }
+
     //methods for finding list of events: by tag, memo or date
 
     /**
