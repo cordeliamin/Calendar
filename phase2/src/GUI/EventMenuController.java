@@ -28,6 +28,10 @@ public class EventMenuController extends Controller {
     @FXML TableView<Event> eventTable;
     @FXML MenuItem linkEventOpt;
     @FXML MenuItem deleteEvent;
+    @FXML MenuItem editEvent;
+    @FXML MenuItem editEventName;
+    @FXML MenuItem editEventTime;
+    @FXML MenuItem editEventTag;
     @FXML TableColumn<Event, String> eventName;
     @FXML TableColumn<Event, LocalDateTime> eventStart;
     @FXML TableColumn<Event, LocalDateTime> eventEnd;
@@ -61,12 +65,15 @@ public class EventMenuController extends Controller {
             if (change.getList().size() > 1) {
                 linkEventOpt.setVisible(true);
                 deleteEvent.setVisible(true);
+                editEvent.setVisible(false);
             } else if (change.getList().size() == 1) {
                 deleteEvent.setVisible(true);
+                editEvent.setVisible(true);
                 linkEventOpt.setVisible(false);
             } else {
                 linkEventOpt.setVisible(false);
                 deleteEvent.setVisible(false);
+                editEvent.setVisible(false);
             }
         });
     }
@@ -130,6 +137,50 @@ public class EventMenuController extends Controller {
             getCalendar().deleteEvent(e);
             eventTable.getItems().remove(e);
         }
+    }
+
+    // Edit events
+
+    @FXML private void setEditEventName() {
+        Event event = eventTable.getSelectionModel().getSelectedItems().get(0);
+
+        Label instructions = new Label("Event Name:");
+        TextField eventName = new TextField(event.getEventName());
+        Button changeName = new Button("Save");
+        PopUp makeChange = new PopUp("Edit Event Name", 9.0, 40, 50, 10, 20);
+        makeChange.getContent().addAll(instructions, eventName, changeName);
+        changeName.setOnAction(e -> {
+            try {
+                if (!eventName.getText().equals("")) {
+                    getCalendar().changeEventName(event, eventName.getText());
+                }
+            } catch (NullPointerException nullp) {}
+            makeChange.exit();
+        });
+        makeChange.display();
+    }
+
+    @FXML private void setEditEventTime() {
+
+    }
+
+    @FXML private void setEditEventTag() {
+        Event event = eventTable.getSelectionModel().getSelectedItems().get(0);
+
+        Label instructions = new Label("Event Tag:");
+        TextField eventTag = new TextField(event.getTag());
+        Button changeTag = new Button("Save");
+        PopUp makeChange = new PopUp("Edit Event Tag", 9.0, 40, 50, 10, 20);
+        makeChange.getContent().addAll(instructions, eventTag, changeTag);
+        changeTag.setOnAction(e -> {
+            try {
+                if (!eventTag.getText().equals("")) {
+                    getCalendar().changeEventTag(eventTag.getText(), event);
+                }
+            } catch (NullPointerException nullp) {}
+            makeChange.exit();
+        });
+        makeChange.display();
     }
 
     @FXML private void searchForEvent() {

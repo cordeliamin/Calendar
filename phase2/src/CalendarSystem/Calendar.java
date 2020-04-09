@@ -73,7 +73,16 @@ public class Calendar implements Serializable {
     public void changeEventTime(Event event, LocalDateTime start, LocalDateTime end) {
         event.setStartTime(start);
         event.setEndTime(end);
+        updateEventStatus(event);
         this.deleteAllAlertsforEvent(event);
+    }
+
+    public void changeEventName(Event event, String new_name) {
+        event.setEventName(new_name);
+    }
+
+    public void changeEventTag(String tag, Event event) {
+        event.setTag(tag);
     }
 
     //methods for finding list of events: by tag, memo or date
@@ -215,13 +224,20 @@ public class Calendar implements Serializable {
 
         // update the status of events
         for (Event event: myEvents) {
-            LocalDate start = event.getStartTime().toLocalDate();
-            LocalDate end = event.getEndTime().toLocalDate();
-            if (date.compareTo(start) >=0 && date.compareTo(end) <= 0 && !event.getStatus().equals("ongoing")) {
-                event.changeStatus("ongoing");
-            } else if (date.compareTo(end) > 0 && !event.getStatus().equals("past")) {
-                event.changeStatus("past");
-            }
+            updateEventStatus(event);
+        }
+    }
+
+    private void updateEventStatus(Event event) {
+
+        LocalDate date1 = time.toLocalDate();
+
+        LocalDate start = event.getStartTime().toLocalDate();
+        LocalDate end = event.getEndTime().toLocalDate();
+        if (date1.compareTo(start) >=0 && date1.compareTo(end) <= 0 && !event.getStatus().equals("ongoing")) {
+            event.changeStatus("ongoing");
+        } else if (date1.compareTo(end) > 0 && !event.getStatus().equals("past")) {
+            event.changeStatus("past");
         }
     }
 
