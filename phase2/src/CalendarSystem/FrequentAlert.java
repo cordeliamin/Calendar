@@ -24,7 +24,9 @@ public class FrequentAlert extends Alert{
         do{
             t = t.minus(this.frequency);
         }
-        while (t.isBefore(CalendarPhase1.time));
+
+        //use system time now - needs to be changed!!
+        while (t.isBefore(LocalDateTime.now()));
 
         //then t is the first alarm time
         while(t.isBefore(this.getEventTime())){
@@ -36,5 +38,17 @@ public class FrequentAlert extends Alert{
     @Override
     public String getAlertType() {
         return "f";
+    }
+
+
+    @Override
+    public String toString(){
+        return "Frequent Alert: " + getMessage() + " every " + frequency;
+    }
+
+    public String durationToString(Duration duration) {
+        if (duration.toDays()!= 0)
+            return duration.toDays() + "D";
+        return duration.toHours()+"H";
     }
 }

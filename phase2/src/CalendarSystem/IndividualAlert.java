@@ -22,4 +22,10 @@ public class IndividualAlert extends Alert{
     public String getAlertType() {
         return "i";
     }
+
+
+    @Override
+    public String toString(){
+        return "Individual Alert: " + getMessage() + " every " + time;
+    }
 }

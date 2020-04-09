@@ -1,6 +1,7 @@
 package GUI;
 
 import CalendarSystem.Calendar;
+import CalendarSystem.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.paint.Paint;
@@ -34,7 +35,9 @@ public class IAlertCreatorControl extends Controller {
             String dateVal = (date.getValue()).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
             String timeVal = time.getText();
             LocalDateTime dateTimeVal = LocalDateTime.parse(dateVal + " " + timeVal, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+            assert calendar.getEventNames().contains(eventNameVal) && messageVal != null && dateTimeVal != null;
             calendar.addIndividualAlert(calendar.getEvent(eventNameVal), messageVal, dateTimeVal);
+            System.out.println("Added!!");
             try{
                 getCalendarManager().saveToFile();
             } catch (IOException e) {
@@ -47,6 +50,7 @@ public class IAlertCreatorControl extends Controller {
         Calendar calendar = getCalendar();
         boolean result = true;
         if (!calendar.getEventNames().contains(eventName.getText())) {
+            getCalendar().addEvent(new Event(eventName.getText(), LocalDateTime.now(), LocalDateTime.of(2020, 4, 9, 0, 0)));
             eventNameLabel.setTextFill(Paint.valueOf("red"));
             result = false;
         }
@@ -62,6 +66,7 @@ public class IAlertCreatorControl extends Controller {
             dateLabel.setTextFill(Paint.valueOf("red"));
             result = false;
         }
+        System.out.println("here!!, result: " + result);
         return result;
 
     }

@@ -95,7 +95,7 @@ public abstract class Controller {
     }
 
 
-    protected FXMLLoader openWindowAndGetLoader(String title, String file) throws IOException {
+    protected void openWindowAndGetLoader(String title, String file) throws IOException {
         //Make New pop up window
         Stage window = new Stage();
         window.setTitle(title);
@@ -106,6 +106,5 @@ public abstract class Controller {
         FXMLLoader loader = setNewWindowAndGetLoader(file, window, 600, 350);
 
         window.showAndWait();
-        return loader;
     }
 }

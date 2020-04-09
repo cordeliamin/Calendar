@@ -50,13 +50,13 @@ public class AlertSystem implements Serializable{
         Set<Alert> CurrAlerts = new HashSet<>(); //the set of Alerts to Show
 
         // subset of valid times, reverse order
-        NavigableSet<LocalDateTime> subset = this.allAlertTimes.headSet(CalendarPhase1.time, true);
+        NavigableSet<LocalDateTime> subset = this.allAlertTimes.headSet(LocalDateTime.now(), true);
         NavigableSet<LocalDateTime> validAlertTimes = subset.descendingSet();
 
         //check if alert is valid (i.e. event hasn't occurred), then add to set CurrAlerts
         for (LocalDateTime date: validAlertTimes){
             for(Alert alert: dateAlertsMap.get(date)){
-                if(alert.getEventTime().isAfter(CalendarPhase1.time))
+                if(alert.getEventTime().isAfter(LocalDateTime.now()))
                     CurrAlerts.add(alert);
             }
         }
@@ -131,5 +131,13 @@ public class AlertSystem implements Serializable{
             dateAlertsMap.get(alertTime).add(alert);
             allAlertTimes.add(alertTime);
         }
+    }
+
+    public Map<LocalDateTime, List<Alert>> getDateAlertsMap() {
+        return dateAlertsMap;
+    }
+
+    public TreeSet<LocalDateTime> getAllAlertTimes() {
+        return allAlertTimes;
     }
 }
