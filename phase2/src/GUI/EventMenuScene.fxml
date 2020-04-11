@@ -5,7 +5,6 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -36,13 +35,7 @@
               <items>
                   <MenuItem mnemonicParsing="false" onAction="#createNewEvent" text="Create New Event" />
                   <MenuItem fx:id="deleteEvent" mnemonicParsing="false" onAction="#deleteEvents" text="Delete Event" visible="false" />
-                  <Menu fx:id="editEvent" mnemonicParsing="false" text="Edit Event">
-                    <items>
-                      <MenuItem fx:id="editEventName" mnemonicParsing="false" onAction="#setEditEventName" text="Change name" />
-                        <MenuItem fx:id="editEventTime" mnemonicParsing="false" onAction="#setEditEventTime" text="Change Date/Time" />
-                        <MenuItem fx:id="editEventTag" mnemonicParsing="false" onAction="#setEditEventTag" text="Change tag" />
-                    </items>
-                  </Menu>
+                  <MenuItem fx:id="editEvent" mnemonicParsing="false" onAction="#editEvent" text="Edit Event" visible="false" />
                 <MenuItem fx:id="linkEventOpt" mnemonicParsing="false" onAction="#linkEvents" text="Link Events" visible="false" />
               </items>
             </ContextMenu>
