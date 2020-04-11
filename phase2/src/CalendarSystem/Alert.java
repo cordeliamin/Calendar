@@ -19,7 +19,6 @@ public abstract class Alert implements Serializable {
         this.eventTime = date;
         this.message = message;
         this.times = new ArrayList<LocalDateTime>();
-        this.data = toString();
     }
 
     @Override

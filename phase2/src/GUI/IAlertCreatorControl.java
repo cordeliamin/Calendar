@@ -50,7 +50,7 @@ public class IAlertCreatorControl extends Controller {
         Calendar calendar = getCalendar();
         boolean result = true;
         if (!calendar.getEventNames().contains(eventName.getText())) {
-            getCalendar().addEvent(new Event(eventName.getText(), LocalDateTime.now(), LocalDateTime.of(2020, 4, 9, 0, 0)));
+            getCalendar().addEvent(new Event(eventName.getText(), LocalDateTime.now(), LocalDateTime.of(2020, 4, 12, 0, 0)));
             eventNameLabel.setTextFill(Paint.valueOf("red"));
             result = false;
         }

@@ -7,6 +7,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Paint;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -40,7 +41,13 @@ public class FAlertCreatorControl extends Controller {
                         throw new IllegalStateException("Unexpected value: " + unitVal);
                 }
                 calendar.addFrequentAlert(calendar.getEvent(eventNameVal), messageVal, durationVal);
+                System.out.println("here (f)");
                 getCalendarManager().saveToFile();
+
+                // close the window
+                Stage stage = (Stage) submit.getScene().getWindow();
+                stage.close();
+
             } catch(NumberFormatException e){
                 frequencyLabel.setTextFill(Paint.valueOf("red"));
             } catch(IllegalStateException e){
@@ -58,7 +65,7 @@ public class FAlertCreatorControl extends Controller {
         if(!calendar.getEventNames().contains(eventName.getText())){
             eventNameLabel.setTextFill(Paint.valueOf("red"));
             result = false;
-        } if (!message.getText().equals("")){
+        } if (message.getText().equals("")){
             messageLabel.setTextFill(Paint.valueOf("red"));
             result = false;
         }

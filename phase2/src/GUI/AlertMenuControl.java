@@ -99,6 +99,8 @@ public class AlertMenuControl extends Controller{
     }
 
     @FXML private void deleteAlert(){
+        getCalendar().deleteAlert(allTableView.getSelectionModel().getSelectedItem());
+        initScreen();
     }
 
     @FXML private void setReturnToMenu() throws IOException{

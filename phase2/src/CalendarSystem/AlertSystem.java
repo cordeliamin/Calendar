@@ -50,7 +50,7 @@ public class AlertSystem implements Serializable{
         Set<Alert> CurrAlerts = new HashSet<>(); //the set of Alerts to Show
 
         // subset of valid times, reverse order
-        NavigableSet<LocalDateTime> subset = this.allAlertTimes.headSet(LocalDateTime.now(), true);
+        NavigableSet<LocalDateTime> subset = this.allAlertTimes.tailSet(LocalDateTime.now(), true);
         NavigableSet<LocalDateTime> validAlertTimes = subset.descendingSet();
 
         //check if alert is valid (i.e. event hasn't occurred), then add to set CurrAlerts
