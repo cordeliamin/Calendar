@@ -114,10 +114,12 @@ public class AlertSystem implements Serializable{
     }
 
     public void deleteAllAlertsforEvent(Event e) {
-        for (Alert a: this.eventAlertsMap.get(e)) {
-            deleteAlert(a);
+        if (!this.eventAlertsMap.isEmpty()) {
+            for (Alert a : this.eventAlertsMap.get(e)) {
+                deleteAlert(a);
+            }
+            this.eventAlertsMap.remove(e);
         }
-        this.eventAlertsMap.remove(e);
     }
 
     // helper methods

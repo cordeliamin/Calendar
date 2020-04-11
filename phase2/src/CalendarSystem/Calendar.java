@@ -73,7 +73,7 @@ public class Calendar implements Serializable {
         event.setStartTime(start);
         event.setEndTime(end);
         updateEventStatus(event);
-        this.deleteAllAlertsforEvent(event);
+        deleteAllAlertsforEvent(event);
     }
 
     public void changeEventName(Event event, String new_name) {
