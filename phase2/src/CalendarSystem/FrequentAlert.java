@@ -52,4 +52,8 @@ public class FrequentAlert extends Alert{
             return duration.toDays() + "D";
         return duration.toHours()+"H";
     }
+
+    public Duration getFrequency() {
+        return frequency;
+    }
 }

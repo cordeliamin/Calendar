@@ -1,6 +1,7 @@
 package GUI;
 
 import CalendarSystem.Calendar;
+import CalendarSystem.FrequentAlert;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -13,6 +14,9 @@ import java.io.IOException;
 import java.time.Duration;
 
 public class FAlertCreatorControl extends Controller {
+    private boolean edit_Mode = false;
+    private FrequentAlert alert = null;
+    private boolean editted = false;
     @FXML Label eventNameLabel;
     @FXML TextField eventName;
     @FXML Label frequencyLabel;
@@ -23,15 +27,32 @@ public class FAlertCreatorControl extends Controller {
     @FXML TextField message;
     @FXML Button submit;
 
+    @FXML private void initEditMode(){
+        System.out.println("initialize called");
+        if (edit_Mode){
+            eventName.setText(alert.getName());
+            eventName.setEditable(false);
+
+            String frequencyFormat = alert.durationToString(alert.getFrequency());
+            frequency.setText(frequencyFormat.substring(0, frequencyFormat.length()-1));
+            if(frequencyFormat.charAt(frequencyFormat.length()-1) == 'D')
+                unit.setValue("day(s)");
+            else
+                unit.setValue("hour(s)");
+
+            message.setText(alert.getMessage());
+        }
+    }
+
     @FXML private void submit() {
         if (!hasformaterrors()) {
             Calendar calendar = getCalendar();
+            String eventNameVal = eventName.getText();
+            int frequencyVal = Integer.parseInt(frequency.getText());
+            String messageVal = message.getText();
+            String unitVal = unit.getValue();
+            Duration durationVal;
             try{
-                String eventNameVal = eventName.getText();
-                int frequencyVal = Integer.parseInt(frequency.getText());
-                String messageVal = message.getText();
-                String unitVal = unit.getValue();
-                Duration durationVal;
                 switch (unitVal){
                     case "day(s)": durationVal = Duration.ofDays(frequencyVal);
                         break;
@@ -42,6 +63,8 @@ public class FAlertCreatorControl extends Controller {
                 }
                 calendar.addFrequentAlert(calendar.getEvent(eventNameVal), messageVal, durationVal);
                 System.out.println("here (f)");
+                if (edit_Mode)
+                    editted = true;
                 getCalendarManager().saveToFile();
 
                 // close the window
@@ -61,16 +84,28 @@ public class FAlertCreatorControl extends Controller {
 
     private boolean hasformaterrors(){
         Calendar calendar = getCalendar();
-        boolean result = true;
+        boolean result = false;
         if(!calendar.getEventNames().contains(eventName.getText())){
             eventNameLabel.setTextFill(Paint.valueOf("red"));
-            result = false;
+            result = true;
         } if (message.getText().equals("")){
             messageLabel.setTextFill(Paint.valueOf("red"));
-            result = false;
+            result = true;
         }
         return result;
 
     }
 
+    public void setEdit_Mode(boolean edit_Mode) {
+        this.edit_Mode = edit_Mode;
+        initEditMode();
+    }
+
+    public void setAlert(FrequentAlert alert) {
+        this.alert = alert;
+    }
+
+    public boolean isEditted() {
+        return editted;
+    }
 }

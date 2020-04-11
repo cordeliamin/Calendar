@@ -1,9 +1,7 @@
 package GUI;
 
+import CalendarSystem.*;
 import CalendarSystem.Alert;
-import CalendarSystem.AlertSystem;
-import CalendarSystem.AlertSystemData;
-import CalendarSystem.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -96,11 +94,49 @@ public class AlertMenuControl extends Controller{
     }
 
     @FXML private void editAlert(){
+        Alert alert = allTableView.getSelectionModel().getSelectedItem();
+
+        //Make New pop up window
+        Stage alertEditWindow = new Stage();
+        alertEditWindow.setTitle("Edit Alert");
+        alertEditWindow.initModality(Modality.APPLICATION_MODAL);
+        alertEditWindow.setResizable(false);
+
+        try {
+            if (alert instanceof IndividualAlert) {
+                FXMLLoader loader = setNewWindowAndGetLoader("IAlertCreator.fxml",
+                        alertEditWindow, 600, 350);
+                IAlertCreatorControl alertEditor = loader.getController();
+                alertEditor.setAlert((IndividualAlert) alert);
+                alertEditor.setEdit_Mode(true);
+                alertEditWindow.showAndWait();
+                if (alertEditor.isEditted())
+                    getCalendar().deleteAlert(alert);
+            }
+            if (alert instanceof FrequentAlert) {
+                FXMLLoader loader = setNewWindowAndGetLoader("FAlertCreator.fxml",
+                        alertEditWindow, 600, 350);
+                FAlertCreatorControl alertEditor = loader.getController();
+                alertEditor.setAlert((FrequentAlert) alert);
+                alertEditor.setEdit_Mode(true);
+                System.out.println("editted?" + alertEditor.isEditted());
+                alertEditWindow.showAndWait();
+                System.out.println("editted?" + alertEditor.isEditted());
+                if (alertEditor.isEditted())
+                    getCalendar().deleteAlert(alert);
+            }
+            initScreen();
+            getCalendarManager().saveToFile();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    @FXML private void deleteAlert(){
+    @FXML private void deleteAlert() throws IOException{
         getCalendar().deleteAlert(allTableView.getSelectionModel().getSelectedItem());
         initScreen();
+        getCalendarManager().saveToFile();
     }
 
     @FXML private void setReturnToMenu() throws IOException{

@@ -29,4 +29,8 @@ public class IndividualAlert extends Alert{
     public String toString(){
         return "Individual Alert: " + getMessage() + " at " + time;
     }
+
+    public LocalDateTime getTime() {
+        return time;
+    }
 }

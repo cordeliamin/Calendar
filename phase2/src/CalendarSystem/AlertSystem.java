@@ -35,10 +35,14 @@ public class AlertSystem implements Serializable{
      * @param message: message content of the alert
      */
     public void addFrequentAlert(Event event, String message, Duration duration) {
-        Alert newAlert = new FrequentAlert(event.getStartTime(), event.getEventName(), message, duration);
-        eventAlertsMap.putIfAbsent(event, new ArrayList<>());
-        eventAlertsMap.get(event).add(newAlert);
-        addtoTimesSet(newAlert);
+        if((LocalDateTime.now().isBefore(event.getStartTime())) && event.getStartTime().minus(duration).isAfter(LocalDateTime.now())) {
+            Alert newAlert = new FrequentAlert(event.getStartTime(), event.getEventName(), message, duration);
+            eventAlertsMap.putIfAbsent(event, new ArrayList<>());
+            eventAlertsMap.get(event).add(newAlert);
+            addtoTimesSet(newAlert);
+        } else{
+            System.out.println("Illegal Frequent Alert Time");
+        }
     }
 
 
