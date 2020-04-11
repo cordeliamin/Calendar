@@ -9,6 +9,7 @@ public class IndividualAlert extends Alert{
         super(evT, message, name);
         time = t;
         addtoTimes(time);
+        setData("Individual Alert: " + message + " at " + t);
     }
 
     //Edit IndividualAlert
@@ -21,5 +22,15 @@ public class IndividualAlert extends Alert{
     @Override
     public String getAlertType() {
         return "i";
+    }
+
+
+    @Override
+    public String toString(){
+        return "Individual Alert: " + getMessage() + " at " + time;
+    }
+
+    public LocalDateTime getTime() {
+        return time;
     }
 }

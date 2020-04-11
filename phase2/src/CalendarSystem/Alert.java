@@ -8,12 +8,13 @@ import java.util.List;
 import java.time.LocalDateTime;
 
 public abstract class Alert implements Serializable {
-    private String name;
+    private String name = "";
     private LocalDateTime eventTime;
     private ArrayList<LocalDateTime> times;
     private String message;
+    private String data;
 
-    public Alert(LocalDateTime date, String name, String message){
+    public Alert(LocalDateTime date, String message, String name){
         this.name = name;
         this.eventTime = date;
         this.message = message;
@@ -53,4 +54,19 @@ public abstract class Alert implements Serializable {
         this.message = newMessage;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
 }

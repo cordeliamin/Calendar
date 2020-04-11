@@ -18,6 +18,7 @@ public class Calendar implements Serializable {
     private AlertSystem myAlerts = new AlertSystem();
     public LocalDateTime time = LocalDateTime.now();
 
+
     //methods for creating events, alerts
     public void addEvent(Event e) {
         myEvents.add(e);
@@ -304,5 +305,9 @@ public class Calendar implements Serializable {
         if (this.myEvents.contains(e)) {
             friendCalendar.addEvent(e);
         }
+    }
+
+    public AlertSystem getMyAlerts() {
+        return myAlerts;
     }
 }

@@ -10,6 +10,7 @@ public class FrequentAlert extends Alert{
         super(evT, message, name);
         frequency = d;
         setTimesHelper();
+        setData("Frequent Alert: " + message + " every " + durationToString(d));
     }
 
     // Edit FrequentAlert
@@ -24,7 +25,9 @@ public class FrequentAlert extends Alert{
         do{
             t = t.minus(this.frequency);
         }
-        while (t.isBefore(CalendarPhase1.time));
+
+        //use system time now - needs to be changed!!
+        while (t.isAfter(LocalDateTime.now()));
 
         //then t is the first alarm time
         while(t.isBefore(this.getEventTime())){
@@ -36,5 +39,21 @@ public class FrequentAlert extends Alert{
     @Override
     public String getAlertType() {
         return "f";
+    }
+
+
+    @Override
+    public String toString(){
+        return "Frequent Alert: " + getMessage() + " every " + durationToString(frequency);
+    }
+
+    public String durationToString(Duration duration) {
+        if (duration.toDays()!= 0)
+            return duration.toDays() + "D";
+        return duration.toHours()+"H";
+    }
+
+    public Duration getFrequency() {
+        return frequency;
     }
 }

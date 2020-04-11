@@ -7,7 +7,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.FAlertCreatorControl">
+<?import javafx.collections.FXCollections?>
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@Default.css" fx:controller="GUI.FAlertCreatorControl">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="580.0" minWidth="10.0" prefWidth="580.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="292.0" minWidth="0.0" prefWidth="0.0" />
@@ -32,7 +33,14 @@
             <Label fx:id="everyLabel" text="Every" />
             <TextField fx:id="frequency" prefHeight="27.0" prefWidth="50.0" promptText="1" />
             <Label />
-            <ChoiceBox fx:id="unit" prefWidth="150.0" />
+            <ChoiceBox value="day(s)" fx:id="unit" prefWidth="150.0">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="day(s)" />
+                        <String fx:value="hour(s)" />
+                    </FXCollections>
+                </items>
+            </ChoiceBox>
          </children>
       </HBox>
       <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="5">
