@@ -16,8 +16,6 @@ public class UserCreatorControl extends Controller {
     @FXML
     private Button createNewUser;
     @FXML
-    private Button returnToMenu;
-    @FXML
     private Label username;
     @FXML
     private Label password;
@@ -48,18 +46,23 @@ public class UserCreatorControl extends Controller {
 
         if (password.equals(password2)) {
 
-            FileWriter writer = new FileWriter("users.csv");
+            FileWriter writer = new FileWriter("users.csv", true);
             writer.append(user);
             writer.append(",");
             writer.append(password);
             writer.append("\n");
             writer.flush();
             writer.close();
-
-            goBackToLogin();
+            success.setVisible(true);
 
         } else {
             errorIn.setVisible(true);
         }
+
+        usernameInput.clear();
+        passwordInput.clear();
+        passwordAgainInput.clear();
+
+
     }
 }

@@ -18,21 +18,29 @@ import java.util.ArrayList;
 
 public class MainMenuControl extends Controller {
 
-    @FXML private Button logOutButton;
-    @FXML private Button eventButton;
-    @FXML private Button memoButton;
+    @FXML
+    private Button logOutButton;
+    @FXML
+    private Button eventButton;
+    @FXML
+    private Button memoButton;
     @FXML
     private Button alertButton;
     @FXML
     private Button seriesButton;
     @FXML
     private Slider themeSwitch;
-    @FXML private Label sysClock;
-    @FXML private Label monthYearLabel;
-    @FXML private GridPane monthlyCalendar;
-    @FXML private ChoiceBox<String> calendarSelect;
+    @FXML
+    private Label sysClock;
+    @FXML
+    private Label monthYearLabel;
+    @FXML
+    private GridPane monthlyCalendar;
+    @FXML
+    private ChoiceBox<String> calendarSelect;
 
-    @FXML private void logOut() throws IOException {
+    @FXML
+    private void logOut() throws IOException {
         getCalendarManager().saveToFile();
         setScreen("LoginScene.fxml", logOutButton);
     }
@@ -89,8 +97,8 @@ public class MainMenuControl extends Controller {
             LocalDateTime currentTime = LocalDateTime.now();
             sysClock.setText("Time: \n" + currentTime.getHour() + ":" +
                     currentTime.getMinute() + ":" + currentTime.getSecond());
-            monthYearLabel.setText("\t" + currentTime.getMonth().toString() + ", " +
-                    currentTime.getYear() + "\t\t");
+            monthYearLabel.setText("\t" + currentTime.getMonth().toString() + " " + currentTime.getDayOfMonth()
+                    + ", " + currentTime.getYear() + "\t\t");
         }), new KeyFrame(Duration.seconds(1)));
         clock.setCycleCount(Animation.INDEFINITE);
         clock.play();
