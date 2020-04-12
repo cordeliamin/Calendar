@@ -21,8 +21,12 @@ public class MainMenuControl extends Controller {
     @FXML private Button logOutButton;
     @FXML private Button eventButton;
     @FXML private Button memoButton;
-    @FXML private Button alertButton;
-    @FXML private Slider themeSwitch;
+    @FXML
+    private Button alertButton;
+    @FXML
+    private Button seriesButton;
+    @FXML
+    private Slider themeSwitch;
     @FXML private Label sysClock;
     @FXML private Label monthYearLabel;
     @FXML private GridPane monthlyCalendar;
@@ -37,15 +41,23 @@ public class MainMenuControl extends Controller {
         setScreen("EventMenuScene.fxml", eventButton);
     }
 
-    @FXML private void viewMemos() throws IOException {
+    @FXML
+    private void viewMemos() throws IOException {
         setScreen("MemoMenuScene.fxml", memoButton);
     }
 
-    @FXML private void viewAlerts() throws IOException {
+    @FXML
+    private void viewAlerts() throws IOException {
         setScreen("AlertMenuScene.fxml", alertButton);
     }
 
-    @FXML private void changeTheme() {
+    @FXML
+    private void viewSeries() throws IOException {
+        setScreen("SeriesMenuScene.fxml", seriesButton);
+    }
+
+    @FXML
+    private void changeTheme() {
         if (getTheme().equals("GUI/Light.css")) {
             setTheme("GUI/Dark.css");
             themeSwitch.setValue(themeSwitch.getMax());

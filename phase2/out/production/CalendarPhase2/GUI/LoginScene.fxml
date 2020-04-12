@@ -15,7 +15,7 @@
 
 <!-- Ensure: xmlns="http://javafx.com/javafx/8.0.172-ea"-->
 
-<GridPane hgap="10.0" prefHeight="600.0" prefWidth="900.0" stylesheets="@Default.css" vgap="8.0" xmlns="http://javafx.com/javafx/8.0.171-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.LoginControl">
+<GridPane hgap="10.0" prefHeight="600.0" prefWidth="900.0" stylesheets="@Light.css" vgap="8.0" xmlns="http://javafx.com/javafx/8.0.171-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.LoginControl">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="329.20001220703125" minWidth="10.0" prefWidth="269.600048828125" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="628.0000122070312" minWidth="10.0" prefWidth="579.999951171875" />
@@ -28,6 +28,7 @@
       <RowConstraints maxHeight="51.400000000000006" minHeight="10.0" prefHeight="44.400006103515636" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="80.80002746582034" minHeight="10.0" prefHeight="29.600000000000023" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="85.60000000000002" minHeight="0.0" prefHeight="85.60000000000002" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -61,15 +62,6 @@
             <ImageView fitHeight="312.0" fitWidth="346.0" layoutX="178.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Images/calendarlogo.png" />
-               </image>
-            </ImageView>
-         </children>
-      </AnchorPane>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
-         <children>
-            <ImageView fitHeight="79.0" fitWidth="226.0" layoutX="348.0" layoutY="-36.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@Images/uoftcompsci.png" />
                </image>
             </ImageView>
          </children>
