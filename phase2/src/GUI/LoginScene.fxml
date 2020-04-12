@@ -15,7 +15,7 @@
 
 <!-- Ensure: xmlns="http://javafx.com/javafx/8.0.172-ea"-->
 
-<GridPane hgap="10.0" prefHeight="600.0" prefWidth="900.0" stylesheets="@Default.css" vgap="8.0" xmlns="http://javafx.com/javafx/8.0.171-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.LoginControl">
+<GridPane hgap="10.0" prefHeight="600.0" prefWidth="900.0" stylesheets="@Light.css" vgap="8.0" xmlns="http://javafx.com/javafx/8.0.171-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.LoginControl">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="329.20001220703125" minWidth="10.0" prefWidth="269.600048828125" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="628.0000122070312" minWidth="10.0" prefWidth="579.999951171875" />

@@ -19,7 +19,11 @@ public class LoginControl extends Controller {
     @FXML private PasswordField passInfo;
 
     @Override
-    protected void initScreen() { setCalendar(null); }
+    protected void initScreen() {
+        setCalendar(null);
+        setTheme("GUI/Light.css");
+        setSceneTheme(errorIn.getScene());
+    }
 
     @FXML private void login() throws ClassNotFoundException, IOException {
         String user = userInfo.getText();
