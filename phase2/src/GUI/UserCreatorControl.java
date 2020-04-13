@@ -14,7 +14,7 @@ public class UserCreatorControl extends Controller {
     @FXML
     private Label errorIn;
     @FXML
-    private Button createNewUser;
+    private Button createNewUserButton;
     @FXML
     private Label username;
     @FXML
@@ -53,16 +53,14 @@ public class UserCreatorControl extends Controller {
             writer.append("\n");
             writer.flush();
             writer.close();
+            errorIn.setVisible(false);
             success.setVisible(true);
 
         } else {
             errorIn.setVisible(true);
         }
-
         usernameInput.clear();
         passwordInput.clear();
         passwordAgainInput.clear();
-
-
     }
 }

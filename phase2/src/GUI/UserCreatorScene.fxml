@@ -39,7 +39,7 @@
         </Label>
         <TextField fx:id="usernameInput" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
         <PasswordField fx:id="passwordAgainInput" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-        <Button fx:id="createNewUser" mnemonicParsing="false" onAction="#createNewUser" text="Submit"
+        <Button fx:id="createNewUserButton" mnemonicParsing="false" onAction="#createNewUser" text="Submit"
                 GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4">
             <font>
                 <Font name="Microsoft Sans Serif" size="16.0"/>
