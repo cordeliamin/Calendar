@@ -114,7 +114,7 @@ public class EventMenuController extends Controller {
         Label instructions = new Label("Event Series Name:");
         TextField eventsName = new TextField();
         Button createSeries = new Button("Create Series");
-        PopUp linkName = new PopUp("Series Name", 9.0, 40, 50, 10, 20);
+        PopUp linkName = new PopUp("Series Name", getTheme(), 9.0, 40, 50, 10, 20);
         linkName.getContent().addAll(instructions, eventsName, createSeries);
         createSeries.setOnAction(e -> {
             try {

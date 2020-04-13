@@ -1,12 +1,12 @@
 package CalendarSystem;
 
+import javax.print.DocFlavor;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.Optional;
 
 public class CalendarManager {
     private Calendar calendar;
@@ -50,7 +50,7 @@ public class CalendarManager {
         saveToFile();
     }
 
-    public void selectCalendar(String name) throws ClassNotFoundException, IOException {
+    public void selectCalendar(String name) throws ClassNotFoundException, IOException{
         saveToFile();
         this.filePath = this.userPath + name + ".ser";
         File file = new File(filePath);
@@ -91,7 +91,7 @@ public class CalendarManager {
         output.close();
     }
 
-    public Calendar getCalendar() {
+    public Calendar getCalendar(){
         return this.calendar;
     }
 
@@ -102,9 +102,11 @@ public class CalendarManager {
         if (userData.isDirectory()) {
             File[] sample = userData.listFiles();
             if (sample != null) {
-                for (File f : sample) {
-                    userCalendars.add(f.getName().replace(username, "").
-                            replace(".ser", ""));
+                for (File f: sample) {
+                    if (f.getName().contains(username)) {
+                        userCalendars.add(f.getName().replace(username, "").
+                                replace(".ser", ""));
+                    }
                 }
             }
         }

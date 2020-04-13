@@ -5,13 +5,10 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -21,16 +18,29 @@ import java.util.ArrayList;
 
 public class MainMenuControl extends Controller {
 
-    @FXML private Button logOutButton;
-    @FXML private Button eventButton;
-    @FXML private Button memoButton;
-    @FXML private Button alertButton;
-    @FXML private Label sysClock;
-    @FXML private Label monthYearLabel;
-    @FXML private GridPane monthlyCalendar;
-    @FXML private ChoiceBox<String> calendarSelect;
+    @FXML
+    private Button logOutButton;
+    @FXML
+    private Button eventButton;
+    @FXML
+    private Button memoButton;
+    @FXML
+    private Button alertButton;
+    @FXML
+    private Button seriesButton;
+    @FXML
+    private Slider themeSwitch;
+    @FXML
+    private Label sysClock;
+    @FXML
+    private Label monthYearLabel;
+    @FXML
+    private GridPane monthlyCalendar;
+    @FXML
+    private ChoiceBox<String> calendarSelect;
 
-    @FXML private void logOut() throws IOException {
+    @FXML
+    private void logOut() throws IOException {
         getCalendarManager().saveToFile();
         setScreen("LoginScene.fxml", logOutButton);
     }
@@ -39,12 +49,31 @@ public class MainMenuControl extends Controller {
         setScreen("EventMenuScene.fxml", eventButton);
     }
 
-    @FXML private void viewMemos() throws IOException {
+    @FXML
+    private void viewMemos() throws IOException {
         setScreen("MemoMenuScene.fxml", memoButton);
     }
 
-    @FXML private void viewAlerts() throws IOException {
+    @FXML
+    private void viewAlerts() throws IOException {
         setScreen("AlertMenuScene.fxml", alertButton);
+    }
+
+    @FXML
+    private void viewSeries() throws IOException {
+        setScreen("SeriesMenuScene.fxml", seriesButton);
+    }
+
+    @FXML
+    private void changeTheme() {
+        if (getTheme().equals("GUI/Light.css")) {
+            setTheme("GUI/Dark.css");
+            themeSwitch.setValue(themeSwitch.getMax());
+        } else {
+            setTheme("GUI/Light.css");
+            themeSwitch.setValue(themeSwitch.getMin());
+        }
+        setSceneTheme(themeSwitch.getScene());
     }
 
     @Override
@@ -52,6 +81,15 @@ public class MainMenuControl extends Controller {
         initClock();
         initMonthlyCalendar();
         initCalendarSelect();
+        initThemeSwitch();
+    }
+
+    private void initThemeSwitch() {
+        if (getTheme().equals("GUI/Dark.css")) {
+            themeSwitch.setValue(themeSwitch.getMax());
+        } else {
+            themeSwitch.setValue(themeSwitch.getMin());
+        }
     }
 
     private void initClock() {
@@ -59,8 +97,8 @@ public class MainMenuControl extends Controller {
             LocalDateTime currentTime = LocalDateTime.now();
             sysClock.setText("Time: \n" + currentTime.getHour() + ":" +
                     currentTime.getMinute() + ":" + currentTime.getSecond());
-            monthYearLabel.setText("\t" + currentTime.getMonth().toString() + ", " +
-                    currentTime.getYear() + "\t\t");
+            monthYearLabel.setText("\t" + currentTime.getMonth().toString() + " " + currentTime.getDayOfMonth()
+                    + ", " + currentTime.getYear() + "\t\t");
         }), new KeyFrame(Duration.seconds(1)));
         clock.setCycleCount(Animation.INDEFINITE);
         clock.play();
@@ -88,7 +126,8 @@ public class MainMenuControl extends Controller {
         day.setPrefHeight(84.0);
         day.setPrefWidth(100.0);
         GridPane.setConstraints(day, dayOfWeek, weekNum);
-        Label dayOfMonth = new Label(Integer.toString(currDay.getDayOfMonth()));
+        Label dayOfMonth = new Label(" " + Integer.toString(currDay.getDayOfMonth()) + " ");
+        if (currDay.equals(LocalDate.now())) {dayOfMonth.setStyle("-fx-background-color: #5FB1FE");}
         day.getChildren().add(dayOfMonth);
         return day;
     }
@@ -122,7 +161,7 @@ public class MainMenuControl extends Controller {
         Label instructions = new Label("New Calendar Name:");
         Button createCalendarButton = new Button("Create Calendar");
         TextField userInput = new TextField();
-        PopUp newCalNameInpt = new PopUp("Create New Calendar");
+        PopUp newCalNameInpt = new PopUp("Create New Calendar", getTheme());
         newCalNameInpt.getContent().addAll(invalidNameLabel, instructions, userInput, createCalendarButton);
         createCalendarButton.setOnAction(e -> {
             if (isValidName(userInput.getText(), invalidNameLabel)) {

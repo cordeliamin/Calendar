@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Calendar implements Serializable {
     /*
@@ -19,9 +20,7 @@ public class Calendar implements Serializable {
     private  NotificationSystem notifications = new NotificationSystem();
     public LocalDateTime time = LocalDateTime.now();
 
-
-
-    //methods for creating events, alerts
+    //methods for creating events, alerts, memos
     public void addEvent(Event e) {
         myEvents.add(e);
     }
@@ -32,6 +31,10 @@ public class Calendar implements Serializable {
 
     public void addFrequentAlert(Event e, String msg, Duration d) {
         myAlerts.addFrequentAlert(e, msg, d);
+    }
+
+    public void createMemo(List<Event> events, String note) {
+        myMemos.createMemo(events, note);
     }
 
     //methods for deleting events, alerts, memos
