@@ -2,6 +2,7 @@ package GUI;
 
 import CalendarSystem.Calendar;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -16,12 +17,25 @@ public class LoginControl extends Controller {
 
     @FXML private Label errorIn;
     @FXML private TextField userInfo;
-    @FXML private PasswordField passInfo;
+    @FXML
+    private PasswordField passInfo;
+    @FXML
+    private Button createNewUser;
 
     @Override
-    protected void initScreen() { setCalendar(null); }
+    protected void initScreen() {
+        setCalendar(null);
+        setTheme("GUI/Light.css");
+        setSceneTheme(errorIn.getScene());
+    }
 
-    @FXML private void login() throws ClassNotFoundException, IOException {
+    @FXML
+    private void newUser() throws IOException {
+        setScreen("UserCreatorScene.fxml", createNewUser);
+    }
+
+    @FXML
+    private void login() throws ClassNotFoundException, IOException {
         String user = userInfo.getText();
         String pswd = passInfo.getText();
         HashMap<String, String> users = getUsers();

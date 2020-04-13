@@ -28,7 +28,7 @@ public class MemoMenuControl extends Controller {
         Label instructions = new Label("Memo note:");
         TextField note = new TextField(memo.getNote());
         Button save = new Button("Save");
-        PopUp editMemo = new PopUp("Edit Memo", 9.0, 40, 50, 10, 20);
+        PopUp editMemo = new PopUp("Edit Memo", getTheme(), 9.0, 40, 50, 10, 20);
         editMemo.getContent().addAll(instructions, note, save);
         save.setOnAction(e -> {
             try{

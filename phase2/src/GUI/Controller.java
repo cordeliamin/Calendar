@@ -20,6 +20,12 @@ public abstract class Controller {
 
     private CalendarManager calendarManager;
 
+    private String theme = "GUI/Light.css";
+
+    protected void setTheme(String theme) {this.theme = theme;}
+
+    protected String getTheme() {return theme;}
+
     protected void setCalendar(CalendarManager calManager) {
         calendarManager = calManager;
     }
@@ -49,6 +55,23 @@ public abstract class Controller {
     protected void initScreen() {}
 
     /*
+     * Sets the theme of currScene to this controller's theme
+     */
+    protected void setSceneTheme(Scene currScene) {
+        if (theme.equals("GUI/Dark.css")) {
+            currScene.getStylesheets().remove("GUI/Light.css");
+            if (!currScene.getStylesheets().contains("GUI/Dark.css")) {
+                currScene.getStylesheets().add("GUI/Dark.css");
+            }
+        } else if (theme.equals("GUI/Light.css")) {
+            currScene.getStylesheets().remove("GUI/Dark.css");
+            if (!currScene.getStylesheets().contains("GUI/Light.css")) {
+                currScene.getStylesheets().add("GUI/Light.css");
+            }
+        }
+    }
+
+    /*
      * Sets Main Screen as described in setScreen() and returns FXML Loader for passing
      * additional info to new Scene controller
      */
@@ -62,9 +85,11 @@ public abstract class Controller {
         loader.setLocation(getClass().getResource(fxmlFileName));
         Parent newRoot = loader.load();
         Scene newScreen = new Scene(newRoot, width, height);
+        setSceneTheme(newScreen);
         window.setScene(newScreen);
         Controller controller = loader.getController();
         controller.setCalendar(calendarManager);
+        controller.setTheme(theme);
         controller.initScreen();
         return loader;
     }

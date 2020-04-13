@@ -1,14 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="GUI.UserCreatorControl"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+          prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="GUI.UserCreatorControl">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <children>
+        <Label fx:id="username" contentDisplay="CENTER" text="User Name:" GridPane.halignment="CENTER"
+               GridPane.rowIndex="1">
+            <font>
+                <Font name="Microsoft Sans Serif" size="16.0"/>
+            </font>
+        </Label>
+        <Label fx:id="password" contentDisplay="CENTER" text="Password:" GridPane.halignment="CENTER"
+               GridPane.rowIndex="2">
+            <font>
+                <Font name="Microsoft Sans Serif" size="16.0"/>
+            </font>
+        </Label>
+        <Label fx:id="passwordAgain" text="Re-Enter Password:" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+            <font>
+                <Font name="Microsoft Sans Serif" size="16.0"/>
+            </font>
+        </Label>
+        <TextField fx:id="usernameInput" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <PasswordField fx:id="passwordAgainInput" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        <Button fx:id="createNewUser" mnemonicParsing="false" onAction="#createNewUser" text="Submit"
+                GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+            <font>
+                <Font name="Microsoft Sans Serif" size="16.0"/>
+            </font>
+        </Button>
+        <Button fx:id="goToLogin" mnemonicParsing="false" onAction="#goBackToLogin" text="Go to Log In"
+                GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+            <font>
+                <Font name="Microsoft Sans Serif" size="16.0"/>
+            </font>
+        </Button>
+        <PasswordField fx:id="passwordInput" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <Label fx:id="success" text="Success!" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+            <font>
+                <Font name="Microsoft Sans Serif" size="16.0"/>
+            </font>
+        </Label>
+        <Label fx:id="errorIn" text="Please try again!" visible="false" GridPane.columnIndex="1"
+               GridPane.halignment="CENTER">
+            <font>
+                <Font name="Microsoft Sans Serif" size="16.0"/>
+            </font>
+        </Label>
+    </children>
+</GridPane>
