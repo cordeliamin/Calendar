@@ -16,7 +16,9 @@ public class Calendar implements Serializable {
     private MemoSystem myMemos = new MemoSystem();
     private SeriesSystem mySeries = new SeriesSystem();
     private AlertSystem myAlerts = new AlertSystem();
+    private  NotificationSystem notifications = new NotificationSystem();
     public LocalDateTime time = LocalDateTime.now();
+
 
 
     //methods for creating events, alerts
@@ -295,19 +297,16 @@ public class Calendar implements Serializable {
         }
         return s;
     }
-    public void shareEvent(Event e, Calendar friendCalendar ){
-        // I have a couple of questions in regards to this method
-        //1. How are users associated with their calendars
-        // A: their calendars are named <username>_<calendarName>.ser (there will always
-        // be a calendar called default for every user).
-        //2. Should we be passing on an event name, or will the UI be enable our users to select event objects
-        // A: The UI can select Event objects
-        if (this.myEvents.contains(e)) {
-            friendCalendar.addEvent(e);
-        }
-    }
 
     public AlertSystem getMyAlerts() {
         return myAlerts;
     }
+
+    public void addEventNotification(Event event){
+        this.notifications.addEvent(event);
+    }
+    public void addMessageNotification(Memo memo){
+        this.notifications.addMessage(memo);
+    }
 }
+
