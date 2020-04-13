@@ -98,13 +98,16 @@ public class CalendarManager  {
     public ArrayList<String> getUserCalendars() {
         File userData = new File("user_data");
         String username = userPath.substring(12);
+        System.out.println(username);
         ArrayList<String> userCalendars = new ArrayList<>();
         if (userData.isDirectory()) {
             File[] sample = userData.listFiles();
             if (sample != null) {
                 for (File f: sample) {
-                    userCalendars.add(f.getName().replace(username, "").
-                            replace(".ser", ""));
+                    if (f.getName().contains(username)) {
+                        userCalendars.add(f.getName().replace(username, "").
+                                replace(".ser", ""));
+                    }
                 }
             }
         }
