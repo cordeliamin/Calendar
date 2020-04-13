@@ -1,7 +1,8 @@
 package CalendarSystem;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class NotificationSystem {
+public class NotificationSystem implements Serializable {
     private ArrayList<Memo> messages = new ArrayList<Memo>();
     private ArrayList<Event> invites = new ArrayList<Event>();
 
