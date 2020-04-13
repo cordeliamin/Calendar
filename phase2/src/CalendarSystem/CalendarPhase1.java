@@ -14,8 +14,7 @@ public class CalendarPhase1 {
         time = LocalDateTime.now();
         System.out.println(time);
 
-        String serializedCalendarManagerInfo = "user.ser";
-        CalendarManager sm = new CalendarManager(serializedCalendarManagerInfo);
+        CalendarManager sm = new CalendarManager("user");
         sm.readFromFile();
 
         new Menus(sm);

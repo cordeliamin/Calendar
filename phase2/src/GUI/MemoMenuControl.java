@@ -51,4 +51,5 @@ public class MemoMenuControl extends Controller {
         getCalendarManager().saveToFile();
     }
 
+
 }
