@@ -98,7 +98,6 @@ public class CalendarManager  {
     public ArrayList<String> getUserCalendars() {
         File userData = new File("user_data");
         String username = userPath.substring(12);
-        System.out.println(username);
         ArrayList<String> userCalendars = new ArrayList<>();
         if (userData.isDirectory()) {
             File[] sample = userData.listFiles();
