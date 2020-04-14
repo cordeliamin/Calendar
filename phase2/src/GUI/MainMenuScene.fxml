@@ -20,7 +20,7 @@
                     <cursor>
                         <Cursor fx:constant="HAND"/>
                     </cursor>
-            </Button>
+                </Button>
             <GridPane hgap="3.0" prefHeight="34.0" prefWidth="70.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="59.0" />
@@ -78,12 +78,6 @@
                  <cursor>
                      <Cursor fx:constant="HAND"/>
                  </cursor>
-             </Button>
-             <Button fx:id="seriesButton" mnemonicParsing="false" onAction="#viewSeries" prefHeight="60.0"
-                     prefWidth="90.0" text="Series">
-                 <font>
-                     <Font name="Microsoft Sans Serif" size="16.0"/>
-                 </font>
              </Button>
              <Label fx:id="sysClock" alignment="TOP_LEFT" text="Label"/>
          </children>

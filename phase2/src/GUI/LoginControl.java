@@ -1,16 +1,15 @@
 package GUI;
 
-import CalendarSystem.Calendar;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-
-import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -29,12 +28,14 @@ public class LoginControl extends Controller {
     protected void initScreen() {
         setCalendar(null);
         setTheme("GUI/Light.css");
-        setSceneTheme(errorIn.getScene());
+        setSceneTheme(userInfo.getScene());
     }
 
     @FXML
     private void newUser() throws IOException {
-        setScreen("UserCreatorScene.fxml", createNewUser);
+        FXMLLoader signUpLoader = setScreenAndGetLoader("UserCreatorScene.fxml", createNewUser);
+        UserCreatorControl signUpControl = signUpLoader.getController();
+        signUpControl.setUsernames(new ArrayList<>(getUsers().keySet()));
     }
 
     @FXML

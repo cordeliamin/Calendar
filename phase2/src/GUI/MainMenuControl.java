@@ -27,8 +27,6 @@ public class MainMenuControl extends Controller {
     @FXML
     private Button alertButton;
     @FXML
-    private Button seriesButton;
-    @FXML
     private Slider themeSwitch;
     @FXML
     private Label sysClock;
@@ -58,11 +56,7 @@ public class MainMenuControl extends Controller {
     private void viewAlerts() throws IOException {
         setScreen("AlertMenuScene.fxml", alertButton);
     }
-
-    @FXML
-    private void viewSeries() throws IOException {
-        setScreen("SeriesMenuScene.fxml", seriesButton);
-    }
+    
 
     @FXML
     private void changeTheme() {

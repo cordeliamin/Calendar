@@ -8,19 +8,13 @@ import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.io.FileWriter;
+import java.util.ArrayList;
 
 public class UserCreatorControl extends Controller {
 
+    private ArrayList<String> users = new ArrayList<>();
     @FXML
     private Label errorIn;
-    @FXML
-    private Button createNewUserButton;
-    @FXML
-    private Label username;
-    @FXML
-    private Label password;
-    @FXML
-    private Label passwordAgain;
     @FXML
     private TextField usernameInput;
     @FXML
@@ -31,6 +25,8 @@ public class UserCreatorControl extends Controller {
     private Label success;
     @FXML
     private Button goToLogin;
+
+    protected void setUsernames(ArrayList<String> users) {this.users = users;}
 
     @FXML
     private void goBackToLogin() throws IOException {
@@ -44,7 +40,7 @@ public class UserCreatorControl extends Controller {
         String password = passwordInput.getText();
         String password2 = passwordAgainInput.getText();
 
-        if (password.equals(password2)) {
+        if (isValidUser(user) && !password.equals("") && password.equals(password2)) {
 
             FileWriter writer = new FileWriter("users.csv", true);
             writer.append(user);
@@ -56,11 +52,25 @@ public class UserCreatorControl extends Controller {
             errorIn.setVisible(false);
             success.setVisible(true);
 
+            usernameInput.clear();
+            passwordInput.clear();
+            passwordAgainInput.clear();
+
         } else {
             errorIn.setVisible(true);
         }
-        usernameInput.clear();
-        passwordInput.clear();
-        passwordAgainInput.clear();
+    }
+
+    private boolean isValidUser(String username) {
+        if (users.contains(username)) {
+            errorIn.setText("This username already exists!");
+            return false;
+        } else if (username.equals("") || username.contains("_")){
+            errorIn.setText("Not a valid username!");
+            return false;
+        } else {
+            errorIn.setText("Invalid Input. Please try again!");
+            return true;
+        }
     }
 }

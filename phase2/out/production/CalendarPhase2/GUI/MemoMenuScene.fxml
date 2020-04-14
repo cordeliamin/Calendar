@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 
-
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.MemoMenuControl">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="784.0" minWidth="10.0" prefWidth="710.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="445.0" minWidth="10.0" prefWidth="190.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
    <children>
-      <AnchorPane prefHeight="580.0" prefWidth="742.0">
-         <children>
-            <ImageView fitHeight="580.0" fitWidth="595.0" layoutX="78.0" layoutY="-14.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@Images/Important.jpg" />
-               </image>
-            </ImageView>
-         </children>
-      </AnchorPane>
-      <Button fx:id="returnToMenu" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#goBackToMenu" prefHeight="91.0" prefWidth="128.0" text="Return To Menu" />
+      <TableView prefHeight="200.0" prefWidth="200.0">
+        <columns>
+          <TableColumn prefWidth="145.99996948242188" text="Memo" />
+          <TableColumn minWidth="4.0000152587890625" prefWidth="139.5" text="Associated Event(s)" />
+        </columns>
+         <contextMenu>
+            <ContextMenu>
+              <items>
+                <MenuItem mnemonicParsing="false" text="Create New Menu" />
+              </items>
+            </ContextMenu>
+         </contextMenu>
+      </TableView>
    </children>
-   <padding>
-      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-   </padding>
-</HBox>
+</GridPane>

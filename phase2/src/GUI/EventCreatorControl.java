@@ -2,16 +2,19 @@ package GUI;
 
 import CalendarSystem.Memo;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.paint.Paint;
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 import java.time.LocalDateTime;
+
 import CalendarSystem.Event;
+import javafx.scene.paint.Paint;
 import javafx.util.StringConverter;
 
 public class EventCreatorControl extends Controller {
@@ -19,153 +22,157 @@ public class EventCreatorControl extends Controller {
     private TableView<Event> eventTable;
     @FXML private ComboBox<String> memoOptions;
     @FXML private TextField eventName;
+    @FXML private Label eventNameLab;
     @FXML private DatePicker eventStartDate;
     @FXML private TextField eventStartTime;
-    @FXML private DatePicker eventEndDate;
-    @FXML private TextField eventEndTime;
-    @FXML private Label successMsg;
-    @FXML private Label errorMsg;
-    @FXML private Label eventNameLab;
     @FXML private Label startDateLab;
     @FXML private Label startTimeLab;
+    @FXML private Label successMsg;
+    @FXML private Label errorMsg;
+    @FXML private Button creationToggler;
+    private boolean multipleEvent;
+
+    //Single event specific
+    @FXML private DatePicker eventEndDate;
+    @FXML private TextField eventEndTime;
     @FXML private Label endDateLab;
     @FXML private Label endTimeLab;
 
+    //Series Event specific
+    @FXML private TextField eventDuration;
+    @FXML private TextField eventFrequency;
+    @FXML private TextField numEvents;
+    @FXML private Label eventDurLabel;
+    @FXML private Label eventFreLabel;
+    @FXML private Label eventNumLabel;
+
     @Override
     protected void initScreen() {
-        initDatePicker();
+        //Setup date pickers to follow specified pattern
+        StringConverter<LocalDate> converter = getDateConverter();
+        eventStartDate.setConverter(converter);
+        eventEndDate.setConverter(converter);
+        //Display all this calendar's memos
         for (Memo m : getCalendar().getMyMemos().getMemos()) {
             memoOptions.getItems().add(m.getNote());
         }
-    }
-
-    @FXML private void createEvent() throws IOException {
-        hideMessage();
-        String nameInput = eventName.getText();
-        String startInput = eventStartDate.getEditor().getText();
-        String endInput = eventEndDate.getEditor().getText();
-        if (hasFormatErrors(nameInput, startInput, endInput)) {
-            errorMsg.setVisible(true);
-        } else {
-            LocalDateTime[] timeInterval = convertToDates(startInput, endInput);
-            if (timeInterval[1].isAfter(timeInterval[0])) {
-                Event newEvent = new Event(nameInput, timeInterval[0], timeInterval[1]);
-                getCalendar().addEvent(newEvent);
-                eventTable.getItems().add(newEvent);
-                setEventMemo(newEvent);
-                getCalendarManager().saveToFile();
-                successMsg.setVisible(true);
-                clearFields();
-            } else {
-                displayInvalidDateInput();
-            }
-        }
-    }
-
-    private void clearFields() {
-        eventName.clear();
-        eventStartDate.getEditor().clear();
-        eventStartTime.clear();
-        eventEndDate.getEditor().clear();
-        eventEndTime.clear();
-        memoOptions.getEditor().setText("");
-    }
-
-    private void initDatePicker() {
-        String pattern = "dd/MM/yyyy";
-        StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter =
-                    DateTimeFormatter.ofPattern(pattern);
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
-        };
-        eventStartDate.setConverter(converter);
-        eventEndDate.setConverter(converter);
-    }
-
-    private void displayInvalidDateInput() {
-        errorMsg.setVisible(true);
-        startDateLab.setTextFill(Paint.valueOf("red"));
-        endDateLab.setTextFill(Paint.valueOf("red"));
-        startTimeLab.setTextFill(Paint.valueOf("red"));
-        endTimeLab.setTextFill(Paint.valueOf("red"));
-    }
-
-    private LocalDateTime[] convertToDates(String startInput, String endInput) {
-        String [] startDate = startInput.split("/");
-        String [] endDate = endInput.split("/");
-        String [] startTime = eventStartTime.getText().split(":");
-        String [] endTime = eventEndTime.getText().split(":");
-        LocalDateTime start = LocalDateTime.of(Integer.parseInt(startDate[2]),
-                Integer.parseInt(startDate[1]), Integer.parseInt(startDate[0]),
-                Integer.parseInt(startTime[0]), Integer.parseInt(startTime[1]));
-        LocalDateTime end = LocalDateTime.of(Integer.parseInt(endDate[2]),
-                Integer.parseInt(endDate[1]), Integer.parseInt(endDate[0]),
-                Integer.parseInt(endTime[0]), Integer.parseInt(endTime[1]));
-        return new LocalDateTime[] {start, end};
+        //Initialize to single event creation
+        multipleEvent = true;
+        toggleSeriesCreation();
     }
 
     protected void setTableToModify(TableView<Event> eventTable) {
         this.eventTable = eventTable;
     }
 
-    @FXML private void hideMessage() {
-        errorMsg.setVisible(false);
-        successMsg.setVisible(false);
-        eventNameLab.getStyleClass().add("label");
-        startDateLab.getStyleClass().add("label");
-        endDateLab.getStyleClass().add("label");
-        startTimeLab.getStyleClass().add("label");
-        endTimeLab.getStyleClass().add("label");
-    }
-
-    private boolean hasFormatErrors(String nameInput, String startInput, String endInput) {
-        boolean hasError = false;
-
-        Pattern dateRule = Pattern.compile("^[0-3][0-9]/[01][0-9]/([0-9]+)$");
-        Matcher matchSDate = dateRule.matcher(startInput);
-        Matcher matchEDate = dateRule.matcher(endInput);
-
-        Pattern timeRule = Pattern.compile("^([01][0-9]|2[0-3]):[0-5][0-9]$");
-        Matcher matchSTime = timeRule.matcher(eventStartTime.getText());
-        Matcher matchETime = timeRule.matcher(eventEndTime.getText());
-
-        if (nameInput.equals("")) {
-            eventNameLab.setTextFill(Paint.valueOf("red"));
-            hasError = true;
-        } if (!matchSDate.matches()) {
-            startDateLab.setTextFill(Paint.valueOf("red"));
-            hasError = true;
-        } if (!matchEDate.matches()) {
-            endDateLab.setTextFill(Paint.valueOf("red"));
-            hasError = true;
-        } if (!matchSTime.matches()) {
-            startTimeLab.setTextFill(Paint.valueOf("red"));
-            hasError = true;
-        } if (!matchETime.matches()) {
-            endTimeLab.setTextFill(Paint.valueOf("red"));
-            hasError = true;
+    @FXML private void toggleSeriesCreation() {
+        reset();
+        Node[] singleEventNodes = {eventEndDate, eventEndTime, endDateLab, endTimeLab};
+        Node[] seriesEventNodes = {eventDuration, eventFrequency, numEvents, eventDurLabel,
+                eventFreLabel, eventNumLabel};
+        if (multipleEvent) {
+            for (Node item: seriesEventNodes) {
+                item.setVisible(false);
+            } for (Node item: singleEventNodes) {
+                item.setVisible(true);
+            }
+            eventNameLab.setText("Event Name: *");
+            creationToggler.setText("Set as Series Event");
+            multipleEvent = false;
+        } else {
+            for (Node item: singleEventNodes) {
+                item.setVisible(false);
+            } for (Node item: seriesEventNodes) {
+                item.setVisible(true);
+            }
+            eventNameLab.setText("Series Name: *");
+            creationToggler.setText("Set as Single Event");
+            multipleEvent = true;
         }
-        return hasError;
     }
 
-    private void setEventMemo(Event newEvent) {
-        ArrayList<Event> eventsToAdd = new ArrayList<>();
-        eventsToAdd.add(newEvent);
+    @FXML private void createEvent() throws IOException {
+        resetErrorMessages();
+        //Parse start time
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        String startTime = eventStartDate.getEditor().getText() + " " + eventStartTime.getText();
+        LocalDateTime start = null;
+        try {
+            start = LocalDateTime.parse(startTime, dateFormat);
+        } catch (DateTimeParseException e) {
+            startTimeLab.setTextFill(Paint.valueOf("red"));
+            startDateLab.setTextFill(Paint.valueOf("red"));
+            errorMsg.setText("Invalid Start Date/Time!");
+            errorMsg.setVisible(true);
+        }
+        //Create either single or series event
+        if (eventName.getText().equals("")) {
+            eventNameLab.setTextFill(Paint.valueOf("red"));
+            errorMsg.setText("No Name Specified!");
+            errorMsg.setVisible(true);
+        } else if (multipleEvent && start != null) {
+            createSeriesEvent(start, eventName.getText());
+        } else if (start != null){
+            createSingleEvent(start, eventName.getText(), dateFormat);
+        }
+    }
+
+    private void createSeriesEvent(LocalDateTime start, String seriesName) throws IOException {
+        try {
+            Long dur = parseNumberInput(eventDuration, eventDurLabel);
+            Long fre = parseNumberInput(eventFrequency, eventFreLabel);
+            Long num = parseNumberInput(numEvents, eventNumLabel);
+            getCalendar().addSeries(seriesName, Duration.ofMinutes(dur),
+                    Period.ofDays(fre.intValue()), num.intValue(), start);
+            ArrayList<Event> newSeries = new ArrayList<>(getCalendar().findEventsBySeries(seriesName));
+            eventTable.getItems().addAll(newSeries);
+            setEventMemo(newSeries);
+            getCalendarManager().saveToFile();
+            successMsg.setVisible(true);
+            reset();
+        } catch (NullPointerException n) { errorMsg.setVisible(true);}
+    }
+    //Helper for createSeriesEvent
+    private Long parseNumberInput(TextField numText, Label assocLabel) {
+        String userNumber = numText.getText();
+        try {
+            return Long.parseLong(userNumber);
+        } catch (NumberFormatException n) {
+            assocLabel.setTextFill(Paint.valueOf("red"));
+            errorMsg.setText("Invalid Number Entered!");
+            errorMsg.setVisible(true);
+            return null;
+        }
+    }
+
+    private void createSingleEvent(LocalDateTime start, String evntName, DateTimeFormatter dateFormat) throws IOException {
+        String endTime = eventEndDate.getEditor().getText() + " " + eventEndTime.getText();
+        try {
+            LocalDateTime end = LocalDateTime.parse(endTime, dateFormat);
+            if (start.isAfter(end)) {
+                for (Label l : new Label[]{startDateLab, startTimeLab, endTimeLab, endDateLab}) {
+                    l.setTextFill(Paint.valueOf("red"));
+                }
+                errorMsg.setText("Event ends before it starts!");
+                errorMsg.setVisible(true);
+            } else {
+                Event newEvent = new Event(evntName, start, end);
+                setEventMemo(new ArrayList<>(Collections.singletonList(newEvent)));
+                eventTable.getItems().add(newEvent);
+                getCalendar().addEvent(newEvent);
+                getCalendarManager().saveToFile();
+                successMsg.setVisible(true);
+                reset();
+            }
+        } catch (DateTimeParseException e) {
+            endTimeLab.setTextFill(Paint.valueOf("red"));
+            endDateLab.setTextFill(Paint.valueOf("red"));
+            errorMsg.setText("Invalid End Date/Time!");
+            errorMsg.setVisible(true);
+        }
+    }
+
+    private void setEventMemo(ArrayList<Event> eventsToAdd) {
         String selectedMemo = memoOptions.getValue();
         if (selectedMemo == null) {selectedMemo = "";}
         if (!selectedMemo.equals("") &&
@@ -175,10 +182,36 @@ public class EventCreatorControl extends Controller {
         } else if (memoOptions.getItems().contains(selectedMemo)) {
             for (Memo m : getCalendar().getMyMemos().getMemos()) {
                 if (m.getNote().equals(selectedMemo)) {
-                    newEvent.getMemos().add(m);
+                    for (Event e : eventsToAdd) { e.getMemos().add(m); }
                     break;
                 }
             }
         }
     }
+
+    private void resetErrorMessages() {
+        successMsg.setVisible(false);
+        errorMsg.setText("Invalid Input");
+        errorMsg.setVisible(false);
+        for (Label errorLabel: new Label[]{eventNameLab, startDateLab, startTimeLab, endDateLab,
+                endTimeLab, eventDurLabel, eventFreLabel, eventNumLabel}) {
+            if (getTheme().equals("GUI/Dark.css")) {
+                errorLabel.setTextFill(Paint.valueOf("white"));
+            } else {
+                errorLabel.setTextFill(Paint.valueOf("black"));
+            }
+        }
+    }
+
+    private void reset() {
+        resetErrorMessages();
+        for (TextField field: new TextField[]{eventName, eventStartTime, eventEndTime,
+                eventDuration, eventFrequency, numEvents}) {
+            field.clear();
+        }
+        eventStartDate.getEditor().clear();
+        eventEndDate.getEditor().clear();
+        memoOptions.getEditor().setText("");
+    }
+
 }
