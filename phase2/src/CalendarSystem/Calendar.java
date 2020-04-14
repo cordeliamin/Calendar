@@ -75,6 +75,24 @@ public class Calendar implements Serializable {
         this.deleteAllAlertsforEvent(event);
     }
 
+
+    /**
+     * Recreate an event at additional time/day.
+     * If the event is in a series of event, add the new event to the series.
+     */
+    public void duplicateEvent(Event event, LocalDateTime start, LocalDateTime end) {
+        String name = event.getEventName();
+        Event duplicate = new Event(name, start, end);
+        addEvent(duplicate);
+
+        ArrayList<Series> associateSeries = event.getSeries();
+        if (!associateSeries.isEmpty()) {
+            for (Series s: associateSeries){
+                mySeries.addEvent(s, duplicate);
+            }
+        }
+    }
+
     //methods for finding list of events: by tag, memo or date
 
     /**

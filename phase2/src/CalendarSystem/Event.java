@@ -7,8 +7,8 @@ import java.util.ArrayList;
 public class Event implements Serializable {
 
     private String eventName;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private LocalDateTime startTime = LocalDateTime.MAX;
+    private LocalDateTime endTime = LocalDateTime.MAX;
     private String tag;
 
     /** whether this Event is "past", "ongoing" or "future" */
@@ -17,7 +17,20 @@ public class Event implements Serializable {
     /**
      * A list of memos associated with this Event
      */
-    public static ArrayList<Memo> memos;
+    public static ArrayList<Memo> memos = new ArrayList<>();
+
+    /** A list of series associated with this Event */
+    public static ArrayList<Series> series = new ArrayList<>();
+
+    /**
+     * Constructs an indefinite event.
+     * @param name: name of event
+     */
+    public Event(String name){
+        eventName = name;
+        tag = "";
+        status = "future";
+    }
 
     public Event(String name, LocalDateTime start, LocalDateTime end){
         eventName = name;
@@ -25,7 +38,6 @@ public class Event implements Serializable {
         endTime = end;
         tag = "";
         status = "future";
-        memos = new ArrayList<>();
     }
 
     public String getEventName() {
@@ -52,6 +64,8 @@ public class Event implements Serializable {
 
     public String getStatus() { return this.status; }
 
+    public ArrayList<Series> getSeries() {return series;}
+
     // Edit Event
 
     /**
@@ -68,9 +82,17 @@ public class Event implements Serializable {
 
     public void setEndTime(LocalDateTime newEnd) {this.endTime = newEnd;}
 
+    public void addMemo(Memo memo) {memos.add(memo);}
+
+    public void associateSeries(Series newSeries) {
+        series.add(newSeries);
+    }
+
     public void deleteMemo(Memo memo) {memos.remove(memo);}
 
     public void deleteAllMemos() {memos = new ArrayList<>();}
+
+    public void deleteSeries(Series target) {series.remove(target);}
 
     public void setTag(String tag) { this.tag = tag; }
 

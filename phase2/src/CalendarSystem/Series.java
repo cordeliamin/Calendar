@@ -20,7 +20,6 @@ public class Series implements Serializable {
     public Collection<Event> getEvents(){
         return this.myEvents;
     }
-    public void addEvent(Event e){
-        //TODO: needs to be implemented
-    }
+
+    public void addEvent(Event e) {myEvents.add(e);}
 }
