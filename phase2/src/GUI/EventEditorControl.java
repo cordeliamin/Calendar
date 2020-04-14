@@ -34,7 +34,6 @@ public class EventEditorControl extends Controller{
     @FXML private Label startTimeLab;
     @FXML private Label endDateLab;
     @FXML private Label endTimeLab;
-    @FXML private Button saveChanges;
 
     @Override
     protected void initScreen() {
@@ -76,36 +75,8 @@ public class EventEditorControl extends Controller{
         }
     }
 
-    private void clearFields() {
-        eventName.clear();
-        eventStartDate.getEditor().clear();
-        eventStartTime.clear();
-        eventEndDate.getEditor().clear();
-        eventEndTime.clear();
-    }
-
     private void initDatePicker() {
-        String pattern = "dd/MM/yyyy";
-        StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter =
-                    DateTimeFormatter.ofPattern(pattern);
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
-        };
+        StringConverter<LocalDate> converter = getDateConverter();
         eventStartDate.setConverter(converter);
         eventEndDate.setConverter(converter);
     }

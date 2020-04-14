@@ -65,7 +65,7 @@ public class UserCreatorControl extends Controller {
         if (users.contains(username)) {
             errorIn.setText("This username already exists!");
             return false;
-        } else if (username.equals("")){
+        } else if (username.equals("") || username.contains("_")){
             errorIn.setText("Not a valid username!");
             return false;
         } else {

@@ -96,7 +96,7 @@ public abstract class Controller {
 
     protected StringConverter<LocalDate> getDateConverter(){
         String pattern = "dd/MM/yyyy";
-        StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
+        return new StringConverter<LocalDate>() {
             DateTimeFormatter dateFormatter =
                     DateTimeFormatter.ofPattern(pattern);
             @Override
@@ -116,7 +116,6 @@ public abstract class Controller {
                 }
             }
         };
-        return converter;
     }
 
 
