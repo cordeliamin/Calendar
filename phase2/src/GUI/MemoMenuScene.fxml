@@ -5,7 +5,8 @@
 <?import javafx.scene.text.*?>
 
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
-          prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.MemoMenuControl">
+          prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="GUI.MemoMenuControl">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="784.0" minWidth="10.0" prefWidth="710.0"/>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="445.0" minWidth="10.0" prefWidth="190.0"/>
@@ -14,10 +15,11 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
     </rowConstraints>
     <children>
-        <TableView prefHeight="200.0" prefWidth="200.0">
+        <TableView fx:id="memoTable" prefHeight="200.0" prefWidth="200.0">
             <columns>
-                <TableColumn prefWidth="330.99998474121094" text="Memo"/>
-                <TableColumn minWidth="4.0000152587890625" prefWidth="298.5" text="Associated Event(s)"/>
+                <TableColumn fx:id="memoContent" prefWidth="330.99998474121094" text="Memo"/>
+                <TableColumn fx:id="eventName" minWidth="4.0000152587890625" prefWidth="298.5"
+                             text="Associated Event(s)"/>
             </columns>
             <contextMenu>
                 <ContextMenu>
