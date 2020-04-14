@@ -20,8 +20,9 @@ public class PopUp {
     private int bPad;
     private int rPad;
     private int lPad;
+    private String theme;
 
-    public PopUp(String title) {
+    public PopUp(String title, String theme) {
         this.content = FXCollections.observableList(new ArrayList<>());
         this.title = title;
         this.spacing = 9.0;
@@ -29,10 +30,11 @@ public class PopUp {
         this.bPad = 50;
         this.lPad = 10;
         this.rPad = 20;
+        this.theme = theme;
         this.pop = new Stage();
     }
 
-    public PopUp(String title, double spacing, int tPad, int bPad, int lPad, int rPad) {
+    public PopUp(String title, String theme, double spacing, int tPad, int bPad, int lPad, int rPad) {
         this.content = FXCollections.observableList(new ArrayList<>());
         this.title = title;
         this.spacing = spacing;
@@ -40,6 +42,7 @@ public class PopUp {
         this.bPad = bPad;
         this.lPad = lPad;
         this.rPad = rPad;
+        this.theme = theme;
         this.pop = new Stage();
     }
 
@@ -61,7 +64,7 @@ public class PopUp {
 
         //Set and display scene to new stage
         Scene popUpScene = new Scene(newScene, 300, 200);
-        popUpScene.getStylesheets().add("GUI/Default.css");
+        popUpScene.getStylesheets().add(theme);
 
         pop.setScene(popUpScene);
         pop.showAndWait();

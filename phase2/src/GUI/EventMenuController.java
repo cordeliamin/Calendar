@@ -28,6 +28,7 @@ public class EventMenuController extends Controller {
     @FXML TableView<Event> eventTable;
     @FXML MenuItem linkEventOpt;
     @FXML MenuItem deleteEvent;
+    @FXML MenuItem editEvent;
     @FXML TableColumn<Event, String> eventName;
     @FXML TableColumn<Event, LocalDateTime> eventStart;
     @FXML TableColumn<Event, LocalDateTime> eventEnd;
@@ -61,12 +62,15 @@ public class EventMenuController extends Controller {
             if (change.getList().size() > 1) {
                 linkEventOpt.setVisible(true);
                 deleteEvent.setVisible(true);
+                editEvent.setVisible(false);
             } else if (change.getList().size() == 1) {
                 deleteEvent.setVisible(true);
                 linkEventOpt.setVisible(false);
+                editEvent.setVisible(true);
             } else {
                 linkEventOpt.setVisible(false);
                 deleteEvent.setVisible(false);
+                editEvent.setVisible(false);
             }
         });
     }
@@ -110,7 +114,7 @@ public class EventMenuController extends Controller {
         Label instructions = new Label("Event Series Name:");
         TextField eventsName = new TextField();
         Button createSeries = new Button("Create Series");
-        PopUp linkName = new PopUp("Series Name", 9.0, 40, 50, 10, 20);
+        PopUp linkName = new PopUp("Series Name", getTheme(), 9.0, 40, 50, 10, 20);
         linkName.getContent().addAll(instructions, eventsName, createSeries);
         createSeries.setOnAction(e -> {
             try {
@@ -124,12 +128,37 @@ public class EventMenuController extends Controller {
         linkName.display();
     }
 
-    @FXML private void deleteEvents() {
+    @FXML private void deleteEvents() throws IOException{
         ArrayList<Event> items = new ArrayList<>(eventTable.getSelectionModel().getSelectedItems());
         for (Event e : items) {
             getCalendar().deleteEvent(e);
             eventTable.getItems().remove(e);
         }
+        getCalendarManager().saveToFile();
+    }
+
+    // Edit events
+
+    @FXML private void editEvent() throws IOException {
+
+        Event event = eventTable.getSelectionModel().getSelectedItem();
+
+        //Make New pop up window
+        Stage eventMakerWindow = new Stage();
+        eventMakerWindow.setTitle("Edit Event");
+        eventMakerWindow.initModality(Modality.APPLICATION_MODAL);
+        eventMakerWindow.setResizable(false);
+
+        //Create new scene to display
+        FXMLLoader loader = setNewWindowAndGetLoader("EventEditorScene.fxml",
+                eventMakerWindow, 600, 350);
+
+        //Pass in additional table data
+        EventEditorControl eventEditor = loader.getController();
+        eventEditor.setTableToModify(eventTable);
+        eventEditor.setEventToModify(event);
+
+        eventMakerWindow.showAndWait();
     }
 
     @FXML private void searchForEvent() {

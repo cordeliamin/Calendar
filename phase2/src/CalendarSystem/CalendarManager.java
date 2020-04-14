@@ -8,7 +8,7 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class CalendarManager  {
+public class CalendarManager {
     private Calendar calendar;
     private String filePath;
     private String userPath;
@@ -103,11 +103,58 @@ public class CalendarManager  {
             File[] sample = userData.listFiles();
             if (sample != null) {
                 for (File f: sample) {
-                    userCalendars.add(f.getName().replace(username, "").
-                            replace(".ser", ""));
+                    if (f.getName().contains(username)) {
+                        userCalendars.add(f.getName().replace(username, "").
+                                replace(".ser", ""));
+                    }
                 }
             }
         }
         return userCalendars;
+    }
+
+    public String shareEvent(String name, Event event) throws IOException, ClassNotFoundException {
+        String otherFilePath = this.userPath + name + ".ser";
+        // TODO: make sure this is the right kind of filepath
+        File otherPersonsFile = new File(otherFilePath);
+        if (otherPersonsFile.exists()) {
+            Calendar friendsCalendar = readFromOtherFile(otherPersonsFile);
+            // add to friendCalendar notificationsystem
+            //TODO: make sure this is saving to the ser. file of the other person
+            friendsCalendar.addEventNotification(event);
+            return "Event Shared! Waiting on" + name + "'s" + "response";
+
+
+        } else {
+            return "Friend's account not found";
+        }
+
+    }
+
+
+    public Calendar readFromOtherFile(File file) throws IOException, ClassNotFoundException {
+        InputStream otherFile = new FileInputStream(file);
+        InputStream buffer = new BufferedInputStream(otherFile);
+        ObjectInput input = new ObjectInputStream(buffer);
+        Calendar friendCalendar = (Calendar) input.readObject();
+        input.close();
+        return friendCalendar;
+    }
+
+    public String sendMessage(String name, Memo memo) throws IOException, ClassNotFoundException {
+        String otherFilePath = this.userPath + name + ".ser";
+        // TODO: make sure this is the right kind of filepath
+        File otherPersonsFile = new File(otherFilePath);
+        if (otherPersonsFile.exists()) {
+            Calendar friendsCalendar = readFromOtherFile(otherPersonsFile);
+            // add to friendCalendar notificationsystem
+            friendsCalendar.addMessageNotification(memo);
+            //TODO: How do I know this will be saved in the serialized file of my friend? do I have to save to file?
+            return "Message sent! Waiting on" + name + "'s" + "response";
+        }else{
+            return "Friend's account not found";
+        }
+
+
     }
 }

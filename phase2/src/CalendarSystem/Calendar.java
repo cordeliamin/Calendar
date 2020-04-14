@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Calendar implements Serializable {
     /*
@@ -16,9 +17,10 @@ public class Calendar implements Serializable {
     private MemoSystem myMemos = new MemoSystem();
     private SeriesSystem mySeries = new SeriesSystem();
     private AlertSystem myAlerts = new AlertSystem();
+    private  NotificationSystem notifications = new NotificationSystem();
     public LocalDateTime time = LocalDateTime.now();
 
-    //methods for creating events, alerts
+    //methods for creating events, alerts, memos
     public void addEvent(Event e) {
         myEvents.add(e);
     }
@@ -29,6 +31,10 @@ public class Calendar implements Serializable {
 
     public void addFrequentAlert(Event e, String msg, Duration d) {
         myAlerts.addFrequentAlert(e, msg, d);
+    }
+
+    public void createMemo(List<Event> events, String note) {
+        myMemos.createMemo(events, note);
     }
 
     //methods for deleting events, alerts, memos
@@ -72,7 +78,16 @@ public class Calendar implements Serializable {
     public void changeEventTime(Event event, LocalDateTime start, LocalDateTime end) {
         event.setStartTime(start);
         event.setEndTime(end);
-        this.deleteAllAlertsforEvent(event);
+        updateEventStatus(event);
+        deleteAllAlertsforEvent(event);
+    }
+
+    public void changeEventName(Event event, String new_name) {
+        event.setEventName(new_name);
+    }
+
+    public void changeEventTag(String tag, Event event) {
+        event.setTag(tag);
     }
 
 
@@ -232,13 +247,20 @@ public class Calendar implements Serializable {
 
         // update the status of events
         for (Event event: myEvents) {
-            LocalDate start = event.getStartTime().toLocalDate();
-            LocalDate end = event.getEndTime().toLocalDate();
-            if (date.compareTo(start) >=0 && date.compareTo(end) <= 0 && !event.getStatus().equals("ongoing")) {
-                event.changeStatus("ongoing");
-            } else if (date.compareTo(end) > 0 && !event.getStatus().equals("past")) {
-                event.changeStatus("past");
-            }
+            updateEventStatus(event);
+        }
+    }
+
+    private void updateEventStatus(Event event) {
+
+        LocalDate date1 = time.toLocalDate();
+
+        LocalDate start = event.getStartTime().toLocalDate();
+        LocalDate end = event.getEndTime().toLocalDate();
+        if (date1.compareTo(start) >=0 && date1.compareTo(end) <= 0 && !event.getStatus().equals("ongoing")) {
+            event.changeStatus("ongoing");
+        } else if (date1.compareTo(end) > 0 && !event.getStatus().equals("past")) {
+            event.changeStatus("past");
         }
     }
 
@@ -296,15 +318,16 @@ public class Calendar implements Serializable {
         }
         return s;
     }
-    public void shareEvent(Event e, Calendar friendCalendar ){
-        // I have a couple of questions in regards to this method
-        //1. How are users associated with their calendars
-        // A: their calendars are named <username>_<calendarName>.ser (there will always
-        // be a calendar called default for every user).
-        //2. Should we be passing on an event name, or will the UI be enable our users to select event objects
-        // A: The UI can select Event objects
-        if (this.myEvents.contains(e)) {
-            friendCalendar.addEvent(e);
-        }
+
+    public AlertSystem getMyAlerts() {
+        return myAlerts;
+    }
+
+    public void addEventNotification(Event event){
+        this.notifications.addEvent(event);
+    }
+    public void addMessageNotification(Memo memo){
+        this.notifications.addMessage(memo);
     }
 }
+
