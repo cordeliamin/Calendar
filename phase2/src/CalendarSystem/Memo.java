@@ -2,52 +2,67 @@ package CalendarSystem;
 
 import java.io.Serializable;
 
+/**
+ * Represents a memo.
+ * A memo contains a note and can be associated with one or multiple events.
+ *
+ * @see Event
+ */
 public class Memo implements Serializable {
 
     /**
-     * the id number for this Memo
+     * The id number for this memo.
      */
     private int idNum;
 
     /**
-     * the total number of Memos created
+     * The total number of memos created.
      */
     private static int numOfMemos = 0;
 
     /**
-     * the note this Memo stores
+     * The message that this memo stores.
      */
     private String note;
 
+    /**
+     * Initializes a new Memo object containing the specified note.
+     *
+     * @param note the message to be stored in this memo.
+     */
     public Memo(String note) {
-        numOfMemos++;
+        numOfMemos++; // updates the total number of memos created
         this.idNum = numOfMemos;
         this.note = note;
     }
 
+    /**
+     * Gets the id number of this memo.
+     *
+     * @return this memo's id number.
+     */
     public int getIdNumber() {
         return this.idNum;
     }
 
+    /**
+     * Gets the note stored in this memo.
+     *
+     * @return this memo's note.
+     */
     public String getNote() {
         return this.note;
     }
 
-    // Editing the memo
+    // Methods for editing this memo
 
     /**
-     * Sets this Memo's note to a new note.
-     * @param newNote: the new note to be stored in this Memo
+     * Changes this memo's note to the specified new note.
+     *
+     * @param newNote the new note to be stored in this memo.
      */
     public void setNote(String newNote) {
         this.note = newNote;
-    }
-
-    /**
-     * Adds on a message to this Memo's current note.
-     */
-    public void addToNote(String note1) {
-        this.note += note1;
     }
 
     @Override
@@ -55,6 +70,13 @@ public class Memo implements Serializable {
         return "Memo " + this.idNum + ": " + this.note;
     }
 
-    static public int getNumOfMemos() { return numOfMemos; }
+    /**
+     * Gets the total number of memos created.
+     *
+     * @return the total number of memos created.
+     */
+    static public int getNumOfMemos() {
+        return numOfMemos;
+    }
 
 }
