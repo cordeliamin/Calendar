@@ -122,7 +122,7 @@ public class AlertSystem implements Serializable{
             for (Alert a : this.eventAlertsMap.get(e)) {
                 deleteAlert(a);
             }
-            this.eventAlertsMap.remove(e);
+           removeEvent(e);
         }
     }
 

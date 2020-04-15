@@ -104,7 +104,6 @@ public class Calendar implements Serializable {
     public void deleteEvent(Event e) {
         this.myEvents.remove(e); // removes from this calendar's list of events
         deleteAllMemosforEvent(e); // removes memos for this event from memo system if not associated with any other events
-        this.myAlerts.removeEvent(e); // removes event from alert system
         deleteAllAlertsforEvent(e); // removes all alerts for this event
     }
 
@@ -132,9 +131,9 @@ public class Calendar implements Serializable {
      * @param m a memo in this calendar's memo system.
      */
     public void deleteMemo(Memo m) {
-        this.myMemos.deleteMemo(m);
+        this.myMemos.deleteMemo(m); // deletes memo from memo system
         for (Event e : this.myEvents) {
-            e.deleteMemo(m);
+            e.deleteMemo(m); // deletes memo from events, if present
         }
     }
 
@@ -146,10 +145,10 @@ public class Calendar implements Serializable {
     public void deleteAllMemosforEvent(Event e) {
         for (Memo m : e.getMemos()) {
             if (findEvent(m).size() == 1) {
-                this.myMemos.deleteMemo(m); // removes memo from memo system's memos if not associated with any other event
+                this.myMemos.deleteMemo(m); // removes memo from memo system if not associated with any other event
             }
         }
-        e.deleteAllMemos(); // removes memo from this event's list of memos
+        e.deleteAllMemos(); // removes all memos from this event's stored memos
     }
 
     /**
@@ -161,11 +160,11 @@ public class Calendar implements Serializable {
         return myMemos;
     }
 
-    // Methods for editting events
+    // Methods for editing events
 
     /**
      * Changes date and time of the specified event to the new specified start and end time and date.
-     *
+     * Note: This method also deletes all the alerts for the specified event.
      * @param event an event in this calendar.
      * @param start the new start time for the event.
      * @param end   the new end time for the event.
@@ -174,7 +173,7 @@ public class Calendar implements Serializable {
         event.setStartTime(start);
         event.setEndTime(end);
         updateEventStatus(event);
-        deleteAllAlertsforEvent(event);
+        deleteAllAlertsforEvent(event); // deletes the alerts for the event
     }
 
     /**
@@ -226,7 +225,7 @@ public class Calendar implements Serializable {
         for (Event event : myEvents) {
             LocalDate start = event.getStartTime().toLocalDate();
             LocalDate end = event.getEndTime().toLocalDate();
-            if (date.compareTo(start) >= 0 && date.compareTo(end) <= 0) {
+            if (date.compareTo(start) >= 0 && date.compareTo(end) <= 0) { // checks if date falls between event's start and end time
                 events.add(event);
             }
         }
@@ -329,7 +328,7 @@ public class Calendar implements Serializable {
     }
 
     /**
-     * Gets an event that is stored in this calendar.
+     * Gets an event that is stored in this calendar by specifying its name.
      *
      * @param name: the name of an event; must be the name of an event in this calendar.
      * @return the event with the specified name.
@@ -348,8 +347,7 @@ public class Calendar implements Serializable {
      * Fast-forwards the time of this calendar by one day.
      */
     public void update() {
-        time = time.plus(Period.ofDays(1));
-        LocalDate date = time.toLocalDate();
+        time = time.plus(Period.ofDays(1)); // increases time by one day
 
         // update the status of events
         for (Event event : myEvents) {
