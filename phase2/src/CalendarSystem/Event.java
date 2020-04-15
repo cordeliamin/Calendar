@@ -119,7 +119,7 @@ public class Event implements Serializable {
     /**
      * Changes the status of this event to "past", "ongoing" or "future".
      *
-     * @param newStatus: "past" || "ongoing" || "future"
+     * @param newStatus "past" || "ongoing" || "future"
      */
     public void changeStatus(String newStatus) {
         this.status = newStatus;
