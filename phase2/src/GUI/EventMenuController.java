@@ -16,6 +16,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -170,17 +172,11 @@ public class EventMenuController extends Controller {
             if (getCalendar().getEvent(userInput) != null) {
                 eventTable.getItems().add(getCalendar().getEvent(userInput));
             }
-            if (isDateFormat(userInput)) {
-                String[] date = userInput.split("/");
-                eventTable.getItems().addAll(getCalendar().findEvent(LocalDate.of(
-                        Integer.parseInt(date[2]), Integer.parseInt(date[1]), Integer.parseInt(date[0]))));
-            }
+            try {
+                eventTable.getItems().addAll(getCalendar().findEvent(LocalDate.parse(userInput,
+                        DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+            } catch (DateTimeParseException d) {}
         }
     }
 
-    private Boolean isDateFormat(String date) {
-        Pattern dateRule = Pattern.compile("^[0-3][0-9]/[01][0-9]/([0-9]+)$");
-        Matcher matchDate = dateRule.matcher(date);
-        return matchDate.matches();
-    }
 }
