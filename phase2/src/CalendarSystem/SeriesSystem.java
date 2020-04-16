@@ -21,6 +21,10 @@ public class SeriesSystem implements Serializable {
         }
     }
 
+    public ArrayList<Series> getSeries() {
+        return mySeries;
+    }
+
     //Construct a series given duration, frequency, and number of events
     /**
      * @param d The duration of each event in the series

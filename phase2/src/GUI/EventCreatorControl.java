@@ -117,7 +117,7 @@ public class EventCreatorControl extends Controller {
         }
     }
 
-    private void createSeriesEvent(LocalDateTime start, String seriesName) throws IOException {
+    private void createSeriesEvent(LocalDateTime start, String seriesName) {
         try {
             Long dur = parseNumberInput(eventDuration, eventDurLabel);
             Long fre = parseNumberInput(eventFrequency, eventFreLabel);
@@ -127,7 +127,6 @@ public class EventCreatorControl extends Controller {
             ArrayList<Event> newSeries = new ArrayList<>(getCalendar().findEventsBySeries(seriesName));
             eventTable.getItems().addAll(newSeries);
             setEventMemo(newSeries);
-            getCalendarManager().saveToFile();
             successMsg.setVisible(true);
             reset();
         } catch (NullPointerException n) { errorMsg.setVisible(true);}
@@ -145,7 +144,7 @@ public class EventCreatorControl extends Controller {
         }
     }
 
-    private void createSingleEvent(LocalDateTime start, String evntName, DateTimeFormatter dateFormat) throws IOException {
+    private void createSingleEvent(LocalDateTime start, String evntName, DateTimeFormatter dateFormat) {
         String endTime = eventEndDate.getEditor().getText() + " " + eventEndTime.getText();
         try {
             LocalDateTime end = LocalDateTime.parse(endTime, dateFormat);
@@ -160,7 +159,6 @@ public class EventCreatorControl extends Controller {
                 setEventMemo(new ArrayList<>(Collections.singletonList(newEvent)));
                 eventTable.getItems().add(newEvent);
                 getCalendar().addEvent(newEvent);
-                getCalendarManager().saveToFile();
                 successMsg.setVisible(true);
                 reset();
             }
@@ -177,7 +175,7 @@ public class EventCreatorControl extends Controller {
         if (selectedMemo == null) {selectedMemo = "";}
         if (!selectedMemo.equals("") &&
                 !memoOptions.getItems().contains(selectedMemo)) {
-            getCalendar().getMyMemos().createMemo(eventsToAdd, selectedMemo);
+            getCalendar().createMemo(eventsToAdd, selectedMemo);
             memoOptions.getItems().add(selectedMemo);
         } else if (memoOptions.getItems().contains(selectedMemo)) {
             for (Memo m : getCalendar().getMyMemos().getMemos()) {

@@ -49,8 +49,8 @@ public abstract class Controller {
     }
 
     /*
-     * Additional steps the controller must perform on passed in data
-     * (e.g. Calendar) in order to fully create scene
+     * Additional steps the controller must perform
+     * in order to fully create scene
      */
     protected void initScreen() {}
 
