@@ -144,7 +144,7 @@ public class MemoMenuControl extends Controller {
             successMsg.setVisible(true);
             getCalendar().getMyMemos().createMemo(l, note);
             memoTable.getItems().clear();
-            memoTable.getItems().addAll(getCalendar().getMyMemos().getMemos())
+            memoTable.getItems().addAll(getCalendar().getMyMemos().getMemos());
         }
 
         getCalendarManager().saveToFile();
