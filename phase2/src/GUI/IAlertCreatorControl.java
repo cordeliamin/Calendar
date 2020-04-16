@@ -22,14 +22,22 @@ public class IAlertCreatorControl extends Controller {
     private boolean edit_Mode = false;
     private IndividualAlert alert = null;
     private boolean editted = false;
-    @FXML Label eventNameLabel;
-    @FXML TextField eventName;
-    @FXML Label dateLabel;
-    @FXML DatePicker date;
-    @FXML TextField time;
-    @FXML Label messageLabel;
-    @FXML TextField message;
-    @FXML Button submit;
+    @FXML
+    private Label eventNameLabel;
+    @FXML
+    private TextField eventName;
+    @FXML
+    private Label dateLabel;
+    @FXML
+    private DatePicker date;
+    @FXML
+    private TextField time;
+    @FXML
+    private Label messageLabel;
+    @FXML
+    private TextField message;
+    @FXML
+    private Button submit;
 
     @FXML
     private void initEditMode() {
