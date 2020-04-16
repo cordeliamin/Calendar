@@ -198,20 +198,35 @@ public class Calendar implements Serializable {
         event.setTag(tag);
     }
 
-    //methods for finding list of events: by note, memo or date
+    //methods for finding list of events: by note, tag, memo or date
 
     /**
      * find events by their associated Memo note
      * @param note: the note of the Memo(s) associated with an Event or multiple Events
      * @return A list of events with the input note
      */
-    public ArrayList<Event> findEvent(String note) {
+    public ArrayList<Event> findEventByMemoNote(String note) {
         ArrayList<Event> events = new ArrayList<>();
         for (Event event: myEvents) {
             for (Memo m : event.getMemos()) {
                 if (m.getNote().equals(note)) {
                     events.add(event);
                 }
+            }
+        }
+        return events;
+    }
+
+    /**
+     * find events by their associated tag
+     * @param tag: the tag associated with an Event or multiple Events
+     * @return A list of events with the input tag
+     */
+    public ArrayList<Event> findEvent(String tag) {
+        ArrayList<Event> events = new ArrayList<>();
+        for (Event event: myEvents) {
+            if (event.getTag().equals(tag)) {
+                events.add(event);
             }
         }
         return events;

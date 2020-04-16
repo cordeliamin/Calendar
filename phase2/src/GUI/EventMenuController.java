@@ -183,6 +183,7 @@ public class EventMenuController extends Controller {
         if (!userInput.equals("")) {
             eventTable.getItems().addAll(getCalendar().findEventsBySeries(userInput));
             eventTable.getItems().addAll(getCalendar().findEvent(userInput));
+            eventTable.getItems().addAll(getCalendar().findEventByMemoNote(userInput));
             if (getCalendar().getEvent(userInput) != null) {
                 eventTable.getItems().add(getCalendar().getEvent(userInput));
             }
