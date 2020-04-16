@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Paint;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,15 +24,23 @@ public class MemoMenuControl extends Controller {
     @FXML
     private TableView<Memo> memoTable;
     @FXML
-    MenuItem editMemo;
+    private MenuItem editMemo;
     @FXML
-    MenuItem deleteMemo;
+    private MenuItem deleteMemo;
     @FXML
-    TableColumn<Memo, String> memoContent;
+    private TableColumn<Memo, String> memoContent;
     @FXML
-    ComboBox<Event> events;
+    private ComboBox<Event> events;
     @FXML
-    TextField newMemoNote;
+    private TextField newMemoNote;
+    @FXML
+    private Label successMsg;
+    @FXML
+    private Label errorMsg;
+    @FXML
+    private Label createEventLabel;
+    @FXML
+    private Label newMemoLabel;
 
 
     @FXML
@@ -105,12 +114,29 @@ public class MemoMenuControl extends Controller {
 
     @FXML
     public void createNewMemo() throws IOException {
-        String note = newMemoNote.getText();
+        resetErrorMessages();
 
-        List<Event> l = new ArrayList<>();
-        l.add(events.getValue());
-        events.getValue().getMemos().add(new Memo(note));
 
+        if (newMemoNote.getText() != "" && newMemoNote.getText() != null) {
+            String note = newMemoNote.getText();
+        } else {
+            errorMsg.setTextFill(Paint.valueOf("red"));
+            errorMsg.setVisible(true);
+            newMemoLabel.setTextFill(Paint.valueOf("red"));
+        }
+
+        if (events.getValue() != null) {
+            List<Event> l = new ArrayList<>();
+            l.add(events.getValue());
+            successMsg.setVisible(true);
+        } else {
+            errorMsg.setText("Please select an event!");
+            errorMsg.setTextFill(Paint.valueOf("red"));
+            errorMsg.setVisible(true);
+        }
+
+
+        // events.getValue().getMemos().add(new Memo(note));
 
         getCalendarManager().saveToFile();
 
@@ -133,5 +159,18 @@ public class MemoMenuControl extends Controller {
 //        }
 
 
+    }
+
+    private void resetErrorMessages() {
+        successMsg.setVisible(false);
+        errorMsg.setText("Invalid Input");
+        errorMsg.setVisible(false);
+        for (Label errorLabel : new Label[]{newMemoLabel, createEventLabel, errorMsg, successMsg}) {
+            if (getTheme().equals("GUI/Dark.css")) {
+                errorLabel.setTextFill(Paint.valueOf("white"));
+            } else {
+                errorLabel.setTextFill(Paint.valueOf("black"));
+            }
+        }
     }
 }

@@ -32,13 +32,20 @@
         </columns>
          <contextMenu>
             <ContextMenu>
-              <items>
-                  <MenuItem fx:id="viewEvent" mnemonicParsing="false" onAction="#displayEvent" text="View Event" visible="false" />
-                  <MenuItem mnemonicParsing="false" onAction="#createNewEvent" text="Create New Event" />
-                  <MenuItem fx:id="deleteEvent" mnemonicParsing="false" onAction="#deleteEvents" text="Delete Event" visible="false" />
-                  <MenuItem fx:id="editEvent" mnemonicParsing="false" onAction="#editEvent" text="Edit Event" visible="false" />
-                <MenuItem fx:id="linkEventOpt" mnemonicParsing="false" onAction="#linkEvents" text="Link Events" visible="false" />
-              </items>
+                <items>
+                    <MenuItem fx:id="viewEvent" mnemonicParsing="false" onAction="#displayEvent" text="View Event"
+                              visible="false"/>
+                    <MenuItem mnemonicParsing="false" onAction="#createNewEvent" text="Create New Event"/>
+                    <MenuItem fx:id="deleteEvent" mnemonicParsing="false" onAction="#deleteEvents" text="Delete Event"
+                              visible="false"/>
+                    <MenuItem fx:id="editEvent" mnemonicParsing="false" onAction="#editEvent" text="Edit Event"
+                              visible="false"/>
+                    <MenuItem fx:id="linkEventOpt" mnemonicParsing="false" onAction="#linkEvents" text="Link Events"
+                              visible="false"/>
+                    <MenuItem fx:id="shareEvent" mnemonicParsing="false" onAction="#shareEventWithFriend"
+                              text="Share Events"
+                              visible="false"/>
+                </items>
             </ContextMenu>
          </contextMenu>
       </TableView>
