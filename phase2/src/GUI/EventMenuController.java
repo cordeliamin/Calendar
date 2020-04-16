@@ -24,20 +24,33 @@ import java.util.regex.Pattern;
 
 public class EventMenuController extends Controller {
 
-    @FXML Button returnToMenu;
-    @FXML TextField searchBar;
-    @FXML ChoiceBox<String> eventSort;
-    @FXML TableView<Event> eventTable;
-    @FXML MenuItem linkEventOpt;
-    @FXML MenuItem deleteEvent;
-    @FXML MenuItem editEvent;
-    @FXML MenuItem viewEvent;
-    @FXML MenuItem shareEvent;
-    @FXML TableColumn<Event, String> eventName;
-    @FXML TableColumn<Event, LocalDateTime> eventStart;
-    @FXML TableColumn<Event, LocalDateTime> eventEnd;
+    @FXML
+    private Button returnToMenu;
+    @FXML
+    private TextField searchBar;
+    @FXML
+    private ChoiceBox<String> eventSort;
+    @FXML
+    private TableView<Event> eventTable;
+    @FXML
+    private MenuItem linkEventOpt;
+    @FXML
+    private MenuItem deleteEvent;
+    @FXML
+    private MenuItem editEvent;
+    @FXML
+    private MenuItem viewEvent;
+    @FXML
+    private MenuItem shareEvent;
+    @FXML
+    private TableColumn<Event, String> eventName;
+    @FXML
+    private TableColumn<Event, LocalDateTime> eventStart;
+    @FXML
+    private TableColumn<Event, LocalDateTime> eventEnd;
 
-    @FXML private void goBackToMenu() throws IOException {
+    @FXML
+    private void goBackToMenu() throws IOException {
         setScreen("MainMenuScene.fxml", returnToMenu);
     }
 

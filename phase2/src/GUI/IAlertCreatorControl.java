@@ -17,22 +17,30 @@ import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class IAlertCreatorControl extends Controller {
     private boolean edit_Mode = false;
     private IndividualAlert alert = null;
     private boolean editted = false;
-    @FXML Label eventNameLabel;
-    @FXML TextField eventName;
-    @FXML Label dateLabel;
-    @FXML DatePicker date;
-    @FXML TextField time;
-    @FXML Label messageLabel;
-    @FXML TextField message;
-    @FXML Button submit;
+    @FXML
+    private Label eventNameLabel;
+    @FXML
+    private TextField eventName;
+    @FXML
+    private Label dateLabel;
+    @FXML
+    private DatePicker date;
+    @FXML
+    private TextField time;
+    @FXML
+    private Label messageLabel;
+    @FXML
+    private TextField message;
+    @FXML
+    private Button submit;
 
-    @FXML void initEditMode(){
-        if(edit_Mode){
+    @FXML
+    private void initEditMode() {
+        if (edit_Mode) {
             eventName.setText(alert.getName());
             eventName.setEditable(false);
 
