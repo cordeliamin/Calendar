@@ -103,7 +103,9 @@ public class Calendar implements Serializable {
      */
     public void deleteEvent(Event e) {
         this.myEvents.remove(e); // removes from this calendar's list of events
-        deleteAllMemosforEvent(e); // removes memos for this event from memo system if not associated with any other events
+        if (!(e.getMemos() == null) && !(e.getMemos().isEmpty())) {
+            deleteAllMemosforEvent(e); // removes memos for this event from memo system if not associated with any other events}
+        }
         deleteAllAlertsforEvent(e); // removes all alerts for this event
     }
 
@@ -144,7 +146,7 @@ public class Calendar implements Serializable {
      */
     public void deleteAllMemosforEvent(Event e) {
         for (Memo m : e.getMemos()) {
-            if (findEvent(m).size() == 1) {
+            if (findEvent(m).size() == 1 && !this.myMemos.isEmpty() && !(this.myMemos == null)) {
                 this.myMemos.deleteMemo(m); // removes memo from memo system if not associated with any other event
             }
         }
