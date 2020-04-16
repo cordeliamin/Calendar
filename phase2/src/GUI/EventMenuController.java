@@ -31,6 +31,7 @@ public class EventMenuController extends Controller {
     @FXML MenuItem linkEventOpt;
     @FXML MenuItem deleteEvent;
     @FXML MenuItem editEvent;
+    @FXML MenuItem viewEvent;
     @FXML TableColumn<Event, String> eventName;
     @FXML TableColumn<Event, LocalDateTime> eventStart;
     @FXML TableColumn<Event, LocalDateTime> eventEnd;
@@ -61,18 +62,16 @@ public class EventMenuController extends Controller {
         eventTable.setPlaceholder(new Label("No Events Found"));
         eventTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         eventTable.getSelectionModel().getSelectedItems().addListener((ListChangeListener<Event>) change -> {
+            for (MenuItem option : new MenuItem[] {linkEventOpt, deleteEvent, editEvent, viewEvent}) {
+                option.setVisible(false);
+            }
             if (change.getList().size() > 1) {
                 linkEventOpt.setVisible(true);
                 deleteEvent.setVisible(true);
-                editEvent.setVisible(false);
             } else if (change.getList().size() == 1) {
+                viewEvent.setVisible(true);
                 deleteEvent.setVisible(true);
-                linkEventOpt.setVisible(false);
                 editEvent.setVisible(true);
-            } else {
-                linkEventOpt.setVisible(false);
-                deleteEvent.setVisible(false);
-                editEvent.setVisible(false);
             }
         });
     }
@@ -177,6 +176,21 @@ public class EventMenuController extends Controller {
                         DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
             } catch (DateTimeParseException d) {}
         }
+    }
+
+    @FXML private void displayEvent() throws IOException {
+        Event eventToDisplay = eventTable.getSelectionModel().getSelectedItem();
+        //Make New pop up window
+        Stage window = new Stage();
+        window.setTitle(eventToDisplay.getEventName());
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setResizable(false);
+
+        //Create new scene to display
+        FXMLLoader loader = setNewWindowAndGetLoader("EventViewScene.fxml", window, 600, 350);
+        EventViewControl evc = loader.getController();
+        evc.displayEvent(eventToDisplay);
+        window.showAndWait();
     }
 
 }

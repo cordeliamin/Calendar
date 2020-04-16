@@ -198,19 +198,20 @@ public class Calendar implements Serializable {
         event.setTag(tag);
     }
 
-    // Methods for getting a list of events: by tag, memo or date
+    //methods for finding list of events: by note, memo or date
 
     /**
-     * Gets a list of events in this calendar with the specified tag.
-     *
-     * @param tag: a tag associated with an event or multiple events in this calendar.
-     * @return a list of events with the specified tag.
+     * find events by their associated Memo note
+     * @param note: the note of the Memo(s) associated with an Event or multiple Events
+     * @return A list of events with the input note
      */
-    public ArrayList<Event> findEvent(String tag) {
+    public ArrayList<Event> findEvent(String note) {
         ArrayList<Event> events = new ArrayList<>();
-        for (Event event : myEvents) {
-            if (event.getTag().equals(tag)) {
-                events.add(event);
+        for (Event event: myEvents) {
+            for (Memo m : event.getMemos()) {
+                if (m.getNote().equals(note)) {
+                    events.add(event);
+                }
             }
         }
         return events;
@@ -395,6 +396,21 @@ public class Calendar implements Serializable {
         myAlerts = new AlertSystem();
     }
 
+    /**
+     * Gets all the Series associated with an event.
+     *
+     * @param event an event in this Calendar
+     * @return An ArrayList of all the Series <event> is in.
+     */
+    public ArrayList<Series> getAssociatedSeries(Event event) {
+        ArrayList<Series> assocSeries = new ArrayList<>();
+        for (Series s : mySeries.getSeries()) {
+            if (s.getEvents().contains(event)) {
+                assocSeries.add(s);
+            }
+        }
+        return assocSeries;
+    }
 
     /**
      * Adds a new series using the given parameters to this calendar's series system.
