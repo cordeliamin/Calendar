@@ -43,7 +43,7 @@
                     <MenuItem fx:id="linkEventOpt" mnemonicParsing="false" onAction="#linkEvents" text="Link Events"
                               visible="false"/>
                     <MenuItem fx:id="shareEvent" mnemonicParsing="false" onAction="#shareEventWithFriend"
-                              text="Share Events"
+                              text="Share Event"
                               visible="false"/>
                 </items>
             </ContextMenu>
@@ -82,7 +82,7 @@
                   <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <TextField fx:id="searchBar" prefHeight="35.0" prefWidth="123.0" />
-                        <Button fx:id="searchEvent" mnemonicParsing="false" onAction="#searchForEvent" text="Go" />
+                        <Button mnemonicParsing="false" onAction="#searchForEvent" text="Go" />
                      </children>
                   </HBox>
                </children>
