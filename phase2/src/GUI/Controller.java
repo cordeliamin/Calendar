@@ -20,6 +20,12 @@ public abstract class Controller {
 
     private CalendarManager calendarManager;
 
+    private String theme = "GUI/Light.css";
+
+    protected void setTheme(String theme) {this.theme = theme;}
+
+    protected String getTheme() {return theme;}
+
     protected void setCalendar(CalendarManager calManager) {
         calendarManager = calManager;
     }
@@ -43,10 +49,27 @@ public abstract class Controller {
     }
 
     /*
-     * Additional steps the controller must perform on passed in data
-     * (e.g. Calendar) in order to fully create scene
+     * Additional steps the controller must perform
+     * in order to fully create scene
      */
     protected void initScreen() {}
+
+    /*
+     * Sets the theme of currScene to this controller's theme
+     */
+    protected void setSceneTheme(Scene currScene) {
+        if (theme.equals("GUI/Dark.css")) {
+            currScene.getStylesheets().remove("GUI/Light.css");
+            if (!currScene.getStylesheets().contains("GUI/Dark.css")) {
+                currScene.getStylesheets().add("GUI/Dark.css");
+            }
+        } else if (theme.equals("GUI/Light.css")) {
+            currScene.getStylesheets().remove("GUI/Dark.css");
+            if (!currScene.getStylesheets().contains("GUI/Light.css")) {
+                currScene.getStylesheets().add("GUI/Light.css");
+            }
+        }
+    }
 
     /*
      * Sets Main Screen as described in setScreen() and returns FXML Loader for passing
@@ -62,16 +85,18 @@ public abstract class Controller {
         loader.setLocation(getClass().getResource(fxmlFileName));
         Parent newRoot = loader.load();
         Scene newScreen = new Scene(newRoot, width, height);
+        setSceneTheme(newScreen);
         window.setScene(newScreen);
         Controller controller = loader.getController();
         controller.setCalendar(calendarManager);
+        controller.setTheme(theme);
         controller.initScreen();
         return loader;
     }
 
     protected StringConverter<LocalDate> getDateConverter(){
         String pattern = "dd/MM/yyyy";
-        StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
+        return new StringConverter<LocalDate>() {
             DateTimeFormatter dateFormatter =
                     DateTimeFormatter.ofPattern(pattern);
             @Override
@@ -91,7 +116,6 @@ public abstract class Controller {
                 }
             }
         };
-        return converter;
     }
 
 

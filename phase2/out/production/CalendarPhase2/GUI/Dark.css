@@ -1,7 +1,7 @@
 .root {
     -fx-base: #2c2f33;
     -fx-background: -fx-base;
-    -fx-font-family: "Comic Sans MS", cursive, sans-serif;
+    -fx-font-family: "Segoe UI", cursive, sans-serif;
     -fx-font-size: 16;
     -fx-control-inner-background: #4B4D4F;
     -fx-control-inner-background-alt: #555759;
@@ -62,8 +62,16 @@
 .calendar-event {
     -fx-font-size: 12;
     -fx-text-fill: #ffffff;
-    -fx-background-color: #378522;
-    -fx-background-radius: 8;
+    -fx-background-color: #F37521;
+    -fx-background-radius: 4;
+}
+
+.slider .track{
+    -fx-background-color: #00FF06;
+}
+
+.slider .thumb{
+    -fx-background-color: #ffffff;
 }
 
 .table-view {

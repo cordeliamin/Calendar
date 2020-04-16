@@ -4,80 +4,187 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+/**
+ * Represents an event.
+ * Events are stored in a calendar.
+ *
+ * @see Calendar
+ */
 public class Event implements Serializable {
 
+    /**
+     * The name of this event.
+     */
     private String eventName;
+
+    /**
+     * The start time and date of this event.
+     */
     private LocalDateTime startTime;
+
+    /**
+     * The end time and date of this event.
+     */
     private LocalDateTime endTime;
+
+    /**
+     * A label for this event.
+     */
     private String tag;
 
-    /** whether this Event is "past", "ongoing" or "future" */
+    /**
+     * Whether this Event is "past", "ongoing" or "future"
+     */
     private String status;
 
     /**
-     * A list of memos associated with this Event
+     * A list of memos associated with this Event.
      */
-    public static ArrayList<Memo> memos;
+    private ArrayList<Memo> memos;
 
-    public Event(String name, LocalDateTime start, LocalDateTime end){
+    /**
+     * Initializes a new Event object with the specified name, start time and end time.
+     * A newly created event by default has no memos, no tag and its status is automatically set
+     * to "future".
+     *
+     * @param name  the name of this event.
+     * @param start the start time and date for this event.
+     * @param end   the end time and date for this event.
+     */
+    public Event(String name, LocalDateTime start, LocalDateTime end) {
         eventName = name;
         startTime = start;
         endTime = end;
-        tag = "";
-        status = "future";
-        memos = new ArrayList<>();
+        tag = "";  // default tag is an empty string
+        status = "future"; // default status is "future"
+        memos = new ArrayList<>(); // has no memos
     }
 
+    /**
+     * Gets the name of this event.
+     *
+     * @return this event's name.
+     */
     public String getEventName() {
         return eventName;
     }
 
+    /**
+     * Gets the start time and date of this event.
+     *
+     * @return the start time and date of this event.
+     */
     public LocalDateTime getStartTime() {
         return startTime;
     }
 
+    /**
+     * Gets the end time and date of this event.
+     *
+     * @return the end time and date of this event.
+     */
     public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public ArrayList<Memo> getMemos() { return memos; }
-
-    public void viewMemos() {
-        for (Memo memo:memos) {
-            System.out.println(memo);
-        }
+    /**
+     * Gets the list of memos associated with this event.
+     *
+     * @return the list of memos associated with this event.
+     */
+    public ArrayList<Memo> getMemos() {
+        return memos;
     }
 
-    public String getTag() { return this.tag; }
-
-    public String getStatus() { return this.status; }
-
-    // Edit Event
+    /**
+     * Gets the tag for this event.
+     *
+     * @return this event's tag.
+     */
+    public String getTag() {
+        return this.tag;
+    }
 
     /**
-     * change the status of this Event to "past", "ongoing" or "future"
-     * @param newStatus: "past" || "ongoing" || "future"
+     * Returns whether this event is "past", "ongoing" or "future".
+     *
+     * @return "past" || "ongoing" || "future"
+     */
+    public String getStatus() {
+        return this.status;
+    }
+
+    // Methods for editing this event
+
+    /**
+     * Changes the status of this event to "past", "ongoing" or "future".
+     *
+     * @param newStatus "past" || "ongoing" || "future"
      */
     public void changeStatus(String newStatus) {
         this.status = newStatus;
     }
 
-    public void setEventName(String newName) {this.eventName = newName;}
+    /**
+     * Changes this event's name to the specified new name.
+     *
+     * @param newName the new name for this event.
+     */
+    public void setEventName(String newName) {
+        this.eventName = newName;
+    }
 
-    public void setStartTime(LocalDateTime newStart) {this.startTime = newStart;}
+    /**
+     * Changes the start time and date for this event to the specified new start time
+     * and date.
+     *
+     * @param newStart the new start time and date for this event.
+     */
+    public void setStartTime(LocalDateTime newStart) {
+        this.startTime = newStart;
+    }
 
-    public void setEndTime(LocalDateTime newEnd) {this.endTime = newEnd;}
+    /**
+     * Changes the end time and date for this event to the specified new end time
+     * and date.
+     *
+     * @param newEnd the new end time and date for this event.
+     */
+    public void setEndTime(LocalDateTime newEnd) {
+        this.endTime = newEnd;
+    }
 
-    public void deleteMemo(Memo memo) {memos.remove(memo);}
+    /**
+     * Removes the specified memo from this event's list of memos, if it is present.
+     *
+     * @param memo a memo associated with this event.
+     */
+    public void deleteMemo(Memo memo) {
+        memos.remove(memo);
+    }
 
-    public void deleteAllMemos() {memos = new ArrayList<>();}
+    /**
+     * Removes all the memos from this event's list of memos.
+     */
+    public void deleteAllMemos() {
+        memos = new ArrayList<>();
+    }
 
-    public void setTag(String tag) { this.tag = tag; }
+    /**
+     * Sets the tag for this event.
+     *
+     * @param tag the label for this event.
+     */
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
-    public String toString(){
+    @Override
+    public String toString() {
         return this.eventName + "\t" + this.startTime.toString() + " to " + this.endTime.toString();
     }
-    public void associateSeries(Series s){
+
+    public void associateSeries(Series s) {
         // TODO: yet to be implemented
     }
 }

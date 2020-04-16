@@ -5,7 +5,6 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -16,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@Default.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.EventMenuController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.EventMenuController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="694.4000061035156" minWidth="10.0" prefWidth="694.4000061035156" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="282.4000244140625" minWidth="10.0" prefWidth="41.59999389648442" />
@@ -34,15 +33,10 @@
          <contextMenu>
             <ContextMenu>
               <items>
+                  <MenuItem fx:id="viewEvent" mnemonicParsing="false" onAction="#displayEvent" text="View Event" visible="false" />
                   <MenuItem mnemonicParsing="false" onAction="#createNewEvent" text="Create New Event" />
                   <MenuItem fx:id="deleteEvent" mnemonicParsing="false" onAction="#deleteEvents" text="Delete Event" visible="false" />
-                  <Menu fx:id="editEvent" mnemonicParsing="false" text="Edit Event">
-                    <items>
-                      <MenuItem fx:id="editEventName" mnemonicParsing="false" onAction="#setEditEventName" text="Change name" />
-                        <MenuItem fx:id="editEventTime" mnemonicParsing="false" onAction="#setEditEventTime" text="Change Date/Time" />
-                        <MenuItem fx:id="editEventTag" mnemonicParsing="false" onAction="#setEditEventTag" text="Change tag" />
-                    </items>
-                  </Menu>
+                  <MenuItem fx:id="editEvent" mnemonicParsing="false" onAction="#editEvent" text="Edit Event" visible="false" />
                 <MenuItem fx:id="linkEventOpt" mnemonicParsing="false" onAction="#linkEvents" text="Link Events" visible="false" />
               </items>
             </ContextMenu>
