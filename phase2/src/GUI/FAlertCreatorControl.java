@@ -55,16 +55,17 @@ public class FAlertCreatorControl extends Controller {
     }
 
     @FXML private void submit() {
-        if (!hasformaterrors()) {
+        if (!hasFormatErrors()) {
             Calendar calendar = getCalendar();
             String eventNameVal = eventName.getText();
             int frequencyVal = Integer.parseInt(frequency.getText());
             String messageVal = message.getText();
             String unitVal = unit.getValue();
             Duration durationVal;
-            try{
-                switch (unitVal){
-                    case "day(s)": durationVal = Duration.ofDays(frequencyVal);
+            try {
+                switch (unitVal) {
+                    case "day(s)":
+                        durationVal = Duration.ofDays(frequencyVal);
                         break;
                     case "hour(s)": durationVal = Duration.ofHours(frequencyVal);
                         break;
@@ -92,13 +93,14 @@ public class FAlertCreatorControl extends Controller {
 
     }
 
-    private boolean hasformaterrors(){
+    private boolean hasFormatErrors() {
         Calendar calendar = getCalendar();
         boolean result = false;
-        if(!calendar.getEventNames().contains(eventName.getText())){
+        if (!calendar.getEventNames().contains(eventName.getText())) {
             eventNameLabel.setTextFill(Paint.valueOf("red"));
             result = true;
-        } if (message.getText().equals("")){
+        }
+        if (message.getText().equals("")) {
             messageLabel.setTextFill(Paint.valueOf("red"));
             result = true;
         }

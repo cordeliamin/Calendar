@@ -17,7 +17,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class IAlertCreatorControl extends Controller {
     private boolean edit_Mode = false;
     private IndividualAlert alert = null;
