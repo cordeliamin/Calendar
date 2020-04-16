@@ -197,7 +197,19 @@ public class Event implements Serializable {
         return this.eventName + "\t" + this.startTime.toString() + " to " + this.endTime.toString();
     }
 
+    /**
+     * Update the list of associated series.
+     * @param s new series associated.
+     */
     public void associateSeries(Series s) {
-        // TODO: yet to be implemented
+        series.add(s);
+    }
+
+    /**
+     * Get the list of associated series to this event.
+     * @return list of associated series
+     */
+    public ArrayList<Series> getSeries() {
+        return series;
     }
 }
