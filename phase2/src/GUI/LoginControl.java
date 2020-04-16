@@ -17,8 +17,10 @@ import CalendarSystem.CalendarManager;
 
 public class LoginControl extends Controller {
 
-    @FXML private Label errorIn;
-    @FXML private TextField userInfo;
+    @FXML
+    private Label errorIn;
+    @FXML
+    private TextField userInfo;
     @FXML
     private PasswordField passInfo;
     @FXML

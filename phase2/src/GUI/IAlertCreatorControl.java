@@ -31,8 +31,9 @@ public class IAlertCreatorControl extends Controller {
     @FXML TextField message;
     @FXML Button submit;
 
-    @FXML void initEditMode(){
-        if(edit_Mode){
+    @FXML
+    private void initEditMode() {
+        if (edit_Mode) {
             eventName.setText(alert.getName());
             eventName.setEditable(false);
 
