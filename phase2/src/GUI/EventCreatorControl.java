@@ -35,8 +35,10 @@ public class EventCreatorControl extends Controller {
     //Single event specific
     @FXML private DatePicker eventEndDate;
     @FXML private TextField eventEndTime;
+    @FXML private TextField eventTag;
     @FXML private Label endDateLab;
     @FXML private Label endTimeLab;
+    @FXML private Label eventTagLab;
 
     //Series Event specific
     @FXML private TextField eventDuration;
@@ -67,7 +69,7 @@ public class EventCreatorControl extends Controller {
 
     @FXML private void toggleSeriesCreation() {
         reset();
-        Node[] singleEventNodes = {eventEndDate, eventEndTime, endDateLab, endTimeLab};
+        Node[] singleEventNodes = {eventEndDate, eventEndTime, endDateLab, endTimeLab, eventTagLab, eventTag};
         Node[] seriesEventNodes = {eventDuration, eventFrequency, numEvents, eventDurLabel,
                 eventFreLabel, eventNumLabel};
         if (multipleEvent) {
@@ -158,6 +160,9 @@ public class EventCreatorControl extends Controller {
             } else {
                 Event newEvent = new Event(evntName, start, end);
                 setEventMemo(new ArrayList<>(Collections.singletonList(newEvent)));
+                if (!eventTag.getText().equals("")) {
+                    newEvent.setTag(eventTag.getText());
+                }
                 eventTable.getItems().add(newEvent);
                 getCalendar().addEvent(newEvent);
                 successMsg.setVisible(true);

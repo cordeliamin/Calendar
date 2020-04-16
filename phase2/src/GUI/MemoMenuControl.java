@@ -83,6 +83,7 @@ public class MemoMenuControl extends Controller {
                 viewEvents.setVisible(false);
             }
         });
+
     }
 
     @FXML
@@ -141,31 +142,13 @@ public class MemoMenuControl extends Controller {
             List<Event> l = new ArrayList<>();
             l.add(events.getValue());
             successMsg.setVisible(true);
-            // create memo method here
-
-            // Uncomment below after new memo is created
-            // memoTable.getItems().add(newMemo);
+            getCalendar().getMyMemos().createMemo(l, note);
+            memoTable.getItems().clear();
+            memoTable.getItems().addAll(getCalendar().getMyMemos().getMemos())
         }
-
-        // events.getValue().getMemos().add(new Memo(note));
 
         getCalendarManager().saveToFile();
 
-
-//        if (!selectedEvent.equals("") &&
-//                !memoOptions.getItems().contains(selectedMemo)) {
-//            getCalendar().getMyMemos().createMemo(eventsToAdd, selectedMemo);
-//            memoOptions.getItems().add(selectedMemo);
-//        } else if (memoOptions.getItems().contains(selectedMemo)) {
-//            for (Memo m : getCalendar().getMyMemos().getMemos()) {
-//                if (m.getNote().equals(selectedMemo)) {
-//                    for (Event e : eventsToAdd) {
-//                        e.getMemos().add(m);
-//                    }
-//                    break;
-//                }
-//            }
-//        }
 
     }
 
