@@ -1014,7 +1014,7 @@ public class Menus extends JFrame {
                     Integer.parseInt(eventStartTime.getText().substring(3)));
 
             Event event = new Event(name, start, end);
-            event.memos.add(memo);
+            //event.memos.add(memo);
             myCalendar.addEvent(event);
 
             //save myCalendar instance

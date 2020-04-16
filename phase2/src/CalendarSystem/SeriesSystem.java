@@ -36,6 +36,10 @@ public class SeriesSystem implements Serializable {
         }
     }
 
+    public ArrayList<Series> getSeries() {
+        return mySeries;
+    }
+
     /**
      * Constructs a new Series object using the specified duration, frequency,
      * number of events and dateTime of the first event in the series, and stores

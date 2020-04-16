@@ -5,29 +5,45 @@ import CalendarSystem.Memo;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Paint;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MemoMenuControl extends Controller {
 
-    @FXML
-    private Button createMemo;
     @FXML
     private Button returnToMenu;
     @FXML
     private TableView<Memo> memoTable;
     @FXML
-    MenuItem editMemo;
+    private MenuItem editMemo;
     @FXML
-    MenuItem deleteMemo;
+    private MenuItem deleteMemo;
     @FXML
-    TableColumn<Memo, String> memoContent;
+    private MenuItem viewEvents;
     @FXML
-    ChoiceBox<String> eventSort;
+    private TableColumn<Memo, String> memoContent;
+    @FXML
+    private ComboBox<Event> events;
+    @FXML
+    private TextField newMemoNote;
+    @FXML
+    private Label successMsg;
+    @FXML
+    private Label errorMsg;
+    @FXML
+    private Label createEventLabel;
+    @FXML
+    private Label newMemoLabel;
 
 
     @FXML
@@ -39,12 +55,13 @@ public class MemoMenuControl extends Controller {
     protected void initScreen() {
         //Populate memoTable
         memoContent.setCellValueFactory(new PropertyValueFactory<>("note"));
-
         ObservableList<Memo> memoTableItems = FXCollections.observableArrayList();
         memoTableItems.addAll(getCalendar().getMyMemos().getMemos());
         memoTable.setItems(memoTableItems);
+        for (Event e : getCalendar().getMyEvents()) {
+            events.getItems().add(e);
+        }
         initSelectionSettings();
-
     }
 
     private void initSelectionSettings() {
@@ -55,12 +72,15 @@ public class MemoMenuControl extends Controller {
             if (change.getList().size() == 1) {
                 deleteMemo.setVisible(true);
                 editMemo.setVisible(true);
+                viewEvents.setVisible(true);
             } else if (change.getList().size() > 1) {
                 deleteMemo.setVisible(true);
                 editMemo.setVisible(false);
+                viewEvents.setVisible(false);
             } else {
                 deleteMemo.setVisible(false);
                 editMemo.setVisible(false);
+                viewEvents.setVisible(false);
             }
         });
     }
@@ -98,5 +118,97 @@ public class MemoMenuControl extends Controller {
         getCalendarManager().saveToFile();
     }
 
+    @FXML
+    public void createNewMemo() throws IOException {
+        resetErrorMessages();
 
+        if (newMemoNote.getText().equals("")) {
+            errorMsg.setText("Memo cannot be empty!");
+            errorMsg.setTextFill(Paint.valueOf("red"));
+            errorMsg.setVisible(true);
+            newMemoLabel.setTextFill(Paint.valueOf("red"));
+        }
+
+        if (events.getValue() == null) {
+            errorMsg.setText("Please select an event!");
+            errorMsg.setTextFill(Paint.valueOf("red"));
+            createEventLabel.setTextFill(Paint.valueOf("red"));
+            errorMsg.setVisible(true);
+        }
+
+        if (!newMemoNote.getText().equals("") && events.getValue() != null) {
+            String note = newMemoNote.getText();
+            List<Event> l = new ArrayList<>();
+            l.add(events.getValue());
+            successMsg.setVisible(true);
+            // create memo method here
+        }
+
+        // events.getValue().getMemos().add(new Memo(note));
+
+        getCalendarManager().saveToFile();
+
+
+//        if (!selectedEvent.equals("") &&
+//                !memoOptions.getItems().contains(selectedMemo)) {
+//            getCalendar().getMyMemos().createMemo(eventsToAdd, selectedMemo);
+//            memoOptions.getItems().add(selectedMemo);
+//        } else if (memoOptions.getItems().contains(selectedMemo)) {
+//            for (Memo m : getCalendar().getMyMemos().getMemos()) {
+//                if (m.getNote().equals(selectedMemo)) {
+//                    for (Event e : eventsToAdd) {
+//                        e.getMemos().add(m);
+//                    }
+//                    break;
+//                }
+//            }
+//        }
+
+    }
+
+    @FXML private void viewRelatedEvents() {
+        Memo selectedMemo = memoTable.getSelectionModel().getSelectedItem();
+        Label eventsForMemo = new Label("Events for this memo:");
+        ListView<Event> relatedEvents = new ListView<>();
+        relatedEvents.getItems().addAll(getCalendar().findEvent(selectedMemo));
+        relatedEvents.setOnMouseClicked(e -> {
+            ObservableList<Event> eventsToView = relatedEvents.getSelectionModel().getSelectedItems();
+            if (eventsToView.size() == 1 ) {
+                try {
+                    createEventView(eventsToView.get(0));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        PopUp eventViewer = new PopUp("Event Viewer", getTheme(), 6.0, 10, 10, 15, 15);
+        eventViewer.getContent().addAll(eventsForMemo, relatedEvents);
+        eventViewer.display();
+    }
+
+    private void createEventView(Event event) throws IOException {
+        Stage window = new Stage();
+        window.setTitle(event.getEventName());
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setResizable(false);
+
+        //Create new scene to display
+        FXMLLoader loader = setNewWindowAndGetLoader("EventViewScene.fxml", window, 600, 350);
+        EventViewControl evc = loader.getController();
+        evc.displayEvent(event);
+        window.showAndWait();
+    }
+
+    private void resetErrorMessages() {
+        successMsg.setVisible(false);
+        errorMsg.setText("Invalid Input");
+        errorMsg.setVisible(false);
+        for (Label errorLabel : new Label[]{newMemoLabel, createEventLabel, errorMsg, successMsg}) {
+            if (getTheme().equals("GUI/Dark.css")) {
+                errorLabel.setTextFill(Paint.valueOf("white"));
+            } else {
+                errorLabel.setTextFill(Paint.valueOf("black"));
+            }
+        }
+    }
 }

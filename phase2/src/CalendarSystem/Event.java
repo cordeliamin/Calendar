@@ -40,7 +40,7 @@ public class Event implements Serializable {
     /**
      * A list of memos associated with this Event.
      */
-    public static ArrayList<Memo> memos;
+    private ArrayList<Memo> memos;
 
     /**
      * Initializes a new Event object with the specified name, start time and end time.
