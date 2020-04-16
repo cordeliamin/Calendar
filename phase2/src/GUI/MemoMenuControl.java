@@ -142,6 +142,9 @@ public class MemoMenuControl extends Controller {
             l.add(events.getValue());
             successMsg.setVisible(true);
             // create memo method here
+
+            // Uncomment below after new memo is created
+            // memoTable.getItems().add(newMemo);
         }
 
         // events.getValue().getMemos().add(new Memo(note));
