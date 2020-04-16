@@ -119,7 +119,7 @@ public class MemoMenuControl extends Controller {
     }
 
     @FXML
-    public void createNewMemo() throws IOException {
+    private void createNewMemo() throws IOException {
         resetErrorMessages();
 
         if (newMemoNote.getText().equals("")) {
@@ -176,7 +176,6 @@ public class MemoMenuControl extends Controller {
         window.setTitle(event.getEventName());
         window.initModality(Modality.APPLICATION_MODAL);
         window.setResizable(false);
-
         //Create new scene to display
         FXMLLoader loader = setNewWindowAndGetLoader("EventViewScene.fxml", window, 600, 350);
         EventViewControl evc = loader.getController();

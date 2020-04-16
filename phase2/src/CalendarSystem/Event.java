@@ -42,6 +42,19 @@ public class Event implements Serializable {
      */
     private ArrayList<Memo> memos;
 
+    /** A list of series associated with this Event */
+    public static ArrayList<Series> series = new ArrayList<>();
+
+    /**
+     * Constructs an indefinite event.
+     * @param name: name of event
+     */
+    public Event(String name){
+        eventName = name;
+        tag = "";
+        status = "future";
+    }
+
     /**
      * Initializes a new Event object with the specified name, start time and end time.
      * A newly created event by default has no memos, no tag and its status is automatically set
@@ -184,7 +197,19 @@ public class Event implements Serializable {
         return this.eventName + "\t" + this.startTime.toString() + " to " + this.endTime.toString();
     }
 
+    /**
+     * Update the list of associated series.
+     * @param s new series associated.
+     */
     public void associateSeries(Series s) {
-        // TODO: yet to be implemented
+        series.add(s);
+    }
+
+    /**
+     * Get the list of associated series to this event.
+     * @return list of associated series
+     */
+    public ArrayList<Series> getSeries() {
+        return series;
     }
 }

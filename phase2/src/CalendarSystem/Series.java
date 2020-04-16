@@ -54,7 +54,5 @@ public class Series implements Serializable {
      *
      * @param e the event to be added to the series.
      */
-    public void addEvent(Event e) {
-        //TODO: needs to be implemented
-    }
+    public void addEvent(Event e) {myEvents.add(e);}
 }

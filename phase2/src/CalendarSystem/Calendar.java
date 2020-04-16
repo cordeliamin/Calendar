@@ -198,27 +198,28 @@ public class Calendar implements Serializable {
         event.setTag(tag);
     }
 
-    //methods for finding list of events: by note, tag, memo or date
 
     /**
-     * find events by their associated Memo note
-     * @param note: the note of the Memo(s) associated with an Event or multiple Events
-     * @return A list of events with the input note
+     * Recreate an event at additional time/day.
+     * If the event is in a series of event, add the new event to the series.
      */
-    public ArrayList<Event> findEventByMemoNote(String note) {
-        ArrayList<Event> events = new ArrayList<>();
-        for (Event event: myEvents) {
-            for (Memo m : event.getMemos()) {
-                if (m.getNote().equals(note)) {
-                    events.add(event);
-                }
+    public void duplicateEvent(Event event, LocalDateTime start, LocalDateTime end) {
+        String name = event.getEventName();
+        Event duplicate = new Event(name, start, end);
+        addEvent(duplicate);
+
+        ArrayList<Series> associateSeries = event.getSeries();
+        if (!associateSeries.isEmpty()) {
+            for (Series s: associateSeries){
+                mySeries.addEvent(s, duplicate);
             }
         }
-        return events;
     }
 
+    //methods for finding list of events: by tag, memo or date
+
     /**
-     * find events by their associated tag
+     * find events by their tag
      * @param tag: the tag associated with an Event or multiple Events
      * @return A list of events with the input tag
      */
@@ -233,17 +234,16 @@ public class Calendar implements Serializable {
     }
 
     /**
-     * Gets a list of events in this calendar that take place on the specified date.
-     *
-     * @param date: any date.
-     * @return a list of events that are happening on the specified date.
+     * find events by date
+     * @param date: date of event
+     * @return A list of events that are happening during the input date
      */
     public ArrayList<Event> findEvent(LocalDate date) {
         ArrayList<Event> events = new ArrayList<>();
-        for (Event event : myEvents) {
+        for (Event event: myEvents) {
             LocalDate start = event.getStartTime().toLocalDate();
             LocalDate end = event.getEndTime().toLocalDate();
-            if (date.compareTo(start) >= 0 && date.compareTo(end) <= 0) { // checks if date falls between event's start and end time
+            if (date.compareTo(start) >=0 && date.compareTo(end) <= 0) {
                 events.add(event);
             }
         }
@@ -251,15 +251,14 @@ public class Calendar implements Serializable {
     }
 
     /**
-     * Gets a list of events that are associated with the specified memo.
-     *
-     * @param memo: a memo associated with an event or multiple events in this calendar.
-     * @return a list of events which have the specified memo.
+     * find events by their memo
+     * @param memo: a memo associated with an event or multiple events
+     * @return A list of events which have the input memo
      */
     public ArrayList<Event> findEvent(Memo memo) {
         ArrayList<Event> events = new ArrayList<>();
-        for (Event event : myEvents) {
-            for (Memo memo1 : event.getMemos()) {
+        for (Event event: myEvents) {
+            for (Memo memo1:event.getMemos()) {
                 if (memo1 == memo) {
                     events.add(event);
                 }
@@ -268,7 +267,7 @@ public class Calendar implements Serializable {
         return events;
     }
 
-    // Methods for getting a list of events: past, current or future
+    //methods for getting list of events: past, current or future
 
     /**
      * Gets the list of events stored in this calendar.
