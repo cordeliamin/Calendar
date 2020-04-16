@@ -8,6 +8,13 @@ public class AlertSystemData {
     private String message;
     private String type;
 
+    /**
+     * AlertSystemData for GUI purposes
+     * @param d datetime of the alert appear time
+     * @param e name of the associated event
+     * @param m message content of alert
+     * @param t type of the alert, 'f' for frequent, 'i' for individual
+     */
     public AlertSystemData(LocalDateTime d, String e, String m, String t){
         time = d;
         eventName = e;
@@ -15,6 +22,7 @@ public class AlertSystemData {
         type = t;
     }
 
+    //getters and setters for display purposes
     public LocalDateTime getTime() {
         return time;
     }

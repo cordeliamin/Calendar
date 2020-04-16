@@ -42,8 +42,6 @@
             <Cursor fx:constant="TEXT" />
          </cursor>
       </TextField>
-      <Label fx:id="eventTagLab" text="Tag:" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-      <TextField fx:id="eventTag" GridPane.columnIndex="2" GridPane.rowIndex="7" />
       <Button fx:id="saveChanges" mnemonicParsing="false" onAction="#editEvent" text="Save" GridPane.halignment="LEFT" GridPane.rowIndex="8">
          <cursor>
             <Cursor fx:constant="HAND" />

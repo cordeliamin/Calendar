@@ -40,7 +40,7 @@ public class Event implements Serializable {
     /**
      * A list of memos associated with this Event.
      */
-    public static ArrayList<Memo> memos;
+    private ArrayList<Memo> memos;
 
     /** A list of series associated with this Event */
     public static ArrayList<Series> series = new ArrayList<>();
@@ -132,7 +132,7 @@ public class Event implements Serializable {
     /**
      * Changes the status of this event to "past", "ongoing" or "future".
      *
-     * @param newStatus: "past" || "ongoing" || "future"
+     * @param newStatus "past" || "ongoing" || "future"
      */
     public void changeStatus(String newStatus) {
         this.status = newStatus;

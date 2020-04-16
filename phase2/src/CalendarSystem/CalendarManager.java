@@ -8,23 +8,41 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * CalendarManager is a class that is user-specific and handles the creation and storage of the user's calendar(s).
+ * It is also responsible for saving the user's calendar information to a .ser file.
+ */
 public class CalendarManager {
+
+    /**
+     * The user's selected calendar.
+     */
     private Calendar calendar;
+
+    /**
+     * The name of the file containing the user's selected calendar.
+     */
     private String filePath;
+
+    /**
+     * The name of the user.
+     */
     private String userPath;
+
     private static final Logger logger = Logger.getLogger(CalendarManager.class.getName());
     private static final Handler consoleHandler = new ConsoleHandler();
 
     /**
-     * Creates a new empty initialBuild.CalendarManager.
+     * Creates a new empty initialBuild.CalendarManager with the specified filePath as the username.
      *
+     * @param filePath the name of the user.
      * @throws IOException
      * @throws ClassNotFoundException
      */
     public CalendarManager(String filePath) throws ClassNotFoundException, IOException {
         this.calendar = new Calendar();
         this.userPath = filePath;
-        this.filePath = filePath + "default.ser";
+        this.filePath = filePath + "default.ser"; // default name of calendar
 
         // Associate the handler with the logger.
         logger.setLevel(Level.ALL);
@@ -41,6 +59,14 @@ public class CalendarManager {
         }
     }
 
+    /**
+     * Creates another calendar for the user with the specified name.
+     * Note: This does not replace the user's default calendar, but is
+     * another calendar added to the user's set of calendars.
+     *
+     * @param name the name of the new calendar.
+     * @throws IOException
+     */
     public void createCalendar(String name) throws IOException {
         saveToFile();
         this.filePath = this.userPath + name + ".ser";
@@ -50,7 +76,14 @@ public class CalendarManager {
         saveToFile();
     }
 
-    public void selectCalendar(String name) throws ClassNotFoundException, IOException{
+    /**
+     * Changes the user's selected calendar to that with the specified name and reads from its file.
+     *
+     * @param name the name of one of the user's calendars
+     * @throws ClassNotFoundException
+     * @throws IOException
+     */
+    public void selectCalendar(String name) throws ClassNotFoundException, IOException {
         saveToFile();
         this.filePath = this.userPath + name + ".ser";
         File file = new File(filePath);
@@ -61,6 +94,11 @@ public class CalendarManager {
         }
     }
 
+    /**
+     * Reads from the file storing the user's calendar information.
+     *
+     * @throws ClassNotFoundException
+     */
     public void readFromFile() throws ClassNotFoundException {
         try {
             InputStream file = new FileInputStream(filePath);
@@ -91,10 +129,20 @@ public class CalendarManager {
         output.close();
     }
 
-    public Calendar getCalendar(){
+    /**
+     * Gets this user's selected calendar.
+     *
+     * @return a calendar belonging to the user.
+     */
+    public Calendar getCalendar() {
         return this.calendar;
     }
 
+    /**
+     * Gets a list of names of this user's calendars.
+     *
+     * @return the list of names of this user's calendars.
+     */
     public ArrayList<String> getUserCalendars() {
         File userData = new File("user_data");
         String username = userPath.substring(12);
@@ -102,7 +150,7 @@ public class CalendarManager {
         if (userData.isDirectory()) {
             File[] sample = userData.listFiles();
             if (sample != null) {
-                for (File f: sample) {
+                for (File f : sample) {
                     if (f.getName().contains(username)) {
                         userCalendars.add(f.getName().replace(username, "").
                                 replace(".ser", ""));
@@ -113,48 +161,29 @@ public class CalendarManager {
         return userCalendars;
     }
 
-    public String shareEvent(String name, Event event) throws IOException, ClassNotFoundException {
-        String otherFilePath = this.userPath + name + ".ser";
-        // TODO: make sure this is the right kind of filepath
-        File otherPersonsFile = new File(otherFilePath);
-        if (otherPersonsFile.exists()) {
-            Calendar friendsCalendar = readFromOtherFile(otherPersonsFile);
-            // add to friendCalendar notificationsystem
-            //TODO: make sure this is saving to the ser. file of the other person
-            friendsCalendar.addEventNotification(event);
-            return "Event Shared! Waiting on" + name + "'s" + "response";
-
-
+    public boolean shareEvent(String name, Event event) throws IOException, ClassNotFoundException {
+        String otherUserPath = "./user_data/" + name + "_";
+        File friendFile = new File(otherUserPath + "default.ser");
+        if (friendFile.exists()) {
+            CalendarManager friendCalManager = new CalendarManager(otherUserPath);
+            friendCalManager.getCalendar().addEventNotification(event);
+            friendCalManager.saveToFile();
+            return true;
         } else {
-            return "Friend's account not found";
+            return false;
         }
-
     }
 
-
-    public Calendar readFromOtherFile(File file) throws IOException, ClassNotFoundException {
-        InputStream otherFile = new FileInputStream(file);
-        InputStream buffer = new BufferedInputStream(otherFile);
-        ObjectInput input = new ObjectInputStream(buffer);
-        Calendar friendCalendar = (Calendar) input.readObject();
-        input.close();
-        return friendCalendar;
-    }
-
-    public String sendMessage(String name, Memo memo) throws IOException, ClassNotFoundException {
-        String otherFilePath = this.userPath + name + ".ser";
-        // TODO: make sure this is the right kind of filepath
-        File otherPersonsFile = new File(otherFilePath);
-        if (otherPersonsFile.exists()) {
-            Calendar friendsCalendar = readFromOtherFile(otherPersonsFile);
-            // add to friendCalendar notificationsystem
-            friendsCalendar.addMessageNotification(memo);
-            //TODO: How do I know this will be saved in the serialized file of my friend? do I have to save to file?
-            return "Message sent! Waiting on" + name + "'s" + "response";
-        }else{
-            return "Friend's account not found";
+    public boolean sendMessage(String name, Memo memo) throws IOException, ClassNotFoundException {
+        String otherUserPath = "./user_data/" + name + "_";
+        File friendFile = new File(otherUserPath + "default.ser");
+        if (friendFile.exists()) {
+            CalendarManager friendCalManager = new CalendarManager(otherUserPath);
+            friendCalManager.getCalendar().addMessageNotification(memo);
+            friendCalManager.saveToFile();
+            return true;
+        } else {
+            return false;
         }
-
-
     }
 }

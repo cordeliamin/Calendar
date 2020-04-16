@@ -16,6 +16,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,6 +31,8 @@ public class EventMenuController extends Controller {
     @FXML MenuItem linkEventOpt;
     @FXML MenuItem deleteEvent;
     @FXML MenuItem editEvent;
+    @FXML MenuItem viewEvent;
+    @FXML MenuItem shareEvent;
     @FXML TableColumn<Event, String> eventName;
     @FXML TableColumn<Event, LocalDateTime> eventStart;
     @FXML TableColumn<Event, LocalDateTime> eventEnd;
@@ -59,18 +63,17 @@ public class EventMenuController extends Controller {
         eventTable.setPlaceholder(new Label("No Events Found"));
         eventTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         eventTable.getSelectionModel().getSelectedItems().addListener((ListChangeListener<Event>) change -> {
+            for (MenuItem option : new MenuItem[] {linkEventOpt, deleteEvent, editEvent, viewEvent, shareEvent}) {
+                option.setVisible(false);
+            }
             if (change.getList().size() > 1) {
                 linkEventOpt.setVisible(true);
                 deleteEvent.setVisible(true);
-                editEvent.setVisible(false);
             } else if (change.getList().size() == 1) {
+                viewEvent.setVisible(true);
                 deleteEvent.setVisible(true);
-                linkEventOpt.setVisible(false);
                 editEvent.setVisible(true);
-            } else {
-                linkEventOpt.setVisible(false);
-                deleteEvent.setVisible(false);
-                editEvent.setVisible(false);
+                shareEvent.setVisible(true);
             }
         });
     }
@@ -170,17 +173,46 @@ public class EventMenuController extends Controller {
             if (getCalendar().getEvent(userInput) != null) {
                 eventTable.getItems().add(getCalendar().getEvent(userInput));
             }
-            if (isDateFormat(userInput)) {
-                String[] date = userInput.split("/");
-                eventTable.getItems().addAll(getCalendar().findEvent(LocalDate.of(
-                        Integer.parseInt(date[2]), Integer.parseInt(date[1]), Integer.parseInt(date[0]))));
-            }
+            try {
+                eventTable.getItems().addAll(getCalendar().findEvent(LocalDate.parse(userInput,
+                        DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+            } catch (DateTimeParseException d) {}
         }
     }
 
-    private Boolean isDateFormat(String date) {
-        Pattern dateRule = Pattern.compile("^[0-3][0-9]/[01][0-9]/([0-9]+)$");
-        Matcher matchDate = dateRule.matcher(date);
-        return matchDate.matches();
+    @FXML private void displayEvent() throws IOException {
+        Event eventToDisplay = eventTable.getSelectionModel().getSelectedItem();
+        //Make New pop up window
+        Stage window = new Stage();
+        window.setTitle(eventToDisplay.getEventName());
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setResizable(false);
+
+        //Create new scene to display
+        FXMLLoader loader = setNewWindowAndGetLoader("EventViewScene.fxml", window, 600, 350);
+        EventViewControl evc = loader.getController();
+        evc.displayEvent(eventToDisplay);
+        window.showAndWait();
     }
+
+    @FXML private void shareEventWithFriend() {
+        Label instructions = new Label("Enter the recipient's username:");
+        TextField userInput = new TextField();
+        Button share = new Button("Share");
+        PopUp sharePopUp = new PopUp("Share Event", getTheme(), 8.0, 10, 10, 10, 10);
+        sharePopUp.getContent().addAll(instructions, userInput, share);
+        share.setOnAction(e -> {
+            String username = userInput.getText();
+            Event selectedEvent = eventTable.getSelectionModel().getSelectedItem();
+            try {
+                if (getCalendarManager().shareEvent(username, selectedEvent)) {
+                    instructions.setText("Event Shared! Waiting on" + username + "'s response");
+                    userInput.clear();
+                } else { instructions.setText(username + "'s account not found"); }
+            } catch (IOException | ClassNotFoundException ex) {
+                instructions.setText("An unexpected error has occured");
+            }
+        });
+    }
+
 }

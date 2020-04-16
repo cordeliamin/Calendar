@@ -17,7 +17,7 @@ public class AlertSystem implements Serializable{
     //Add alerts to the system
     /**
      * adds the new Individual alert to the system:
-     * @param event: event of the alert
+     * @param event: the event which the alert is associated with
      * @param time: time of the alert
      * @param message: message content of the alert
      */
@@ -29,9 +29,10 @@ public class AlertSystem implements Serializable{
     }
 
     /**
-     * adds the new Frequent alert to the system
-     * @param event: event of the alert
-     * @param duration: the frequency of the event
+     * adds the new Frequent alert to the system: do nothing if the frequent alert date is not valid (ex. no valid alert
+     * time with the given frequency)
+     * @param event: the event which the alert is associated with
+     * @param duration: frequency of the event
      * @param message: message content of the alert
      */
     public void addFrequentAlert(Event event, String message, Duration duration) {
@@ -46,9 +47,18 @@ public class AlertSystem implements Serializable{
     }
 
 
-    //return sets of alerts -> that should appear currently, all alerts, or according to event
+    //Return sets of alerts -> that should appear currently, all alerts, or according to event
     /**
-     * display alerts that should appear now
+     * get all alerts associated with the event
+     * @param e: events
+     */
+    public Set<Alert> getAlerts(Event e) {
+        return new HashSet<>(eventAlertsMap.get(e));
+    }
+
+    /**
+     * return list of upcoming alerts
+     * @return upcoming alerts
      */
     public Set<Alert> getCurrAlerts(){
         Set<Alert> CurrAlerts = new HashSet<>(); //the set of Alerts to Show
@@ -69,17 +79,8 @@ public class AlertSystem implements Serializable{
     }
 
     /**
-     * get all alerts associated with the event
-     * @param e: events
-     */
-    public Set<Alert> getAlerts(Event e) {
-        Set<Alert> alerts = new HashSet<>(eventAlertsMap.get(e));
-        return alerts;
-    }
-
-    /**
-     * get all alerts in the system, past, current or future
-     * @return all alerts
+     * return list of all alerts in the system, past, current or future
+     * @return list of all alerts
      */
     public Set<Alert> getAllAlerts(){
         Set<Alert> result = new HashSet<>();
@@ -91,6 +92,7 @@ public class AlertSystem implements Serializable{
     }
 
 
+    //methods to edit or delete alerts
     /**
      * Removes specified event from this eventAlertsMap.
      */
@@ -122,7 +124,7 @@ public class AlertSystem implements Serializable{
             for (Alert a : this.eventAlertsMap.get(e)) {
                 deleteAlert(a);
             }
-            this.eventAlertsMap.remove(e);
+           removeEvent(e);
         }
     }
 
@@ -139,6 +141,8 @@ public class AlertSystem implements Serializable{
         }
     }
 
+
+    //getters and setters
     public Map<LocalDateTime, List<Alert>> getDateAlertsMap() {
         return dateAlertsMap;
     }

@@ -22,11 +22,13 @@ public class EventEditorControl extends Controller{
     private Event event;
     private String ogEventName;
     private LocalDateTime[] ogTimes;
+    private String ogTag;
     @FXML private TextField eventName;
     @FXML private DatePicker eventStartDate;
     @FXML private TextField eventStartTime;
     @FXML private DatePicker eventEndDate;
     @FXML private TextField eventEndTime;
+    @FXML private TextField eventTag;
     @FXML private Label successMsg;
     @FXML private Label errorMsg;
     @FXML private Label eventNameLab;
@@ -34,6 +36,7 @@ public class EventEditorControl extends Controller{
     @FXML private Label startTimeLab;
     @FXML private Label endDateLab;
     @FXML private Label endTimeLab;
+    @FXML private Label eventTagLab;
 
     @Override
     protected void initScreen() {
@@ -45,6 +48,7 @@ public class EventEditorControl extends Controller{
         String nameInput = eventName.getText();
         String startInput = eventStartDate.getEditor().getText();
         String endInput = eventEndDate.getEditor().getText();
+        String tagInput = eventTag.getText();
         if (hasFormatErrors(nameInput, startInput, endInput)) {
             errorMsg.setVisible(true);
         } else {
@@ -53,6 +57,9 @@ public class EventEditorControl extends Controller{
                 if (!ogEventName.equals(nameInput) || !Arrays.equals(ogTimes, timeInterval)) {
                     changeEventName(event, ogEventName, nameInput);
                     changeEventTime(event, ogTimes, timeInterval);
+                    if (!tagInput.equals("")) {
+                        changeEventTag(event, ogTag, tagInput);
+                    }
                     getCalendarManager().saveToFile();
                     eventTable.refresh();
                     successMsg.setVisible(true);
@@ -72,6 +79,12 @@ public class EventEditorControl extends Controller{
     private void changeEventTime(Event event, LocalDateTime[] oldDate, LocalDateTime[] newDate) {
         if (!oldDate[0].equals(newDate[0]) || !oldDate[1].equals(newDate[1])) {
             getCalendar().changeEventTime(event, newDate[0], newDate[1]);
+        }
+    }
+
+    private void changeEventTag(Event event, String ogTag, String newTag) {
+        if (!ogTag.equals(newTag)) {
+            getCalendar().changeEventTag(newTag, event);
         }
     }
 
@@ -113,11 +126,15 @@ public class EventEditorControl extends Controller{
         eventStartTime.setText(timeFormatter(event.getStartTime()));
         eventEndDate.setValue(event.getEndTime().toLocalDate());
         eventEndTime.setText(timeFormatter(event.getEndTime()));
+        if (!event.getTag().equals("")) {
+         eventTag.setText(event.getTag());
+        }
 
         ogEventName = event.getEventName();
         LocalDateTime ogEventStartTime = event.getStartTime();
         LocalDateTime ogEventEndTime = event.getEndTime();
         ogTimes = new LocalDateTime[]{ogEventStartTime, ogEventEndTime};
+        ogTag = event.getTag();
     }
 
     @FXML private void hideMessage() {
