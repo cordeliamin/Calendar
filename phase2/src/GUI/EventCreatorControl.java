@@ -132,6 +132,7 @@ public class EventCreatorControl extends Controller {
             reset();
         } catch (NullPointerException n) { errorMsg.setVisible(true);}
     }
+
     //Helper for createSeriesEvent
     private Long parseNumberInput(TextField numText, Label assocLabel) {
         String userNumber = numText.getText();

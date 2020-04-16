@@ -15,9 +15,9 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
     </rowConstraints>
     <children>
-        <TableView fx:id="memoTable" prefHeight="200.0" prefWidth="200.0">
+        <TableView fx:id="memoTable" prefHeight="600.0" prefWidth="678.0">
             <columns>
-                <TableColumn fx:id="memoContent" prefWidth="707.0" text="Memo"/>
+                <TableColumn fx:id="memoContent" prefWidth="707.0" text="Memo(s)"/>
             </columns>
             <contextMenu>
                 <ContextMenu>
@@ -53,10 +53,16 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                     </rowConstraints>
                     <children>
-                        <TextField scaleX="0.8" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
-                        <Label text="Memo:" GridPane.halignment="CENTER">
+                        <TextField fx:id="newMemoNote" promptText="A memo note" scaleX="0.8"
+                                   GridPane.halignment="CENTER" GridPane.rowIndex="1">
                             <font>
-                                <Font name="Microsoft Sans Serif" size="16.0"/>
+                                <Font name="Microsoft Sans Serif" size="13.0"/>
+                            </font>
+                        </TextField>
+                        <Label prefHeight="52.0" prefWidth="174.0" text="Create a New Memo for an Event:"
+                               textAlignment="CENTER" GridPane.halignment="CENTER">
+                            <font>
+                                <Font name="Microsoft Sans Serif" size="11.0"/>
                             </font>
                         </Label>
                     </children>
@@ -75,9 +81,11 @@
                                 <Font name="Microsoft Sans Serif" size="16.0"/>
                             </font>
                         </Label>
-                        <ChoiceBox prefWidth="150.0" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+                        <ComboBox fx:id="events" prefWidth="150.0" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
                     </children>
                 </GridPane>
+                <Button fx:id="createMemo" mnemonicParsing="false" onAction="#createNewMemo" text="Submit"
+                        GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
             </children>
         </GridPane>
     </children>

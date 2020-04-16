@@ -5,12 +5,14 @@ import CalendarSystem.Memo;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MemoMenuControl extends Controller {
 
@@ -27,7 +29,9 @@ public class MemoMenuControl extends Controller {
     @FXML
     TableColumn<Memo, String> memoContent;
     @FXML
-    ChoiceBox<String> eventSort;
+    ComboBox<Event> events;
+    @FXML
+    TextField newMemoNote;
 
 
     @FXML
@@ -39,12 +43,13 @@ public class MemoMenuControl extends Controller {
     protected void initScreen() {
         //Populate memoTable
         memoContent.setCellValueFactory(new PropertyValueFactory<>("note"));
-
         ObservableList<Memo> memoTableItems = FXCollections.observableArrayList();
         memoTableItems.addAll(getCalendar().getMyMemos().getMemos());
         memoTable.setItems(memoTableItems);
+        for (Event e : getCalendar().getMyEvents()) {
+            events.getItems().add(e);
+        }
         initSelectionSettings();
-
     }
 
     private void initSelectionSettings() {
@@ -98,5 +103,35 @@ public class MemoMenuControl extends Controller {
         getCalendarManager().saveToFile();
     }
 
+    @FXML
+    public void createNewMemo() throws IOException {
+        String note = newMemoNote.getText();
 
+        List<Event> l = new ArrayList<>();
+        l.add(events.getValue());
+        events.getValue().getMemos().add(new Memo(note));
+
+
+        getCalendarManager().saveToFile();
+
+//        if (selectedEvent == null) {
+//            selectedEvent = "";
+//        }
+//        if (!selectedEvent.equals("") &&
+//                !memoOptions.getItems().contains(selectedMemo)) {
+//            getCalendar().getMyMemos().createMemo(eventsToAdd, selectedMemo);
+//            memoOptions.getItems().add(selectedMemo);
+//        } else if (memoOptions.getItems().contains(selectedMemo)) {
+//            for (Memo m : getCalendar().getMyMemos().getMemos()) {
+//                if (m.getNote().equals(selectedMemo)) {
+//                    for (Event e : eventsToAdd) {
+//                        e.getMemos().add(m);
+//                    }
+//                    break;
+//                }
+//            }
+//        }
+
+
+    }
 }
