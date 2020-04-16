@@ -116,33 +116,33 @@ public class MemoMenuControl extends Controller {
     public void createNewMemo() throws IOException {
         resetErrorMessages();
 
-
-        if (newMemoNote.getText() != "" && newMemoNote.getText() != null) {
-            String note = newMemoNote.getText();
-        } else {
+        if (newMemoNote.getText().equals("")) {
+            errorMsg.setText("Memo cannot be empty!");
             errorMsg.setTextFill(Paint.valueOf("red"));
             errorMsg.setVisible(true);
             newMemoLabel.setTextFill(Paint.valueOf("red"));
         }
 
-        if (events.getValue() != null) {
-            List<Event> l = new ArrayList<>();
-            l.add(events.getValue());
-            successMsg.setVisible(true);
-        } else {
+        if (events.getValue() == null) {
             errorMsg.setText("Please select an event!");
             errorMsg.setTextFill(Paint.valueOf("red"));
+            createEventLabel.setTextFill(Paint.valueOf("red"));
             errorMsg.setVisible(true);
         }
 
+        if (!newMemoNote.getText().equals("") && events.getValue() != null) {
+            String note = newMemoNote.getText();
+            List<Event> l = new ArrayList<>();
+            l.add(events.getValue());
+            successMsg.setVisible(true);
+            // create memo method here
+        }
 
         // events.getValue().getMemos().add(new Memo(note));
 
         getCalendarManager().saveToFile();
 
-//        if (selectedEvent == null) {
-//            selectedEvent = "";
-//        }
+
 //        if (!selectedEvent.equals("") &&
 //                !memoOptions.getItems().contains(selectedMemo)) {
 //            getCalendar().getMyMemos().createMemo(eventsToAdd, selectedMemo);
@@ -157,7 +157,6 @@ public class MemoMenuControl extends Controller {
 //                }
 //            }
 //        }
-
 
     }
 
