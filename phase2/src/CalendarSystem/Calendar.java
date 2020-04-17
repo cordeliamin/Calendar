@@ -267,6 +267,23 @@ public class Calendar implements Serializable {
         return events;
     }
 
+    /**
+     * find events by their memo note
+     * @param note: the note associated with a Memo
+     * @return A list of events with the input note
+     */
+    public ArrayList<Event> findEventByMemoNote(String note) {
+        ArrayList<Event> events = new ArrayList<>();
+        for (Event event: myEvents) {
+            for (Memo m : event.getMemos()) {
+                if (m.getNote().equals(note) && !events.contains(event)) {
+                    events.add(event);
+                }
+            }
+        }
+        return events;
+    }
+
     //methods for getting list of events: past, current or future
 
     /**
